@@ -1,13 +1,13 @@
-package dao.meowlib.teamneko.org;
+package obj.meowlib.teamneko.org;
 
-public class UserDAO {
+public class User {
 	private int id;
 	private String firstName;
 	private String lastName;
 	private int number;
 	private String type;
 
-	public UserDAO() {
+	public User() {
 	}
 
 	public String getFirstName() {

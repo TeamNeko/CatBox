@@ -1,16 +1,16 @@
-package dao.meowlib.teamneko.org;
+package obj.meowlib.teamneko.org;
 
 import java.util.Date;
 
-public class ProductDAO {
+public class Product {
 	private int id;
 	private String name;
 	private String description;
 	private Date added;
 	private Date removed;
-	private float weight;
+	private double weight;
 
-	public ProductDAO() {
+	public Product() {
 	}
 
 	public int getId() {
@@ -37,7 +37,7 @@ public class ProductDAO {
 		return removed;
 	}
 
-	public float getWeight() {
+	public double getWeight() {
 		return weight;
 	}
 

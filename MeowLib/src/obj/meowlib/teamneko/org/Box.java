@@ -1,15 +1,15 @@
-package dao.meowlib.teamneko.org;
+package obj.meowlib.teamneko.org;
 
 import java.util.Date;
 
-public class BoxDAO {
+public class Box {
 	private int id;
 	private float weight;
 	private Date created;
 	private Date modified;
 	private String size;
 
-	public BoxDAO() {
+	public Box() {
 	}
 
 	public int getId() {

@@ -1,6 +1,6 @@
-package dao.meowlib.teamneko.org;
+package obj.meowlib.teamneko.org;
 
-public class LocationDAO {
+public class Location {
 	private int id;
 	private int floor;
 	private String row;
@@ -9,7 +9,7 @@ public class LocationDAO {
 	private String pallet;
 	private String building;
 
-	public LocationDAO() {
+	public Location() {
 	}
 
 	public int getId() {
