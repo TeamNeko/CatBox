@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<%@ page import="soprema.intranet.Backend" %>
-<%@ page import="soprema.intranet.Product" %>
+<%@ page import="frontend.catbox.teamneko.org.*" %>
+<%@ page import="obj.meowlib.teamneko.org.*" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -34,12 +35,11 @@
 				<td>Product Name</td>
 			</tr>
 		    <%
-		        for (Product Item: new Backend().ProductsInventory.getProductList())
-		        {
+		    	for(Product item : Database.getProductList()) {
 		            %>
 		                <tr>
-		            	    <td><%= Item.getID()%></td> 
-		                	<td><%= Item.getProductName()%></td>        
+		            	    <td><%= item.getId()%></td> 
+		                	<td><%= item.getName()%></td>        
 		                </tr>
 		            <% 
 		        }
