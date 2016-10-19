@@ -1,12 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%><
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+    pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 
+<!--
+<sql:setDataSource var="snapshot" driver="org.postgresql.Driver"
+     url="jdbc:postgresql://localhost/catbox"
+     user="jaune"  password="yolo"/>
+-->
 
 <sql:setDataSource var="snapshot" driver="org.postgresql.Driver"
-     url="jdbc:postgresql://localhost/catbox?user=jaune&password=yolo"
-     user="jaune"  password="yolo"/>
+     url="jdbc:postgresql://elmer.db.elephantsql.com:5432/jmtntlek"
+     user="jmtntlek"  password="vaYxsY1WBNr5gYMMd-74kLrc98gqNhqI"/>
 
 <sql:query dataSource="${snapshot}" var="products">
 SELECT * FROM "Products" LIMIT 50;
@@ -43,12 +48,12 @@ SELECT * FROM "Products" LIMIT 50;
 				<th>ID</th>
 				<th>Name</th>
 			</tr>
-			<c:forEach var="row" items="${products.rows}">
+			<core:forEach var="row" items="${products.rows}">
 				<tr>
-					<td><c:out value="${row.idProduct}"/></td>
-					<td><c:out value="${row.name}"/></td>
+					<td><core:out value="${row.idProduct}"/></td>
+					<td><core:out value="${row.name}"/></td>
 				</tr>
-			</c:forEach>
+			</core:forEach>
 		</table>
 	</div>
 	<div id="footer">

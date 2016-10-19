@@ -7,7 +7,6 @@ import java.util.List;
 
 import dao.meowlib.teamneko.org.ProductsDAO;
 import obj.meowlib.teamneko.org.Product;
-import sql.meowlib.teamneko.org.Transmuter;
 
 public class PostgresProductDAO implements ProductsDAO {
 	private PostgresDatabase database;
