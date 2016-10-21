@@ -3,6 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ page import="frontend.catbox.teamneko.FrontendServer" %>
 <!--
 <sql:setDataSource var="snapshot" driver="org.postgresql.Driver"
      url="jdbc:postgresql://localhost/catbox"
@@ -12,15 +13,19 @@
 <sql:setDataSource var="snapshot" driver="org.postgresql.Driver"
      url="jdbc:postgresql://elmer.db.elephantsql.com:5432/jmtntlek"
      user="jmtntlek"  password="vaYxsY1WBNr5gYMMd-74kLrc98gqNhqI"/>
+     
+<core:set var="KeyWord" value="<%=FrontendServer.SearchWord %>"/>
+<core:set var="DefaultSearch" value="<%=FrontendServer.DefaultSearch %>"/>
 
-<core:if test="${empty param.Recherche}">
+<core:if test="${DefaultSearch}">
 	<sql:query dataSource="${snapshot}" var="products">
 		SELECT * FROM "Products" LIMIT 50;
 	</sql:query>
 </core:if>
-<core:if test="${not empty param.Recherche}">
+<core:if test="${DefaultSearch == false}">
 	<sql:query dataSource="${snapshot}" var="products">
-		SELECT * FROM "Products" LIMIT 50;
+		SELECT * FROM "Products" WHERE name = ? LIMIT 50;
+		<sql:param value="${KeyWord}" />
 	</sql:query>
 </core:if>
 
