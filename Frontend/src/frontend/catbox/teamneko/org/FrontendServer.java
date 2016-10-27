@@ -1,6 +1,8 @@
 package frontend.catbox.teamneko;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,8 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/FrontendServer")
 public class FrontendServer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    public static String SearchWord;
-    public static boolean DefaultSearch = true;
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -27,21 +27,6 @@ public class FrontendServer extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String NullChecker = request.getParameter("Recherche");
-		if (NullChecker != null)
-		{
-			SearchWord = NullChecker;
-			if(SearchWord.isEmpty())
-			{
-				DefaultSearch = true;
-			}
-			else
-			{
-				DefaultSearch = false;
-			}
-		}
-		System.out.println(DefaultSearch);
-		System.out.println(SearchWord);
 		request.getRequestDispatcher("/ProductsList.jsp").forward(request, response);
 	}
 
