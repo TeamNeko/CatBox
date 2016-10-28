@@ -3,10 +3,10 @@ package org.teamneko.meowlib.test;
 import static org.junit.Assert.*;
 import java.sql.SQLException;
 
-import dao.meowlib.teamneko.org.ProductsDAO;
-import obj.meowlib.teamneko.org.Product;
-import postgres.meowlib.teamneko.org.PostgresDAOFactory;
-import postgres.meowlib.teamneko.org.PostgresDatabase;
+import org.teamneko.meowlib.dao.ProductsDAO;
+import org.teamneko.meowlib.obj.Product;
+import org.teamneko.meowlib.postgres.PostgresDAOFactory;
+import org.teamneko.meowlib.postgres.PostgresDatabase;
 
 public class Test {
 

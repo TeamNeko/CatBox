@@ -1,4 +1,4 @@
-package meowlib.teamneko.org;
+package org.teamneko.meowlib;
 
 import java.io.IOException;
 import java.io.PrintStream;

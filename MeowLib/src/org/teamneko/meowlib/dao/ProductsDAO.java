@@ -1,8 +1,8 @@
-package dao.meowlib.teamneko.org;
+package org.teamneko.meowlib.dao;
 
 import java.util.List;
 
-import obj.meowlib.teamneko.org.Product;
+import org.teamneko.meowlib.obj.Product;
 
 public interface ProductsDAO {
 	public List<Product> getProducts();

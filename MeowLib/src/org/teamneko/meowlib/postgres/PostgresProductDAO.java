@@ -1,12 +1,12 @@
-package postgres.meowlib.teamneko.org;
+package org.teamneko.meowlib.postgres;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import dao.meowlib.teamneko.org.ProductsDAO;
-import obj.meowlib.teamneko.org.Product;
+import org.teamneko.meowlib.dao.ProductsDAO;
+import org.teamneko.meowlib.obj.Product;
 
 public class PostgresProductDAO implements ProductsDAO {
 	private PostgresDatabase database;

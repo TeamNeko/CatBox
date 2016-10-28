@@ -1,4 +1,4 @@
-package obj.meowlib.teamneko.org;
+package org.teamneko.meowlib.obj;
 
 public class InventoryItem {
 	private Product product;

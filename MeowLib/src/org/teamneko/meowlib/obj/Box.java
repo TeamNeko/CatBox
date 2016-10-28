@@ -1,4 +1,4 @@
-package obj.meowlib.teamneko.org;
+package org.teamneko.meowlib.obj;
 
 import java.util.Date;
 
