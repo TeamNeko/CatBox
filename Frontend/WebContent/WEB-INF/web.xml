@@ -7,6 +7,9 @@
     id="WebApp_ID"
     version="3.0">
   <display-name>JerseyRESTServer</display-name>
+  <listener>
+    <listener-class>org.teamneko.schrodinger.sql.Database</listener-class>
+  </listener>
   <servlet>
     <servlet-name>Jersey REST Service</servlet-name>
     <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
