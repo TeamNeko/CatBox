@@ -61,7 +61,7 @@
 	</core:forEach>
 	</table>
 	<div id="footer">
-		<jsp:include page="Footer.jsp" />
+		<jsp:include page="footer.jsp" />
 	</div>
 </body>
 </html>
