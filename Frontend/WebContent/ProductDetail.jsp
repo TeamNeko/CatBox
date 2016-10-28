@@ -3,7 +3,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ page import="frontend.catbox.teamneko.org.FrontendBoxDetail" %>
 <!--
 <sql:setDataSource var="snapshot" driver="org.postgresql.Driver"
      url="jdbc:postgresql://localhost/catbox"
@@ -13,8 +12,6 @@
 <sql:setDataSource var="snapshot" driver="org.postgresql.Driver"
      url="jdbc:postgresql://elmer.db.elephantsql.com:5432/jmtntlek"
      user="jmtntlek"  password="vaYxsY1WBNr5gYMMd-74kLrc98gqNhqI"/>
-
-<core:set var="KeyWord" value="<%=FrontendBoxDetail.Item%>"/>
 
 <sql:query dataSource="${snapshot}" var="inventory">
 		SELECT * FROM "Inventory" WHERE ? = ? LIMIT 1;
@@ -61,7 +58,7 @@
 	</core:forEach>
 	</table>
 	<div id="footer">
-		<jsp:include page="footer.jsp" />
+		<jsp:include page="Footer.jsp" />
 	</div>
 </body>
 </html>
