@@ -57,8 +57,14 @@ public class Product {
 		this.removed = removed;
 	}
 
-	public void setWeight(float weight) {
-		this.weight = weight;
+	public void setWeight(double d) {
+		this.weight = d;
+	}
+
+	@Override
+	public String toString() {
+		return "Product [id=" + id + ", name=" + name + ", description=" + description + ", added=" + added
+				+ ", removed=" + removed + ", weight=" + weight + "]";
 	}
 
 }

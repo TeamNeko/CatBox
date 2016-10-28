@@ -7,7 +7,6 @@ import java.util.List;
 
 import dao.meowlib.teamneko.org.ProductsDAO;
 import obj.meowlib.teamneko.org.Product;
-import sql.meowlib.teamneko.org.Transmuter;
 
 public class PostgresProductDAO implements ProductsDAO {
 	private PostgresDatabase database;
@@ -22,10 +21,18 @@ public class PostgresProductDAO implements ProductsDAO {
 		
 		try {
 			ResultSet rs = database.executeQuery("SELECT * FROM \"Products\"");
-			while(rs.next())
-				products.add(Transmuter.transmute(rs, Product.class));
-			
+			while(rs.next()) {
+				Product product = new Product();
+				product.setId(rs.getInt("idProduct"));
+				product.setName(rs.getString("name"));
+				product.setDescription(rs.getString("description"));
+				product.setAdded(rs.getDate("date_added"));
+				product.setRemoved(rs.getDate("date_retired"));
+				product.setWeight(rs.getDouble("weight"));
+				products.add(product);
+			}
 		} catch(SQLException e) {
+			e.printStackTrace();
 			
 		}
 		
