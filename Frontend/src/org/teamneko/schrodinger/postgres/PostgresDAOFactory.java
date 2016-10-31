@@ -1,8 +1,8 @@
-package org.teamneko.meowlib.postgres;
+package org.teamneko.schrodinger.postgres;
 
-import org.teamneko.meowlib.dao.AbstractDAOFactory;
-import org.teamneko.meowlib.dao.ProductsDAO;
-import org.teamneko.meowlib.dao.UsersDAO;
+import org.teamneko.schrodinger.dao.AbstractDAOFactory;
+import org.teamneko.schrodinger.dao.ProductsDAO;
+import org.teamneko.schrodinger.dao.UsersDAO;
 
 public class PostgresDAOFactory extends AbstractDAOFactory {
 	PostgresDatabase database;

@@ -1,12 +1,12 @@
-package org.teamneko.meowlib.postgres;
+package org.teamneko.schrodinger.postgres;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
-import org.teamneko.meowlib.dao.UsersDAO;
-import org.teamneko.meowlib.obj.User;
+import org.teamneko.schrodinger.dao.UsersDAO;
+import org.teamneko.meowlib.dto.User;
 
 public class PostgresUsersDAO implements UsersDAO {
 private PostgresDatabase database;

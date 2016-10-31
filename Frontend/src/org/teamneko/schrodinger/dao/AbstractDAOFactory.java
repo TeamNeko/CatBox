@@ -1,4 +1,4 @@
-package org.teamneko.meowlib.dao;
+package org.teamneko.schrodinger.dao;
 
 public abstract class AbstractDAOFactory {
 	public abstract ProductsDAO getProductsDAO();

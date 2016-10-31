@@ -5,9 +5,9 @@ import java.sql.SQLException;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import org.teamneko.meowlib.dao.AbstractDAOFactory;
-import org.teamneko.meowlib.postgres.PostgresDAOFactory;
-import org.teamneko.meowlib.postgres.PostgresDatabase;
+import org.teamneko.schrodinger.dao.AbstractDAOFactory;
+import org.teamneko.schrodinger.postgres.PostgresDAOFactory;
+import org.teamneko.schrodinger.postgres.PostgresDatabase;
 
 public class Database implements ServletContextListener {
 	private static AbstractDAOFactory factory;

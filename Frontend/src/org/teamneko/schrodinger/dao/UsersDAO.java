@@ -1,8 +1,8 @@
-package org.teamneko.meowlib.dao;
+package org.teamneko.schrodinger.dao;
 
 import java.util.Optional;
 
-import org.teamneko.meowlib.obj.User;
+import org.teamneko.meowlib.dto.User;
 
 public interface UsersDAO {
 	public Optional<User> getUser(String number);	

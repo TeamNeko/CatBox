@@ -1,4 +1,4 @@
-package org.teamneko.meowlib.postgres;
+package org.teamneko.schrodinger.postgres;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
