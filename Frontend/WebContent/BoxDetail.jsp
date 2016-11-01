@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<%@ page import="frontend.catbox.teamneko.FrontendBoxDetail" %>
+<%@ page import="org.teamneko.schrodinger.frontend.FrontendBoxDetail" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>

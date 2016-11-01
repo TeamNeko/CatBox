@@ -1,6 +1,7 @@
 package org.teamneko.schrodinger.postgres;
 
 import org.teamneko.schrodinger.dao.AbstractDAOFactory;
+import org.teamneko.schrodinger.dao.BoxesDAO;
 import org.teamneko.schrodinger.dao.ProductsDAO;
 import org.teamneko.schrodinger.dao.UsersDAO;
 
@@ -19,6 +20,11 @@ public class PostgresDAOFactory extends AbstractDAOFactory {
 	@Override
 	public UsersDAO getUsersDAO() {
 		return new PostgresUsersDAO(database);
+	}
+
+	@Override
+	public BoxesDAO getBoxesDAO() {
+		return new PostgresBoxesDAO(database);
 	}
 	
 }

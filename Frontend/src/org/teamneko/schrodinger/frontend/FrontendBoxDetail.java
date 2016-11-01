@@ -1,4 +1,4 @@
-package frontend.catbox.teamneko;
+package org.teamneko.schrodinger.frontend;
 
 import java.io.IOException;
 import javax.servlet.ServletException;

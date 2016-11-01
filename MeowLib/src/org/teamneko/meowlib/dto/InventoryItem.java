@@ -1,5 +1,7 @@
 package org.teamneko.meowlib.dto;
 
+import org.teamneko.meowlib.pojo.Box;
+
 public class InventoryItem {
 	private Product product;
 	private Box box;
