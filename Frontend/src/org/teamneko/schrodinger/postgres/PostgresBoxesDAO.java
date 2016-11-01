@@ -4,7 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.teamneko.meowlib.pojo.Box;
 import org.teamneko.schrodinger.dao.BoxesDAO;
 
 public class PostgresBoxesDAO implements BoxesDAO {
@@ -32,11 +31,22 @@ public class PostgresBoxesDAO implements BoxesDAO {
 		try {
 			PreparedStatement ps = database.prepare("INSERT INTO \"Boxes\"(barcode) VALUES (?)");
 			ps.setString(1, barcode);
-			
 			ps.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		}
+	}
+	@Override
+	public int getId(String barcode) {
+		PreparedStatement ps;
+		try {
+			ps = database.prepare("SELECT id FROM \"Boxes\" WHERE barcode = ?");
+			ps.setString(1, barcode);
+			
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+			return rs.getInt("id");
+		} catch (SQLException e) {
+			return -1;
 		}
 	}
 }

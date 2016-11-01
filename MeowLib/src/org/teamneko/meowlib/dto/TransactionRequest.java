@@ -3,25 +3,28 @@ package org.teamneko.meowlib.dto;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class Transaction {
-	private String barcode;
+public class TransactionRequest {
+	private int user;
+	private String box;
 	private Product[] productsAdded;
 	private Product[] productsRemoved;
 	
-	public Transaction(String barcode, Product[] productsAdded, Product[] productsRemoved) {
-		this.barcode = barcode;
+	public TransactionRequest(int user, String box, Product[] productsAdded, Product[] productsRemoved) {
+		this.user = user;
+		this.box = box;
 		this.productsAdded = productsAdded;
 		this.productsRemoved = productsRemoved;
 	}
 	
-	public Transaction() {
-		this.barcode = "";
+	public TransactionRequest() {
+		this.user = -1;
+		this.box = "";
 		this.productsAdded = new Product[0];
 		this.productsRemoved = new Product[0];
 	}
 
-	public String getBarcode() {
-		return barcode;
+	public String getBox() {
+		return box;
 	}
 
 	public Product[] getProductsAdded() {
@@ -32,8 +35,12 @@ public class Transaction {
 		return productsRemoved;
 	}
 	
-	public void setBarcode(String barcode) {
-		this.barcode = barcode;
+	public int getUser() {
+		return user;
+	}
+	
+	public void setBox(String box) {
+		this.box = box;
 	}
 
 	public void setProductsAdded(Product[] productsAdded) {
@@ -42,6 +49,10 @@ public class Transaction {
 	
 	public void setProductsRemoved(Product[] productsRemoved) {
 		this.productsRemoved = productsRemoved;
+	}
+	
+	public void setUser(int user) {
+		this.user = user;
 	}
 	
 	public static class Product {

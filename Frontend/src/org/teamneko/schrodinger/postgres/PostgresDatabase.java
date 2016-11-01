@@ -12,12 +12,14 @@ public class PostgresDatabase {
 	public PostgresDatabase(String connectionUrl) throws ClassNotFoundException, SQLException {
 			Class.forName("org.postgresql.Driver");
 			connection = DriverManager.getConnection(connectionUrl);
+			connection.setAutoCommit(true);
 	}
 	
 	public PostgresDatabase(String connectionUrl, String user, String password) throws ClassNotFoundException, SQLException {
 		Class.forName("org.postgresql.Driver");
 		connection = DriverManager.getConnection(connectionUrl, user, password);
-}
+		connection.setAutoCommit(true);
+	}
 	
 	public ResultSet executeQuery(String query) throws SQLException {
 		return connection.createStatement().executeQuery(query);

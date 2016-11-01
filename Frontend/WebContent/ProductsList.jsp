@@ -53,7 +53,7 @@
 
 <core:if test="${empty keyWord}">
 	<sql:query dataSource="${snapshot}" var="products"> 
-		SELECT * FROM "Products" ORDER BY "${sortColumnName}" ${sortColumnOrder} LIMIT 50;
+		SELECT * FROM "Products" LEFT OUTER JOIN (SELECT "idProduct", coalesce(sum(quantity),0) AS total FROM "Inventory" GROUP BY id) t ON "Products".id = t."idProduct" ORDER BY "${sortColumnName}" ${sortColumnOrder} LIMIT 50;
 	</sql:query>
 </core:if>
 <core:if test="${not empty keyWord}">
@@ -100,10 +100,12 @@
 			<tr>
 				<th>ID</th>
 				<th>Name</th>
+				<th>Barcode</th>
 				<th>Description</th>
 				<th>Poids (kg)</th>
 				<th>Date d'ajout</th>
 				<th>Date de retrait</th>
+				<th>Total</th>
 			</tr>
 			<core:set var="total" scope="session" value="${fn:length(products.rows)}"/>
 			<core:set var="perPage" scope="session"  value="10"/>
@@ -117,12 +119,16 @@
 			<core:forEach var="row" items="${products.rows}" begin="${pageStart}" end="${pageStart + perPage - 1}">
 				<tr>
 					<td><a href="ProductDetail.jsp?Item=${row.id}"><core:out value="${row.id}"/></a></td>
-					<td><core:out value="${row.barcode}"/></td>
 					<td><core:out value="${row.name}"/></td>
+					<td><core:out value="${row.barcode}"/></td>
 					<td><core:out value="${row.description}"/></td>
 					<td><core:out value="${row.weight}"/></td>
 					<td><core:out value="${row.date_added}"/></td>
 					<td><core:out value="${row.date_retired}"/></td>
+					<td>
+						<core:if test="${empty row.total}">0</core:if>
+						<core:if test="${not empty row.total}"><core:out value="${row.total}"/></core:if>
+					</td>
 				</tr>
 			</core:forEach>
 		</table>
