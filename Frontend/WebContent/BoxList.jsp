@@ -3,11 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<!--
-<sql:setDataSource var="snapshot" driver="org.postgresql.Driver"
-     url="jdbc:postgresql://localhost/catbox"
-     user="jaune"  password="yolo"/>
--->
+
 
 <sql:setDataSource var="snapshot" driver="org.postgresql.Driver"
      url="jdbc:postgresql://elmer.db.elephantsql.com:5432/jmtntlek"
@@ -15,13 +11,14 @@
      
 <% 
 	String urlSaver = ""; 
-	String keyWord = request.getParameter("Recherche");
-	if (keyWord != null)
+	int boxId;
+	try{
+		boxId = Integer.parseInt(request.getParameter("Recherche"));
+		urlSaver += "&Recherche=" + boxId;
+	}
+	catch(NumberFormatException e)
 	{
-		if(!keyWord.isEmpty())
-		{
-			urlSaver += "&Recherche=" + keyWord;
-		}
+		boxId = -1;
 	}
 	String sortString = request.getParameter("Sort");
 	String sortColumnOrder = "ASC";
@@ -47,35 +44,34 @@
 	urlSaver.trim();
 %>
 
-<core:set var="keyWord" value="<%=keyWord %>"/>
+<core:set var="keyWord" value="<%=boxId %>"/>
 <core:set var="sortColumnOrder" value="<%=sortColumnOrder %>"/>
 <core:set var="sortColumnName" value="<%=sortColumnName %>"/>
 
-<core:if test="${empty keyWord}">
-	<sql:query dataSource="${snapshot}" var="products"> 
-		SELECT * FROM "Products" ORDER BY "${sortColumnName}" ${sortColumnOrder} LIMIT 50;
+<core:if test="${keyWord == -1}">
+	<sql:query dataSource="${snapshot}" var="box"> 
+		SELECT * FROM "Boxes" ORDER BY "${sortColumnName}" ${sortColumnOrder} LIMIT 50;
 	</sql:query>
 </core:if>
-<core:if test="${not empty keyWord}">
-	<sql:query dataSource="${snapshot}" var="products">
-		SELECT * FROM "Products" WHERE name = ? ORDER BY "${sortColumnName}" ${sortColumnOrder} LIMIT 50;
+<core:if test="${keyWord != -1}">
+	<sql:query dataSource="${snapshot}" var="box">
+		SELECT * FROM "Boxes" WHERE id = ? ORDER BY "${sortColumnName}" ${sortColumnOrder} LIMIT 50;
 		<sql:param value="${keyWord}" />
 	</sql:query>
 </core:if>
-     
+    
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<link rel="stylesheet" type="text/css" href="Intranet.css">
-	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	<title>Soprema - Liste de produits</title>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Soprema - Liste de boite</title>
 </head>
 <body>
 	<div id="header">
 		<jsp:include page="Header.jsp" />
 	</div>
 	<div class="search">
-	 	<form action="FrontendServer">
+	 	<form action="FrontendBoxServer">
 			Recherche: <input type="text" name="Recherche">
 			<button type="submit" id="search"></button>
 			Ordre d'affichage:  
@@ -83,15 +79,15 @@
 					<option value="Asc-id" <%=sortString.equals("Asc-id") ? "selected" : ""%>>Ordre croissant d'ID</option>
 					<option value="Des-id" <%=sortString.equals("Des-id")? "selected" : ""%>>Ordre décroissant d'ID</option>
 					<option value="Asc-barcode" <%=sortString.equals("Asc-barcode") ? "selected" : ""%>>Ordre croissant de code barre</option>
-					<option value="Des-barcode" <%=sortString.equals("Des-barcode") ? "selected" : ""%>>Ordre décroissant de code barre</option>
-					<option value="Asc-name" <%=sortString.equals("Asc-name") ? "selected" : ""%>>Ordre croissant de nom de produit</option>
-					<option value="Des-name" <%=sortString.equals("Des-name")? "selected" : ""%>>Ordre décroissant de nom de produit</option>
+					<option value="Des-barcode" <%=sortString.equals("Des-barcode")? "selected" : ""%>>Ordre décroissant de code barre</option>
 					<option value="Asc-weight" <%=sortString.equals("Asc-weight") ? "selected" : ""%>>Ordre croissant de poids</option>
 					<option value="Des-weight" <%=sortString.equals("Des-weight") ? "selected" : ""%>>Ordre décroissant de poids</option>
-					<option value="Asc-date_added" <%=sortString.equals("Asc-date_added") ? "selected" : ""%>>Ordre croissant de création</option>
-					<option value="Des-date_added" <%=sortString.equals("Des-date_added") ? "selected" : ""%>>Ordre décroissant de création</option>
-					<option value="Asc-date_retired" <%=sortString.equals("Asc-date_retired") ? "selected" : ""%>>Ordre croissant de retrait</option>
-					<option value="Des-date_retired" <%=sortString.equals("Des-date_retired") ? "selected" : ""%>>Ordre décroissant de retrait</option>
+					<option value="Asc-size" <%=sortString.equals("Asc-size") ? "selected" : ""%>>Ordre croissant de taille</option>
+					<option value="Des-size" <%=sortString.equals("Des-size") ? "selected" : ""%>>Ordre décroissant de taille</option>
+					<option value="Asc-creation_date" <%=sortString.equals("Asc-creation_date") ? "selected" : ""%>>Ordre croissant de création</option>
+					<option value="Des-creation_date" <%=sortString.equals("Des-creation_date") ? "selected" : ""%>>Ordre décroissant de création</option>
+					<option value="Asc-last_modified" <%=sortString.equals("Asc-last_modified") ? "selected" : ""%>>Ordre croissant de retrait</option>
+					<option value="Des-last_modified" <%=sortString.equals("Des-last_modified") ? "selected" : ""%>>Ordre décroissant de retrait</option>
 				</select>
 		</form>
 	</div>
@@ -99,13 +95,13 @@
 		<table width="59%" border="1">
 			<tr>
 				<th>ID</th>
-				<th>Name</th>
-				<th>Description</th>
-				<th>Poids (kg)</th>
-				<th>Date d'ajout</th>
-				<th>Date de retrait</th>
+				<th>Code barre</th>
+				<th>Poids</th>
+				<th>Taille</th>
+				<th>Date de création</th>
+				<th>Date de modification</th>
 			</tr>
-			<core:set var="total" scope="session" value="${fn:length(products.rows)}"/>
+			<core:set var="total" scope="session" value="${fn:length(box.rows)}"/>
 			<core:set var="perPage" scope="session"  value="10"/>
 			<core:set var="pageStart" value="${param.start}"/>
 			<core:if test="${empty pageStart or pageStart < 0}">
@@ -114,15 +110,14 @@
 			<core:if test="${total <= pageStart}">
 			    <core:set var="pageStart" value="${total}"/>
 			</core:if>			
-			<core:forEach var="row" items="${products.rows}" begin="${pageStart}" end="${pageStart + perPage - 1}">
+			<core:forEach var="row" items="${box.rows}" begin="${pageStart}" end="${pageStart + perPage - 1}">
 				<tr>
-					<td><a href="ProductDetail.jsp?Item=${row.id}"><core:out value="${row.id}"/></a></td>
+					<td><a href="FrontendBoxDetail?Box=${row.id}"><core:out value="${row.id}"/></a></td>
 					<td><core:out value="${row.barcode}"/></td>
-					<td><core:out value="${row.name}"/></td>
-					<td><core:out value="${row.description}"/></td>
 					<td><core:out value="${row.weight}"/></td>
-					<td><core:out value="${row.date_added}"/></td>
-					<td><core:out value="${row.date_retired}"/></td>
+					<td><core:out value="${row.size}"/></td>
+					<td><core:out value="${row.creation_date}"/></td>
+					<td><core:out value="${row.last_modified}"/></td>
 				</tr>
 			</core:forEach>
 		</table>
