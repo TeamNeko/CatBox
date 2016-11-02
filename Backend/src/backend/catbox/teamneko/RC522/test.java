@@ -1,4 +1,4 @@
-package RC522;
+package backend.catbox.teamneko.RC522;
 
 public class test {
 
