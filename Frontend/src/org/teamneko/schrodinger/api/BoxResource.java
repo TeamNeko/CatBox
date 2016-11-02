@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
 
+import org.teamneko.meowlib.dto.Product;
 import org.teamneko.meowlib.dto.TransactionRequest;
 import org.teamneko.meowlib.pojo.InventoryItem;
 import org.teamneko.meowlib.pojo.Transaction;

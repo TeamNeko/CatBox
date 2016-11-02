@@ -2,6 +2,9 @@ package org.teamneko.meowlib.dto;
 
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Product {
 	private int id;
 	private String name;
