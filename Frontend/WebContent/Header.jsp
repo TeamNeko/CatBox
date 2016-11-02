@@ -11,29 +11,29 @@
 		<ul id="horizontalList">
 			<li> 
 				<span>
-					<a href="http://soprema.ca/roofs/">
+					<a href="ProductsList.jsp">
 						Liste des produits
 					</a>
 				</span>
 			</li>
 			<li> 
 				<span>
-					<a href="http://soprema.ca/roofs/">
-						TEST
+					<a href="BoxList.jsp">
+						Liste des boîtes
 					</a>
 				</span>
 			</li>
 			<li> 
 				<span>
-					<a href="http://soprema.ca/roofs/">
-						TEST
+					<a href="Barcode.jsp">
+						Générer un code barre
 					</a>
 				</span>
 			</li>
 			<li> 
 				<span>
-					<a href="http://soprema.ca/roofs/">
-						TEST
+					<a href="CreateUser.jsp">
+						Créer un utilisateur
 					</a>
 				</span>
 			</li>
