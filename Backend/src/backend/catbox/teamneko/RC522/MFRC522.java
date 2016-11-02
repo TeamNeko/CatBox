@@ -124,6 +124,10 @@ public class MFRC522 {
 	 private int Speed 							= 500000;
 	 private int ResetPin						= 22; 	// Enabling RST on pin 22 by default
 	 
+	 public static String currentID				= "0000000000";
+	 private boolean SPI_Initialized			= false;
+	 
+	 
 	 
 	 MFRC522()
      {
@@ -145,12 +149,15 @@ public class MFRC522 {
     
 	public void MFRC522_Init()
     {
-        Gpio.wiringPiSetup();           //Enabling wiringPi pin schema
-        if (Spi.wiringPiSPISetup(SPI_SELECT,Speed) <= -1){
-			System.out.println(" --> Failed to set up  SPI communication");
-			return;
-        }
-        
+		if (SPI_Initialized == false){
+			//Initialize SPI only one time
+	        Gpio.wiringPiSetup();           //Enabling wiringPi pin schema
+	        if (Spi.wiringPiSPISetup(SPI_SELECT,Speed) <= -1){
+				System.out.println(" --> Failed to set up  SPI communication");
+				return;
+	        }
+		}
+		
 		Gpio.pinMode(ResetPin, Gpio.OUTPUT);
         Gpio.digitalWrite(ResetPin, Gpio.HIGH);
         
@@ -210,9 +217,9 @@ public class MFRC522 {
         byte data[]=new byte[2];
         data[0]=(byte) (((address << 1) & 0x7E) | 0x80);
         data[1]=0;
-        int result=Spi.wiringPiSPIDataRW(SPI_SELECT, data);
-        if(result == -1)
-            System.out.println("Device read  error,address="+address);
+        //int result=Spi.wiringPiSPIDataRW(SPI_SELECT, data);
+        //if(result == -1)
+        //    System.out.println("Device read  error,address="+address);
         return data[1];
     }
 	
@@ -322,14 +329,14 @@ public class MFRC522 {
         int status;
         byte []serial_number = new byte[2];
         int serial_number_check = 0;
-        int backLen[]=new int[1];
-        int back_bits[]=new int[1];
+        int backLen[] = new int[1];
+        int back_bits[] = new int[1];
         int i;
 
         Write_RC522(BitFramingReg, (byte)0x00);
-        serial_number[0]=PICC_ANTICOLL;
-        serial_number[1]=0x20;
-        status=Write_Card(PCD_TRANSCEIVE,serial_number,2,back_data,back_bits,backLen);
+        serial_number[0] = PICC_ANTICOLL;
+        serial_number[1] = 0x20;
+        status = Write_Card(PCD_TRANSCEIVE,serial_number,2,back_data,back_bits,backLen);
         if(status == MI_OK)
         {
             if(backLen[0] == 5)
@@ -367,69 +374,79 @@ public class MFRC522 {
 	}
 
     
-    public String ReadID( int SleepTime, int nbHit) throws InterruptedException{
+    public boolean ReadID( int sleepTime, int nbHit) throws InterruptedException{
     
-    	int back_len[] = new int[1];
-        byte tagid[] = new byte[5];
-        byte tagidVerif[] = new byte[5];
-        int i = 0;
-        int j = 0;
+    	// Security if user enters an unallowed number of Hit
+        if (nbHit < 1){
+        	nbHit = 3;
+        }
         
-        // Security if user enters an unallowed number of Hit
-        if (nbHit < 1)
-        	nbHit = 1;
+        // Security if user enters an unallowed sleep time
+        if (sleepTime < 100){
+        	sleepTime = 500;
+        }
+        
+        int 	back_len[] 	= new int[1];
+        byte 	tagid[] 	= new byte[5];
+        byte 	tagidVerif[]= new byte[5];
+        byte 	tagidNull[] = {0,0,0,0,0};
+        int 	hitCount 	= 0;
+        int 	notHitCount = 0;
 
         // Read till you read "nbHit" times the same UID, then return his value
 		while (true){
 			
 			// Verify if there's a card to read
-		    if(this.Request(PICC_REQIDL, back_len) == MI_OK)
-		        System.out.println("Detected card:"+back_len[0]);
+		    if(this.Request(PICC_REQIDL, back_len) == MI_OK){
+		    	//System.out.println("Detected card:");
+		    }
 		
 		    // Verify if there's a collision with the signal to read
 		    if(this.AntiColl(tagid) != MI_OK)
 		    { 
-		    	
-		        j++;
-		        if (j>3){
-		        	// If it's been a bad read more than 10 times in a row, 
+		        notHitCount++;
+		        if (notHitCount>nbHit){
+		        	// If it's been a bad read more than nbHit times in a row, 
 		        	// reset the count and the UID stored
-		        	i = 0;
-		        	System.out.println("Error, card is not detected");
-		        	tagidVerif[0]= 0;
-		        	tagidVerif[1]= 0;
-		        	tagidVerif[2]= 0;
-		        	tagidVerif[3]= 0;
-		        	tagidVerif[4]= 0;
+		        	//System.out.println("Error, card is not detected");
+		        	currentID = bytesToHex(tagidNull);
+		        	return false;
 		        }
 		        continue;
 		    }
 		    
-		    if ((tagidVerif[0] == 0) && (tagidVerif[1] == 0) && 
-		    	(tagidVerif[2] == 0) && (tagidVerif[3] == 0) && 
-		    	(tagidVerif[4] == 0)){
+		    // Initialisation of the verification ID tag (tagidVerif)
+		    if (tagidVerif == tagidNull){
 		    	tagidVerif = tagid;
-		    	i = 0;
-		    	j = 0;
+		    	hitCount = 0;
+		    	notHitCount = 0;
 		    }
 		    
+		    // The right id is read
 		    if (tagidVerif == tagid){
-		    	i++ ;
-		    	j = 0;
+		    	hitCount++ ;
+		    	notHitCount = 0;
 		    }
 		    
+		    // The wrong id is read
 		    if (tagidVerif != tagid){
-		    	i = 0;
+		    	hitCount = 0;
 		    }
 		    
-		    if (i == nbHit){
-		    	return bytesToHex(tagid);
+		    if (hitCount == nbHit){
+		    	currentID = bytesToHex(tagid);
+		    	return true;
 		    }
 		    
 		    // Insert a timer to read the RFID card at a reasonable rate
-				Thread.sleep(SleepTime);
+				Thread.sleep(sleepTime);
 				    
 		}
+	}
+    
+    public boolean ReadID() throws InterruptedException{
+    	
+    	return ReadID(500, 3);
 	
 	}
 }

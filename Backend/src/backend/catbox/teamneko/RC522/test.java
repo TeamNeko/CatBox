@@ -6,11 +6,10 @@ public class test {
     {
 		
 	        MFRC522 rc522=new MFRC522();
-	        String strUID;
 	        
 	    while (true){    
-	    	strUID = rc522.ReadID(500, 3);
-	    	System.out.println("Detecte card: "+strUID);
+	    	if (rc522.ReadID());
+	    	System.out.println("Detecte card: "+ MFRC522.currentID);
 	    }
 	
     };
