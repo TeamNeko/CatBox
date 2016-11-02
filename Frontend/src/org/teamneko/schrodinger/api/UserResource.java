@@ -31,6 +31,6 @@ public class UserResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public User getUser(@PathParam("code") String code) {
-    	return dao.getUser(code).orElseThrow(() -> new NotFoundException());
+    	return dao.search(code).orElseThrow(() -> new NotFoundException());
     }
 }

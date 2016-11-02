@@ -16,7 +16,7 @@ private PostgresDatabase database;
 	}
 	
 	@Override
-	public Optional<User> getUser(String number) {
+	public Optional<User> search(String number) {
 		try {
 			//Prepare Statement
 			PreparedStatement ps = database.prepare("SELECT * FROM \"Users\" WHERE number=?");
@@ -30,8 +30,16 @@ private PostgresDatabase database;
 				//Return an empty object
 				return Optional.empty();
 			
+			//Create User Object
+			User resultUser = new User();
+			resultUser.setId(rs.getInt("id"));
+			resultUser.setFirstName(rs.getString("first_name"));
+			resultUser.setLastName(rs.getString("last_name"));
+			resultUser.setNumber(number);
+			resultUser.setType(rs.getString("type"));
+			
 			//Return a new instance of user
-			return Optional.of(new User(rs.getInt("idUser"), rs.getString("first_name"), rs.getString("last_name"), number, rs.getString("type")));
+			return Optional.of(resultUser);
 			
 		} catch (SQLException e) {
 			//Return an empty object
