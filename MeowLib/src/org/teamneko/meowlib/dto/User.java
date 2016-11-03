@@ -21,8 +21,8 @@ public class User {
         number = "";
         type = "";
     }
-    
-    public User(long id, String firstName, String lastName, String number, String type) {
+
+	public User(long id, String firstName, String lastName, String number, String type) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -68,5 +68,11 @@ public class User {
 
 	public void setType(String type) {
 		this.type = type;
-	}     
+	}
+	
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", number=" + number
+				+ ", type=" + type + "]";
+	}
 }
