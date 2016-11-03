@@ -65,6 +65,12 @@ public class Box {
 		this.created = created;
 	}
 
+	@Override
+	public String toString() {
+		return "Box [barcode=" + barcode + ", id=" + id + ", weight=" + weight + ", created=" + created + ", modified="
+				+ modified + ", size=" + size + "]";
+	}
+
 	public void setModified(Date modified) {
 		this.modified = modified;
 	}

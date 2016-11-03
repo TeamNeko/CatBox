@@ -4,10 +4,13 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 
+import javax.ws.rs.core.MediaType;
+
 import org.teamneko.meowlib.dto.BoxSearchResult;
 import org.teamneko.meowlib.dto.CompositeSearchResult;
 import org.teamneko.meowlib.dto.ProductSearchResult;
 import org.teamneko.meowlib.dto.SearchResult;
+import org.teamneko.meowlib.dto.TransactionRequest;
 import org.teamneko.meowlib.dto.User;
 import org.teamneko.meowlib.dto.UserSearchResult;
 
@@ -36,5 +39,9 @@ public class SchrodingerClient extends Client {
 		}
 		
 		return new SearchResult(s.getType());
+	}
+	
+	public void postTransaction(TransactionRequest transaction) {
+		resource(url).path("box").path("update").type(MediaType.APPLICATION_JSON).post(transaction);
 	}
 }
