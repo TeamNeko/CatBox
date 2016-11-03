@@ -48,3 +48,5 @@ local.properties
 
 # Code Recommenders
 .recommenders/
+/Interface RPI/nbproject/private/
+/Interface RPI/build/
