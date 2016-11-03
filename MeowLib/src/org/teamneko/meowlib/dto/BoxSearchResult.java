@@ -23,5 +23,10 @@ public class BoxSearchResult extends SearchResult {
 	public void setBox(Box box) {
 		this.box = box;
 	}
+
+	@Override
+	public String toString() {
+		return "BoxSearchResult [box=" + box + "]";
+	}
 	
 }

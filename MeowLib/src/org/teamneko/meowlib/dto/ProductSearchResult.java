@@ -23,5 +23,10 @@ public class ProductSearchResult extends SearchResult {
 	public void setProduct(Product product) {
 		this.product = product;
 	}
+
+	@Override
+	public String toString() {
+		return "ProductSearchResult [product=" + product + ", type=" + getType() + "]";
+	}
 	
 }
