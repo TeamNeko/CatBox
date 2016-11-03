@@ -11,6 +11,10 @@
 	vertical-align: middle;	
 }
 
+.creationList ul
+{
+	list-style-type: none;
+}
 
 ul#horizontalList li {
 	display: inline;

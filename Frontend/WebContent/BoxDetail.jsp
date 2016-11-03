@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<%@ page import="org.teamneko.schrodinger.frontend.FrontendBoxDetail" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -10,17 +9,40 @@
      user="jmtntlek"  password="vaYxsY1WBNr5gYMMd-74kLrc98gqNhqI"/>
 
 <%
-	int boxId;
+	int boxId = -1, size = 0;
+	float weight = 0;
+	boolean needUpdate = false;
 	try{
 		boxId = Integer.parseInt(request.getParameter("Box"));
+		weight = Float.parseFloat(request.getParameter("weight"));
+		size = Integer.parseInt(request.getParameter("size"));
 	}
 	catch(NumberFormatException e)
 	{
-		boxId = -1;
+		e.printStackTrace();
+	}
+	catch(NullPointerException e)
+	{ 
+		e.printStackTrace();
+	}
+	if(weight!=0 || size != 0)
+	{
+		needUpdate = true;
 	}
 %>
 
 <core:set var="boxId" value="<%=boxId%>"/>
+<core:set var="weight" value="<%=weight%>"/>
+<core:set var="size" value="<%=size%>"/>
+
+<core:if test="<%=needUpdate %>">
+	<sql:update dataSource="${snapshot}">
+		UPDATE "Boxes" SET weight = ?, size = ? WHERE id = ?;
+		<sql:param value="${weight}" />
+		<sql:param value="${size}" />
+		<sql:param value="${boxId}" />
+	</sql:update>
+</core:if>
 
 <sql:query dataSource="${snapshot}" var="box">
 		SELECT * FROM "Boxes" WHERE id = ?;
@@ -39,20 +61,20 @@
 	</div>
 	<core:if test="${boxId != -1}">
 		<core:forEach var="row" items="${box.rows}">
-			<form action="FrontendBoxDetail" method="Post">
-				ID: <input type="text" value="${row.id}">
-				Poids: <input type="text" value="${row.weight}">
-				Taille: <input type="text" value="${row.size}">
+			<form action="?Box=${boxId}" method="Post">
+				ID: <input type="text" value="${row.id}" disabled>
+				Poids: <input type="text" name="weight" value="${row.weight}">
+				Taille: <input type="text" name="size" value="${row.size}">
 				Code Barre: <input type="text" value="${row.barcode}">
 			<input type="submit" value="Modifier"/>
 		</form> 
 		</core:forEach>  
 	</core:if> 
 	<core:if test="${boxId == -1}">
-		<form action="FrontendBoxDetail" method="Post">
-			ID: <input type="text" value="${row.id}">
-			Poids: <input type="text" value="${row.weight}">
-			Taille: <input type="text" value="${row.size}">
+		<form>		
+			ID: <input type="text" value="${row.id}" disabled>
+			Poids: <input type="text" name="weight" value="${row.weight}">
+			Taille: <input type="text" name="size" value="${row.size}">
 			Code Barre: <input type="text" value="${row.barcode}">
 			<input type="submit" value="Ajouter"/>
 		</form>
