@@ -13,7 +13,7 @@
 	float weight = 0;
 	boolean needUpdate = false;
 	try{
-		boxId = Integer.parseInt(request.getParameter("Box"));
+		boxId = Integer.parseInt(request.getParameter("box"));
 		weight = Float.parseFloat(request.getParameter("weight"));
 		size = Integer.parseInt(request.getParameter("size"));
 	}
@@ -61,7 +61,7 @@
 	</div>
 	<core:if test="${boxId != -1}">
 		<core:forEach var="row" items="${box.rows}">
-			<form action="?Box=${boxId}" method="Post">
+			<form action="?box=${boxId}" method="Post">
 				ID: <input type="text" value="${row.id}" disabled>
 				Poids: <input type="text" name="weight" value="${row.weight}">
 				Taille: <input type="text" name="size" value="${row.size}">

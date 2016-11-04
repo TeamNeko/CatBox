@@ -3,7 +3,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ page import="org.teamneko.schrodinger.frontend.FrontendBoxDetail" %>
 <!--
 <sql:setDataSource var="snapshot" driver="org.postgresql.Driver"
      url="jdbc:postgresql://localhost/catbox"
@@ -18,8 +17,8 @@
 	int productId;
 	String urlSaver = "";
 	try{
-			productId = Integer.parseInt(request.getParameter("Item"));
-			urlSaver = "&Item=" + productId; 
+			productId = Integer.parseInt(request.getParameter("item"));
+			urlSaver = "&item=" + productId; 
 	}
 	catch(NumberFormatException e)
 	{
@@ -34,6 +33,31 @@
 		<sql:param value="${productId}" />
 </sql:query>
 
+<core:set var="total" value="${fn:length(inventory.rows)}"/>
+<% 
+	int perPage = 5;
+	int totalRecords = 0, totalPage = 0, lastPageItem = 0; 
+	int currentPage = 0;
+	try 
+	{
+		totalRecords =  (int)pageContext.getAttribute("total");
+		totalPage = totalRecords/perPage;
+		lastPageItem = totalRecords%perPage;
+		currentPage = Integer.parseInt(request.getParameter("start"));
+		if(currentPage > totalPage)
+		{
+			currentPage = totalPage;
+		}
+		else if (currentPage < 0)
+		{
+			currentPage = 0;
+		}
+	}
+	catch (NumberFormatException e)
+	{
+		e.printStackTrace();
+	}
+%>  
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -67,7 +91,7 @@
 			 	<td>Date de modification</td>
 				<td>Code barre</td>
 			</tr>
-			<core:forEach var="row" items="${inventory.rows}" begin="${pageStart}" end="${pageStart + perPage - 1}" >
+			<core:forEach var="row" items="${inventory.rows}" begin="<%=currentPage*perPage%>" end="<%=perPage*(currentPage+1)-1 %>">
 				<tr>
 				 	<td><a href="FrontendBoxDetail?Box=${row.id}"><core:out value="${row.idBox}"/></a></td>
 				 	<td><core:out value="${row.quantity}"/></td>
@@ -79,11 +103,9 @@
 				</tr>
 			</core:forEach>
 		</table>
-		<a href="?start=${pageStart - perPage}<%=urlSaver%>">Previous</a>${pageStart +1} - ${pageStart + perPage} 
-		<a href="?start=${pageStart + perPage}<%=urlSaver%>">Next</a><br/>
-	</div>
-	<div id="footer">
-		<jsp:include page="Footer.jsp" />
+		<a href="?start=<%=(currentPage-1)+urlSaver%>">Previous</a>
+		<%=currentPage*perPage+1 %> - <%=perPage*(currentPage+1) %>
+		<a href="?start=<%=(currentPage+1)+urlSaver%>">Next</a><br/>
 	</div>
 </body>
 </html>

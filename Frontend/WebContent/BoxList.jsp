@@ -3,24 +3,20 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-
-
-<sql:setDataSource var="snapshot" driver="org.postgresql.Driver"
-     url="jdbc:postgresql://elmer.db.elephantsql.com:5432/jmtntlek"
-     user="jmtntlek"  password="vaYxsY1WBNr5gYMMd-74kLrc98gqNhqI"/>
      
 <% 
 	String urlSaver = ""; 
 	int boxId;
 	try{
-		boxId = Integer.parseInt(request.getParameter("Recherche"));
-		urlSaver += "&Recherche=" + boxId;
+		boxId = Integer.parseInt(request.getParameter("search"));
+		System.out.println(boxId);
+		urlSaver += "&search=" + boxId;
 	}
 	catch(NumberFormatException e)
 	{
 		boxId = -1;
 	}
-	String sortString = request.getParameter("Sort");
+	String sortString = request.getParameter("sort");
 	String sortColumnOrder = "ASC";
 	String sortColumnName = "id";
 	
@@ -29,7 +25,7 @@
 		String[] sortArguments = sortString.split("-");
 		sortColumnOrder = sortArguments[0];
 		sortColumnName = sortArguments[1];
-		urlSaver += "&Sort=" + sortColumnOrder + "-" + sortColumnName;
+		urlSaver += "&sort=" + sortColumnOrder + "-" + sortColumnName;
 		if(sortColumnOrder.equals("Des")){
 			sortColumnOrder = "DESC";
 		}
@@ -48,6 +44,10 @@
 <core:set var="sortColumnOrder" value="<%=sortColumnOrder %>"/>
 <core:set var="sortColumnName" value="<%=sortColumnName %>"/>
 
+<sql:setDataSource var="snapshot" driver="org.postgresql.Driver"
+     url="jdbc:postgresql://elmer.db.elephantsql.com:5432/jmtntlek"
+     user="jmtntlek"  password="vaYxsY1WBNr5gYMMd-74kLrc98gqNhqI"/>
+     
 <core:if test="${keyWord == -1}">
 	<sql:query dataSource="${snapshot}" var="box"> 
 		SELECT * FROM "Boxes" ORDER BY "${sortColumnName}" ${sortColumnOrder} LIMIT 50;
@@ -60,6 +60,32 @@
 	</sql:query>
 </core:if>
     
+<core:set var="total" value="${fn:length(box.rows)}"/>
+<% 
+	int perPage = 5;
+	int totalRecords = 0, totalPage = 0, lastPageItem = 0; 
+	int currentPage = 0;
+	try 
+	{
+		totalRecords =  (int)pageContext.getAttribute("total");
+		totalPage = totalRecords/perPage;
+		lastPageItem = totalRecords%perPage;
+		currentPage = Integer.parseInt(request.getParameter("start"));
+		if(currentPage > totalPage)
+		{
+			currentPage = totalPage;
+		}
+		else if (currentPage < 0)
+		{
+			currentPage = 0;
+		}
+	}
+	catch (NumberFormatException e)
+	{
+		e.printStackTrace();
+	}
+%>  
+    
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -71,11 +97,11 @@
 		<jsp:include page="Header.jsp" />
 	</div>
 	<div class="search">
-	 	<form action="FrontendBoxServer">
-			Recherche: <input type="text" name="Recherche">
+	 	<form>
+			search: <input type="text" name="search">
 			<button type="submit" id="search"></button>
 			Ordre d'affichage:  
-				<select name="Sort">
+				<select name="sort">
 					<option value="Asc-id" <%=sortString.equals("Asc-id") ? "selected" : ""%>>Ordre croissant d'ID</option>
 					<option value="Des-id" <%=sortString.equals("Des-id")? "selected" : ""%>>Ordre décroissant d'ID</option>
 					<option value="Asc-barcode" <%=sortString.equals("Asc-barcode") ? "selected" : ""%>>Ordre croissant de code barre</option>
@@ -110,9 +136,9 @@
 			<core:if test="${total <= pageStart}">
 			    <core:set var="pageStart" value="${total}"/>
 			</core:if>			
-			<core:forEach var="row" items="${box.rows}" begin="${pageStart}" end="${pageStart + perPage - 1}">
+			<core:forEach var="row" items="${box.rows}" begin="<%=currentPage*perPage%>" end="<%=perPage*(currentPage+1)-1 %>">
 				<tr>
-					<td><a href="FrontendBoxDetail?Box=${row.id}"><core:out value="${row.id}"/></a></td>
+					<td><a href="BoxDetail.jsp?box=${row.id}"><core:out value="${row.id}"/></a></td>
 					<td><core:out value="${row.barcode}"/></td>
 					<td><core:out value="${row.weight}"/></td>
 					<td><core:out value="${row.size}"/></td>
@@ -121,8 +147,9 @@
 				</tr>
 			</core:forEach>
 		</table>
-		<a href="?start=${pageStart - perPage}<%=urlSaver%>">Previous</a>${pageStart +1} - ${pageStart + perPage}
-		<a href="?start=${pageStart + perPage}<%=urlSaver%>">Next</a><br/>
+		<a href="?start=<%=(currentPage-1)+urlSaver%>">Previous</a>
+		<%=currentPage*perPage+1 %> - <%=perPage*(currentPage+1) %>
+		<a href="?start=<%=(currentPage+1)+urlSaver%>">Next</a><br/>
 	</div>
 </body>
 </html>

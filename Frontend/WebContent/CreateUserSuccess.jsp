@@ -9,17 +9,13 @@
      user="jmtntlek"  password="vaYxsY1WBNr5gYMMd-74kLrc98gqNhqI"/>
      
 <%
-	int userNum = 0, id = 1;
-	String firstName = "", lastName = "", userType = "Employé";
+	int id = 1;
+	String firstName = "", lastName = "", userType = "Employé",  userNum = "";
 	try{
-		userNum = Integer.parseInt(request.getParameter("number"));
+		userNum = request.getParameter("number");
 		firstName = request.getParameter("first_name");
 		lastName = request.getParameter("last_name");
 		userType = request.getParameter("type");
-	}
-	catch(NumberFormatException e)
-	{
-		e.printStackTrace();
 	}
 	catch(NullPointerException e)
 	{ 
