@@ -1,4 +1,4 @@
-package backend.catbox.teamneko.RC522;
+package org.teamneko.schrodinger.backend.RC522;
 
 import com.pi4j.wiringpi.Gpio;
 import com.pi4j.wiringpi.Spi;

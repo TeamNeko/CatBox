@@ -1,4 +1,4 @@
-package backend.catbox.teamneko.RC522;
+package org.teamneko.schrodinger.backend.RC522;
 
 public class test {
 

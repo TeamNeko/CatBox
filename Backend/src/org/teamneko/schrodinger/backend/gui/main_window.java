@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main;
+package org.teamneko.schrodinger.backend.gui;
 
 import javax.swing.JOptionPane;
 
@@ -531,7 +531,7 @@ public class main_window extends javax.swing.JFrame {
 
         jLabel_type.setText("Type: Étagère");
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/main/myimageapp/-Barcode_32896.jpg"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/teamneko/schrodinger/backend/gui/myimageapp/-Barcode_32896.jpg"))); // NOI18N
         jLabel1.setText("jLabel1");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
