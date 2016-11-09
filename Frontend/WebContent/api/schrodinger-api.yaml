@@ -1,0 +1,205 @@
+#####################################
+## Schrödinger REST API Specification
+##
+## Author: Tommy Savaria
+## Organization: TeamNeko
+## Current Version: 1.0
+## Version Date: November 9th 2016
+#####################################
+
+swagger: '2.0'
+info:
+  title: Schrödinger API
+  description: Schrödinger inventory management system API
+  version: "1.0"
+# the domain of the service
+host: api.uber.com
+# array of all schemes that your API supports
+schemes:
+  - http
+# will be prefixed to all paths
+basePath: /api
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /user:
+    get:
+      summary: Get user by employee code
+      description: |
+        The User endpoint fetches information about a user in the application
+        database
+      parameters:
+        - name: code
+          in: query
+          description: Employee Code
+          required: true
+          type: string
+      tags:
+        - User
+      responses:
+        200:
+          description: The user corresponding to the requested employee code 
+          schema:
+            $ref: '#/definitions/User'
+        404:
+          description: User not found
+  /search:
+    get:
+      summary: Search item in database
+      description: |
+        The Search endpoint searches for the item with the requested number/barcode. If found, the item returned can be a user, a product or a box.
+      parameters:
+        - name: number
+          in: query
+          description: Number to search in database
+          required: true
+          type: string
+      tags:
+        - User
+        - Product
+        - Box
+      responses:
+        200:
+          description: A search result corresponding to the found item. If the type is "not found", it contains no item. If type is "box", contains a "box" property. If type is "product", contains a "product" property. If the type is "user", contains a "user" property.
+          schema:
+            $ref: '#/definitions/SearchResult'
+            
+  /box/exists:
+    get:
+      summary: Find if box exists
+      description: |
+        This endpoint searches the database for a box with the specified barcode and replies if the box was found.
+      parameters:
+        - name: barcode
+          in: query
+          description: Number to search in database
+          required: true
+          type: string
+      tags:
+        - Box
+      responses:
+        200:
+          description: A boolean value representing if a box was found
+          schema:
+            type: boolean
+  
+    
+  /box/update:
+    post:
+      summary: Update contents of box
+      description: |
+        This endpoint changes the content of the box in inventory
+      parameters:
+        - name: Transaction Request
+          in: body
+          schema:
+            $ref: '#/definitions/TransactionRequest'
+      tags:
+        - Box
+      responses:
+        204:
+          description: This endpoint does not return anything
+      
+definitions:
+  Box:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Unique identifier of the box
+      barcode:
+        type: string
+        description: Barcode on the box
+      created:
+        type: string
+        format: date-time
+        description: Creation date
+      modified:
+        type: string
+        description: Last modification date
+      size:
+        type: string
+        description: Size of the box
+      weight:
+        type: number
+        format: double
+        description: Weight of the box in kilograms
+  Product:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Unique identifier of the product
+      name:
+        type: string
+        description: Name of the product
+      description:
+        type: string
+        description: A detailed description of the product
+      created:
+        type: string
+        description: Creation date
+      removed:
+        type: string
+        description: Date the product was retired
+      weight:
+        type: number
+        format: double
+        description: Weight of the product in kilograms
+        
+  User:
+    type: object
+    properties:
+      first_name:
+        type: string
+        description: Employee first name
+      last_name:
+        type: string
+        description: Employee last name
+        
+  SearchResult:
+    type: object
+    properties:
+      type:
+        type: string
+        description: Type of search result. "not found" if the object contains no item
+      box:
+        $ref: '#/definitions/Box'
+      product:
+        $ref: '#/definitions/Product'
+      user:
+        $ref: '#/definitions/User'
+  
+  TransactionRequest:
+    type: object
+    properties:
+      user:
+        type: integer
+        description: Id of the user making the transaction
+      box:
+        type: string
+        description: Barcode of the box being modified
+      productsAdded:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: integer
+              description: Id of the product being added
+            quantity:
+              type: integer
+              description: Quantity of this object to add
+      productsRemoved:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: integer
+              description: Id of the product being removed
+            quantity:
+              type: integer
+              description: Quantity of this object to remove
