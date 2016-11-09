@@ -8,6 +8,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.teamneko.meowlib.dto.BoxSearchResult;
 import org.teamneko.meowlib.dto.CompositeSearchResult;
+import org.teamneko.meowlib.dto.NamedProduct;
 import org.teamneko.meowlib.dto.ProductSearchResult;
 import org.teamneko.meowlib.dto.SearchResult;
 import org.teamneko.meowlib.dto.TransactionRequest;
@@ -43,5 +44,9 @@ public class SchrodingerClient extends Client {
 	
 	public void postTransaction(TransactionRequest transaction) {
 		resource(url).path("box").path("update").type(MediaType.APPLICATION_JSON).post(transaction);
+	}
+	
+	public NamedProduct[] getBoxDetails(int idBox) {
+		return resource(url).path("box").path("details").path(Integer.toString(idBox)).get(NamedProduct[].class);
 	}
 }

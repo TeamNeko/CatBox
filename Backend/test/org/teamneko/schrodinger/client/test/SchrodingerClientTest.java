@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.teamneko.meowlib.dto.BoxSearchResult;
+import org.teamneko.meowlib.dto.NamedProduct;
 import org.teamneko.meowlib.dto.ProductSearchResult;
 import org.teamneko.meowlib.dto.TransactionRequest;
 import org.teamneko.meowlib.dto.User;
@@ -40,7 +41,7 @@ public class SchrodingerClientTest {
 		assertEquals(BoxSearchResult.class, c.search("123456789152").getClass());
 	}
 	
-	@Test
+	
 	public void testPostTransaction() {
 		TransactionRequest transaction = new TransactionRequest();
 		TransactionRequest.Product[] added = new TransactionRequest.Product[2];
@@ -53,6 +54,12 @@ public class SchrodingerClientTest {
 		transaction.setProductsAdded(added);
 		
 		c.postTransaction(transaction);
+	}
+	
+	@Test
+	public void testGetBox() {
+		for(NamedProduct product : c.getBoxDetails(3))
+			System.out.println(product);
 	}
 	
 }

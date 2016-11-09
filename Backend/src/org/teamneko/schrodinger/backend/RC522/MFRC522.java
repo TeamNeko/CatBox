@@ -1,4 +1,4 @@
-package backend.catbox.teamneko.RC522;
+package org.teamneko.schrodinger.backend.RC522;
 
 import com.pi4j.wiringpi.Gpio;
 import com.pi4j.wiringpi.Spi;
@@ -129,18 +129,18 @@ public class MFRC522 {
 	 
 	 
 	 
-	 public MFRC522()
+	 MFRC522()
      {
         MFRC522_Init();
      }
 	
-	public MFRC522(int PinReset)
+	 MFRC522(int PinReset)
      {
         this.ResetPin = PinReset;
         MFRC522_Init();
      }
 	
-	 public MFRC522(int Speed,int PinReset)
+	 MFRC522(int Speed,int PinReset)
      {
         this.ResetPin = PinReset;
 		this.Speed = Speed;

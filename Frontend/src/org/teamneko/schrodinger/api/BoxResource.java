@@ -1,6 +1,7 @@
 package org.teamneko.schrodinger.api;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -13,7 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
 
-import org.teamneko.meowlib.dto.Product;
+import org.teamneko.meowlib.dto.NamedProduct;
 import org.teamneko.meowlib.dto.TransactionRequest;
 import org.teamneko.meowlib.pojo.InventoryItem;
 import org.teamneko.meowlib.pojo.Transaction;
@@ -40,6 +41,13 @@ public class BoxResource {
 	public String boxExists(@PathParam("barcode") String barcode) {
 		System.out.println(barcode);
 		return Boolean.toString(boxes.exists(barcode));
+	}
+	
+	@GET
+	@Path("/details/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<NamedProduct> getBoxDetails(@PathParam("id") int id) {
+		return inventory.getBoxContents(id);
 	}
 	
 	@POST

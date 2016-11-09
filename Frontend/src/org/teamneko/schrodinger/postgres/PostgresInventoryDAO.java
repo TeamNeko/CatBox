@@ -3,7 +3,10 @@ package org.teamneko.schrodinger.postgres;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.teamneko.meowlib.dto.NamedProduct;
 import org.teamneko.meowlib.pojo.InventoryItem;
 import org.teamneko.schrodinger.dao.InventoryDAO;
 
@@ -84,6 +87,30 @@ public class PostgresInventoryDAO implements InventoryDAO {
 			update(id, 0-item.getQuantity());
 		}
 
+	}
+
+	@Override
+	public List<NamedProduct> getBoxContents(int idBox) {
+		ArrayList<NamedProduct> products = new ArrayList<NamedProduct>();
+		
+		try {
+			PreparedStatement ps = database.prepare("SELECT quantity, \"idProduct\", \"Products\".name FROM \"Inventory\" INNER JOIN \"Products\" ON \"Inventory\".\"idProduct\" = \"Products\".id WHERE \"Inventory\".\"idBox\" = ?");
+			ps.setInt(1, idBox);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				NamedProduct product = new NamedProduct();
+				product.setId(rs.getInt("idProduct"));
+				product.setQuantity(rs.getInt("quantity"));
+				product.setName(rs.getString("name"));
+				products.add(product);
+			}
+			
+			ps.close();
+		} catch (SQLException e) {
+		}
+		
+		return products;
 	}
 
 }
