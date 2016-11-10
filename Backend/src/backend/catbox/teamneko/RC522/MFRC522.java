@@ -124,7 +124,7 @@ public class MFRC522 {
 	 private int Speed 							= 500000;
 	 private int ResetPin						= 22; 	// Enabling RST on pin 22 by default
 	 
-	 public static String currentID				= "0000000000";
+	 public String currentID				= "0000000000";
 	 private boolean SPI_Initialized			= false;
 	 
 	 

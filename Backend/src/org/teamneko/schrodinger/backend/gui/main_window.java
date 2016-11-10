@@ -6,10 +6,14 @@
 package org.teamneko.schrodinger.backend.gui;
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import java.lang.Thread;
 
 import org.teamneko.meowlib.dto.TransactionRequest;
 import org.teamneko.schrodinger.client.SchrodingerClient;
 
+import com.sun.jersey.api.client.UniformInterfaceException;
+import backend.catbox.teamneko.RC522.MFRC522;
 /**
  *
  * @author Alexandre
@@ -24,7 +28,9 @@ public class main_window extends javax.swing.JFrame {
      * Creates new form main_window
      */
     public main_window() {
-        initComponents();
+        
+    	initComponents();
+    	
         this.addKeyListener(new BarcodeScannerController());
         jTextField_barcode.requestFocus();
     }
@@ -79,9 +85,29 @@ public class main_window extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable_items = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
+        jPanel_authentification = new javax.swing.JPanel();
+        jlabel_phrase = new javax.swing.JLabel();
+        jLabel_Xrouge = new javax.swing.JLabel();
+        jLabel_Xrouge.setVisible(false);
+        jLabel_crochetvert = new javax.swing.JLabel();
+        jLabel_crochetvert.setVisible(false);
+        jPanel_blank = new javax.swing.JPanel();
 
         jPanel_Button_control.setPreferredSize(new java.awt.Dimension(133, 320));
 
+        jPanel_authentification.setMaximumSize(new java.awt.Dimension(318, 320));
+        jPanel_authentification.setMinimumSize(new java.awt.Dimension(318, 320));
+        jPanel_authentification.setPreferredSize(new java.awt.Dimension(318, 320));
+        
+        jPanel_blank.setMaximumSize(new java.awt.Dimension(133, 320));
+        jPanel_blank.setMinimumSize(new java.awt.Dimension(133, 320));
+
+        jlabel_phrase.setText("Veuiller scanner la carte RFID");
+
+        jLabel_Xrouge.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/teamneko/schrodinger/backend/gui/myimageapp/x_rouge.png"))); // NOI18N
+
+        jLabel_crochetvert.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/teamneko/schrodinger/backend/gui/myimageapp/crochet_vert.png"))); // NOI18N
+        
         jButton_plus.setText("+");
         jButton_plus.setAlignmentY(0.0F);
         jButton_plus.setFocusable(false);
@@ -124,6 +150,19 @@ public class main_window extends javax.swing.JFrame {
                 jButton_minusActionPerformed(evt);
             }
         });
+        
+        javax.swing.GroupLayout jPanel_blankLayout = new javax.swing.GroupLayout(jPanel_blank);
+        jPanel_blank.setLayout(jPanel_blankLayout);
+        jPanel_blankLayout.setHorizontalGroup(
+            jPanel_blankLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 133, Short.MAX_VALUE)
+        );
+        jPanel_blankLayout.setVerticalGroup(
+            jPanel_blankLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 320, Short.MAX_VALUE)
+        );
+
+        
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -496,7 +535,34 @@ public class main_window extends javax.swing.JFrame {
                 jButton_optionsActionPerformed(evt);
             }
         });
-
+        
+        javax.swing.GroupLayout jPanel_authentificationLayout = new javax.swing.GroupLayout(jPanel_authentification);
+        jPanel_authentification.setLayout(jPanel_authentificationLayout);
+        jPanel_authentificationLayout.setHorizontalGroup(
+            jPanel_authentificationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_authentificationLayout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(jLabel_crochetvert)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addComponent(jLabel_Xrouge)
+                .addGap(43, 43, 43))
+            .addGroup(jPanel_authentificationLayout.createSequentialGroup()
+                .addGap(88, 88, 88)
+                .addComponent(jlabel_phrase)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel_authentificationLayout.setVerticalGroup(
+            jPanel_authentificationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel_authentificationLayout.createSequentialGroup()
+                .addGap(59, 59, 59)
+                .addComponent(jlabel_phrase)
+                .addGap(32, 32, 32)
+                .addGroup(jPanel_authentificationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel_crochetvert)
+                    .addComponent(jLabel_Xrouge, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(85, Short.MAX_VALUE))
+        );
+        
         javax.swing.GroupLayout jPanel_ButtonLayout = new javax.swing.GroupLayout(jPanel_Button);
         jPanel_Button.setLayout(jPanel_ButtonLayout);
         jPanel_ButtonLayout.setHorizontalGroup(
@@ -523,7 +589,7 @@ public class main_window extends javax.swing.JFrame {
                 .addContainerGap(43, Short.MAX_VALUE))
         );
 
-        jSplitPane.setLeftComponent(jPanel_Button);
+        jSplitPane.setLeftComponent(jPanel_blank);
 
         jPanel_view.setMaximumSize(new java.awt.Dimension(340, 320));
         jPanel_view.setMinimumSize(new java.awt.Dimension(340, 320));
@@ -608,7 +674,7 @@ public class main_window extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jSplitPane.setRightComponent(jPanel_view);
+        jSplitPane.setRightComponent(jPanel_authentification);
 
         javax.swing.GroupLayout jPanel_MainLayout = new javax.swing.GroupLayout(jPanel_Main);
         jPanel_Main.setLayout(jPanel_MainLayout);
@@ -813,20 +879,24 @@ public class main_window extends javax.swing.JFrame {
 
     /**
      * @param args the command line arguments
+     * @throws InterruptedException 
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws InterruptedException {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
+    	
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
+                
             }
+            
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(main_window.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
@@ -836,7 +906,6 @@ public class main_window extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(main_window.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
   
 
         /* Create and display the form */
@@ -845,7 +914,7 @@ public class main_window extends javax.swing.JFrame {
                 new main_window().setVisible(true);
             }
         });
-    }
+    }    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -889,5 +958,10 @@ public class main_window extends javax.swing.JFrame {
     private javax.swing.JSplitPane jSplitPane;
     private javax.swing.JTable jTable_items;
     private javax.swing.JTextField jTextField_barcode;
+    javax.swing.JLabel jLabel_Xrouge;
+    javax.swing.JLabel jLabel_crochetvert;
+    private javax.swing.JPanel jPanel_authentification;
+    private javax.swing.JLabel jlabel_phrase;
+    private javax.swing.JPanel jPanel_blank;
     // End of variables declaration//GEN-END:variables
 }
