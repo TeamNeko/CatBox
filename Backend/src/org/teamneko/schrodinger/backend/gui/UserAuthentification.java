@@ -7,24 +7,32 @@ import com.sun.jersey.api.client.UniformInterfaceException;
 
 public class UserAuthentification {
 	
-	MFRC522 rc522;
-	main_window window;
+	private MFRC522 rc522;
+	private main_window window;
 	
+	public UserAuthentification(){
+		
+	}
 	
+	public UserAuthentification(main_window win){
+		window = win;
+	}
 	public static void main(String[] args) {
 		main_window window = new main_window();
+		UserAuthentification userAuth = new UserAuthentification(window);
 		MFRC522 rc522 = new MFRC522();
-			/*	try {
+		
+				try {
 				
-				boolean doSleep = runAuthentif();
+				boolean doSleep = userAuth.runAuthentif();
 					if (doSleep){
 						Thread.sleep(5000);
 					}
 				}
-				catch (Exception e) {
+				catch (Exception e) { 
 					e.printStackTrace();
 				}
-			*/
+			
 		};
 	
 public boolean runAuthentif() throws InterruptedException{ 					//type de fonction
