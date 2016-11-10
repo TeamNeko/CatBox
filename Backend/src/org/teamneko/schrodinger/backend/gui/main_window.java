@@ -8,12 +8,11 @@ package org.teamneko.schrodinger.backend.gui;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import java.lang.Thread;
-
+import javax.swing.ImageIcon;
 import org.teamneko.meowlib.dto.TransactionRequest;
 import org.teamneko.schrodinger.client.SchrodingerClient;
 
 import com.sun.jersey.api.client.UniformInterfaceException;
-import backend.catbox.teamneko.RC522.MFRC522;
 /**
  *
  * @author Alexandre
@@ -70,6 +69,8 @@ public class main_window extends javax.swing.JFrame {
         jButton_number_9 = new javax.swing.JButton();
         jButton_number_0 = new javax.swing.JButton();
         jButton_number_cancel = new javax.swing.JButton();
+       // jButton_crochet_vert = new javax.swing.JButton();
+       // jButton_crochet_vert.setIcon(new javax.swing.ImageIcon(getClass().getResource("/crochet_vert.png")));
         jPanel_auth = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jPanel_Main = new javax.swing.JPanel();
@@ -415,6 +416,12 @@ public class main_window extends javax.swing.JFrame {
                 jButton_number_cancelActionPerformed(evt);
             }
         });
+        
+     //  jButton_crochet_vert.addActionListener(new java.awt.event.ActionListener() {
+       //    public void actionPerformed(java.awt.event.ActionEvent evt) {
+      //          jButton1ActionPerformed(evt);
+      //      }
+     //   });
 
         javax.swing.GroupLayout jPanel_ClavierLayout = new javax.swing.GroupLayout(jPanel_Clavier);
         jPanel_Clavier.setLayout(jPanel_ClavierLayout);
@@ -877,6 +884,8 @@ public class main_window extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton_downActionPerformed
 
+    
+    
     /**
      * @param args the command line arguments
      * @throws InterruptedException 
@@ -936,6 +945,7 @@ public class main_window extends javax.swing.JFrame {
     private javax.swing.JButton jButton_number_8;
     private javax.swing.JButton jButton_number_9;
     private javax.swing.JButton jButton_number_cancel;
+    private javax.swing.JButton jButton_crochet_vert;
     private javax.swing.JButton jButton_ok;
     private javax.swing.JButton jButton_options;
     private javax.swing.JButton jButton_plus;

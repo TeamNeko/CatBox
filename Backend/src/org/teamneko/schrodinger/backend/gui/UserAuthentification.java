@@ -1,26 +1,21 @@
 package org.teamneko.schrodinger.backend.gui;
 
-import backend.catbox.teamneko.RC522.MFRC522;
+import org.teamneko.schrodinger.backend.RC522.MFRC522;
 
 import com.sun.jersey.api.client.UniformInterfaceException;
-
-
-
-
 
 
 public class UserAuthentification {
 	
 	MFRC522 rc522;
-	private String crochet = "" ;
 	main_window window;
 	
 	
-	public void main(String[] args) {
-		window = new main_window();
-		rc522 = new MFRC522();
-				try {
-					
+	public static void main(String[] args) {
+		main_window window = new main_window();
+		MFRC522 rc522 = new MFRC522();
+			/*	try {
+				
 				boolean doSleep = runAuthentif();
 					if (doSleep){
 						Thread.sleep(5000);
@@ -29,7 +24,7 @@ public class UserAuthentification {
 				catch (Exception e) {
 					e.printStackTrace();
 				}
-			
+			*/
 		};
 	
 public boolean runAuthentif() throws InterruptedException{ 					//type de fonction

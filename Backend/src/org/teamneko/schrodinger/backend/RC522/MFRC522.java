@@ -1,6 +1,7 @@
 package org.teamneko.schrodinger.backend.RC522;
 
 import com.pi4j.wiringpi.Gpio;
+
 import com.pi4j.wiringpi.Spi;
 
 
@@ -129,18 +130,18 @@ public class MFRC522 {
 	 
 	 
 	 
-	 MFRC522()
+	 public MFRC522()
      {
         MFRC522_Init();
      }
 	
-	 MFRC522(int PinReset)
+	 public MFRC522(int PinReset)
      {
         this.ResetPin = PinReset;
         MFRC522_Init();
      }
 	
-	 MFRC522(int Speed,int PinReset)
+	 public MFRC522(int Speed,int PinReset)
      {
         this.ResetPin = PinReset;
 		this.Speed = Speed;
