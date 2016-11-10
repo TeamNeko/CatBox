@@ -3,6 +3,7 @@ package org.teamneko.schrodinger.client;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
+import com.sun.jersey.api.client.filter.LoggingFilter;
 
 import javax.ws.rs.core.MediaType;
 
@@ -21,13 +22,14 @@ public class SchrodingerClient extends Client {
 	
 	public SchrodingerClient(String url) {
 		this.url = url;
+		this.addFilter(new LoggingFilter(System.out));
 	}
 	
 	public User requestUser(String number) throws UniformInterfaceException {
 		return resource(url).path("user").path(number).get(User.class);
 	}
 	
-	public SearchResult search(String barcode) {
+	public SearchResult search(String barcode) { 
 		ClientResponse cr = resource(url).path("search").path(barcode).get(ClientResponse.class);
 		CompositeSearchResult s = cr.getEntity(CompositeSearchResult.class);
 	

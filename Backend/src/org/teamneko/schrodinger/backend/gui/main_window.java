@@ -6,6 +6,11 @@
 package org.teamneko.schrodinger.backend.gui;
 
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
+import org.teamneko.meowlib.dto.NamedProduct;
+import org.teamneko.meowlib.dto.TransactionRequest;
+import org.teamneko.schrodinger.client.SchrodingerClient;
 
 /**
  *
@@ -14,12 +19,28 @@ import javax.swing.JOptionPane;
 
  
 public class main_window extends javax.swing.JFrame {
-
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private ProductListModel products = new ProductListModel();
+	public SchrodingerClient client = new SchrodingerClient("http://localhost:8080/Frontend/rest");
+	public String barcode;
+	public int idContainer;
+	private BarcodeScannerController controller = new BarcodeScannerController();
     /**
      * Creates new form main_window
      */
     public main_window() {
         initComponents();
+        idContainer = 0;
+        barcode = jTextField_barcode.getText();//Set Box Barcode
+        controller.setMainWindow(this);
+        jTextField_barcode.addActionListener(controller);
+        jTextField_barcode.requestFocus();
+        this.addKeyListener(controller);
+        jButton_modifier.setEnabled(false);
+        //jTextField_barcode.setEnabled(false);
     }
         
     /**
@@ -70,7 +91,7 @@ public class main_window extends javax.swing.JFrame {
         jLabel_type = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTable_items = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
 
         jPanel_Button_control.setPreferredSize(new java.awt.Dimension(133, 320));
@@ -521,31 +542,33 @@ public class main_window extends javax.swing.JFrame {
         jPanel_view.setMaximumSize(new java.awt.Dimension(340, 320));
         jPanel_view.setMinimumSize(new java.awt.Dimension(340, 320));
         jPanel_view.setPreferredSize(new java.awt.Dimension(340, 320));
-
-        jTextField_barcode.setText("11111111111");
         jTextField_barcode.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField_barcodeActionPerformed(evt);
             }
         });
 
-        jLabel_type.setText("Type: Étagère");
+        jLabel_type.setText("Type:");
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/teamneko/schrodinger/backend/gui/myimageapp/-Barcode_32896.jpg"))); // NOI18N
         jLabel1.setText("jLabel1");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTable_items.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                { new Integer(1), "Patate",  new Integer(10000),  new Integer(0)},
-                { new Integer(2), "orange",  new Integer(5),  new Integer(0)},
-                { new Integer(3), "tangerine",  new Integer(400),  new Integer(0)},
-                { new Integer(4), "concombre",  new Integer(52),  new Integer(0)}
+                { new Integer(1), "",  new Integer(0),  new Integer(0)},
+                { new Integer(2), "",  new Integer(0),  new Integer(0)},
+                { new Integer(3), "",  new Integer(0),  new Integer(0)},
+                { new Integer(4), "",  new Integer(0),  new Integer(0)}
             },
             new String [] {
                 "# Item", "Nom", "Qty Actuelle", "Qty Modifié"
             }
         ) {
-            Class[] types = new Class [] {
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+			Class[] types = new Class [] {
                 java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
@@ -560,8 +583,8 @@ public class main_window extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.getTableHeader().setReorderingAllowed(false);
-        jScrollPane2.setViewportView(jTable1);
+        jTable_items.getTableHeader().setReorderingAllowed(false);
+        jScrollPane2.setViewportView(jTable_items);
 
         jButton1.setFont(new java.awt.Font("Tahoma", 0, 8)); // NOI18N
         jButton1.setText("C");
@@ -631,9 +654,22 @@ public class main_window extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton_modifierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_modifierActionPerformed
-        jSplitPane.setLeftComponent(jPanel_Button_control);
-        repaint();
-        revalidate();
+        
+    	jSplitPane.setLeftComponent(jPanel_Button_control);
+        jTextField_barcode.setEnabled(false);
+        jTable_items.requestFocus();
+        
+        //Affichage dans le tableau des valeurs dans jTable_items
+        String col[] = {"#id","Nom","Quantite", "Qte Modifié"};
+        DefaultTableModel model = new DefaultTableModel(col, 0);
+        for (NamedProduct item: client.getBoxDetails(idContainer))
+        {
+        	int modifyQte = 0;
+        	Object o[] = {item.getId(), item.getName(), item.getQuantity(), modifyQte};
+        	model.addRow(o);
+        }
+        jTable_items.setModel(model);
+        jTable_items.changeSelection(0, 0, false, false);
     }//GEN-LAST:event_jButton_modifierActionPerformed
 
     private void jTextField_barcodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField_barcodeActionPerformed
@@ -653,34 +689,45 @@ public class main_window extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton_upMouseClicked
 
     private void jButton_upActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_upActionPerformed
-        jTable1.requestFocusInWindow();
-        int row = jTable1.getSelectedRow();
+        jTable_items.requestFocusInWindow();
+        int row = jTable_items.getSelectedRow();
         if(row > 0)
         {
             row--;
-            jTable1.setRowSelectionInterval(row, row);
+            jTable_items.setRowSelectionInterval(row, row);
         }
     }//GEN-LAST:event_jButton_upActionPerformed
 
     private void jButton_minusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_minusActionPerformed
-     int row = jTable1.getSelectedRow();
-        String value = jTable1.getValueAt(row, 3).toString();
+     int row = jTable_items.getSelectedRow();
+        String value = jTable_items.getValueAt(row, 3).toString();
         int val = Integer.parseInt(value);
+        int id = Integer.parseInt(jTable_items.getValueAt(row, 0).toString());
+        this.products.removeOneItem(id);
+        
         val--;
         
-        jTable1.setValueAt(val, row, 3);
+        jTable_items.setValueAt(val, row, 3);
     }//GEN-LAST:event_jButton_minusActionPerformed
 
     private void jButton_okActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_okActionPerformed
-        String message = "Voici les changement éfecctué:"
+        String message = "Voici les changements effectués:"
                 + "";
-        String title = "Confirmation des changements effectué";
+        String title = "Confirmation des changements effectués";
         int reply = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.YES_NO_OPTION);
         
-     if (reply == JOptionPane.YES_OPTION)
-    {
-      jSplitPane.setLeftComponent(jPanel_Button);
-    }
+	    if (reply == JOptionPane.YES_OPTION)
+	    {
+	      jSplitPane.setLeftComponent(jPanel_Button);
+	      TransactionRequest transaction = new TransactionRequest();
+	      int user_id = 7;//Set User ID
+	      transaction.setUser(user_id);
+	      transaction.setBox(barcode);
+	      transaction.setProductsAdded(products.getProductsAdded());
+	      transaction.setProductsRemoved(products.getProductsRemoved());
+	      client.postTransaction(transaction);
+	      jTextField_barcode.setEnabled(true);
+	    }
     }//GEN-LAST:event_jButton_okActionPerformed
 
     private void jButton_shutdownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_shutdownActionPerformed
@@ -717,7 +764,9 @@ public class main_window extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton_number_cancelActionPerformed
 
     private void jButton_cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_cancelActionPerformed
-        jSplitPane.setLeftComponent(jPanel_Button);        // TODO add your handling code here:
+        jSplitPane.setLeftComponent(jPanel_Button); 
+        jTextField_barcode.setEnabled(true);
+        jTextField_barcode.requestFocus();
     }//GEN-LAST:event_jButton_cancelActionPerformed
 
     private void jButton_clavier_annulerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_clavier_annulerActionPerformed
@@ -769,23 +818,26 @@ public class main_window extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton_plusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_plusActionPerformed
-        int row = jTable1.getSelectedRow();
-        String value = jTable1.getValueAt(row, 3).toString();
+        int row = jTable_items.getSelectedRow();
+        String value = jTable_items.getValueAt(row, 3).toString();
         int val = Integer.parseInt(value);
         val++;
         
-        jTable1.setValueAt(val, row, 3);
+        int id = Integer.parseInt(jTable_items.getValueAt(row, 0).toString());
+        this.products.addOneItem(id);
+        
+        jTable_items.setValueAt(val, row, 3);
     }//GEN-LAST:event_jButton_plusActionPerformed
 
     private void jButton_downActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_downActionPerformed
-        jTable1.requestFocusInWindow();
-        int row = jTable1.getSelectedRow();
-        int maxrow = jTable1.getModel().getRowCount();
+        jTable_items.requestFocusInWindow();
+        int row = jTable_items.getSelectedRow();
+        int maxrow = jTable_items.getModel().getRowCount();
         maxrow--;
         if((row >= 0) && (row < maxrow))
         {
             row++;
-            jTable1.setRowSelectionInterval(row, row);
+            jTable_items.setRowSelectionInterval(row, row);
         }
     }//GEN-LAST:event_jButton_downActionPerformed
 
@@ -853,7 +905,7 @@ public class main_window extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel_type;
-    private javax.swing.JPanel jPanel1;
+	private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel_Button;
     private javax.swing.JPanel jPanel_Button_control;
@@ -865,7 +917,39 @@ public class main_window extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSplitPane jSplitPane;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable_items;
     private javax.swing.JTextField jTextField_barcode;
     // End of variables declaration//GEN-END:variables
+    public javax.swing.JTable getjTable_items() {
+		return jTable_items;
+	}
+
+	public void setjTable_items(Object aValue, int row , int column ) {
+		this.jTable_items.setValueAt(aValue, row, column);
+	}
+
+	public javax.swing.JTextField getjTextField_barcode() {
+		return jTextField_barcode;
+	}
+
+	public void setjTextField_barcode(String string) {
+		this.jTextField_barcode.setText(string);
+	}
+	
+	public javax.swing.JLabel getjLabel_type() {
+		return jLabel_type;
+	}
+
+	public void setjLabel_type(String jLabel_type) {
+		this.jLabel_type.setText(jLabel_type);
+	}
+	
+	public javax.swing.JButton getjButton_modifier() {
+		return jButton_modifier;
+	}
+
+	public void setjButton_modifier(javax.swing.JButton jButton_modifier) {
+		this.jButton_modifier = jButton_modifier;
+	}
 }
+
