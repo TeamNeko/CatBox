@@ -29,7 +29,7 @@ public class SchrodingerClient extends Client {
 		return resource(url).path("user").path(number).get(User.class);
 	}
 	
-	public SearchResult search(String barcode) {
+	public SearchResult search(String barcode) { 
 		ClientResponse cr = resource(url).path("search").path(barcode).get(ClientResponse.class);
 		CompositeSearchResult s = cr.getEntity(CompositeSearchResult.class);
 	

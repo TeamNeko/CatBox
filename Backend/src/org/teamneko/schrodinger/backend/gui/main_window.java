@@ -6,7 +6,9 @@
 package org.teamneko.schrodinger.backend.gui;
 
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
+import org.teamneko.meowlib.dto.NamedProduct;
 import org.teamneko.meowlib.dto.TransactionRequest;
 import org.teamneko.schrodinger.client.SchrodingerClient;
 
@@ -22,17 +24,22 @@ public class main_window extends javax.swing.JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private ProductListModel products = new ProductListModel();
-	public SchrodingerClient client = new SchrodingerClient("http://localhost:8080/rest");
+	public SchrodingerClient client = new SchrodingerClient("http://localhost:8080/Frontend/rest");
+	public String barcode;
+	public int idContainer;
 	private BarcodeScannerController controller = new BarcodeScannerController();
     /**
      * Creates new form main_window
      */
     public main_window() {
         initComponents();
+        idContainer = 0;
+        barcode = jTextField_barcode.getText();//Set Box Barcode
         controller.setMainWindow(this);
         jTextField_barcode.addActionListener(controller);
         jTextField_barcode.requestFocus();
         this.addKeyListener(controller);
+        jButton_modifier.setEnabled(false);
         //jTextField_barcode.setEnabled(false);
     }
         
@@ -548,10 +555,10 @@ public class main_window extends javax.swing.JFrame {
 
         jTable_items.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                { new Integer(1), "Patate",  new Integer(10000),  new Integer(0)},
-                { new Integer(2), "orange",  new Integer(5),  new Integer(0)},
-                { new Integer(3), "tangerine",  new Integer(400),  new Integer(0)},
-                { new Integer(4), "concombre",  new Integer(52),  new Integer(0)}
+                { new Integer(1), "",  new Integer(0),  new Integer(0)},
+                { new Integer(2), "",  new Integer(0),  new Integer(0)},
+                { new Integer(3), "",  new Integer(0),  new Integer(0)},
+                { new Integer(4), "",  new Integer(0),  new Integer(0)}
             },
             new String [] {
                 "# Item", "Nom", "Qty Actuelle", "Qty Modifié"
@@ -653,18 +660,16 @@ public class main_window extends javax.swing.JFrame {
         jTable_items.requestFocus();
         
         //Affichage dans le tableau des valeurs dans jTable_items
-        
-        
-        
-        
-        
-        
-        
-        
+        String col[] = {"#id","Nom","Quantite", "Qte Modifié"};
+        DefaultTableModel model = new DefaultTableModel(col, 0);
+        for (NamedProduct item: client.getBoxDetails(idContainer))
+        {
+        	int modifyQte = 0;
+        	Object o[] = {item.getId(), item.getName(), item.getQuantity(), modifyQte};
+        	model.addRow(o);
+        }
+        jTable_items.setModel(model);
         jTable_items.changeSelection(0, 0, false, false);
-        
-        
-        
     }//GEN-LAST:event_jButton_modifierActionPerformed
 
     private void jTextField_barcodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField_barcodeActionPerformed
@@ -715,8 +720,9 @@ public class main_window extends javax.swing.JFrame {
 	    {
 	      jSplitPane.setLeftComponent(jPanel_Button);
 	      TransactionRequest transaction = new TransactionRequest();
-	      String user_id = "C5236209FG";//Set User ID
-	      String barcode = jTextField_barcode.getText();//Set Box Barcode
+	      int user_id = 7;//Set User ID
+	      transaction.setUser(user_id);
+	      transaction.setBox(barcode);
 	      transaction.setProductsAdded(products.getProductsAdded());
 	      transaction.setProductsRemoved(products.getProductsRemoved());
 	      client.postTransaction(transaction);
@@ -921,8 +927,6 @@ public class main_window extends javax.swing.JFrame {
 	public void setjTable_items(Object aValue, int row , int column ) {
 		this.jTable_items.setValueAt(aValue, row, column);
 	}
-	
-    
 
 	public javax.swing.JTextField getjTextField_barcode() {
 		return jTextField_barcode;
@@ -938,6 +942,14 @@ public class main_window extends javax.swing.JFrame {
 
 	public void setjLabel_type(String jLabel_type) {
 		this.jLabel_type.setText(jLabel_type);
+	}
+	
+	public javax.swing.JButton getjButton_modifier() {
+		return jButton_modifier;
+	}
+
+	public void setjButton_modifier(javax.swing.JButton jButton_modifier) {
+		this.jButton_modifier = jButton_modifier;
 	}
 }
 

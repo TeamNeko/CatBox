@@ -1,5 +1,9 @@
 package org.teamneko.schrodinger.backend.gui;
 
+import org.teamneko.meowlib.dto.BoxSearchResult;
+import org.teamneko.meowlib.dto.NamedProduct;
+import org.teamneko.meowlib.dto.ProductSearchResult;
+import org.teamneko.meowlib.dto.UserSearchResult;
 import org.teamneko.schrodinger.backend.gui.main_window;
 import org.teamneko.schrodinger.client.SchrodingerClient;
 
@@ -9,6 +13,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.naming.directory.SearchResult;
+import javax.swing.table.DefaultTableModel;
 
 public class BarcodeScannerController implements ActionListener,KeyListener {
 
@@ -23,6 +28,7 @@ public class BarcodeScannerController implements ActionListener,KeyListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		String doubleCodebarBuffer = refMain_Window.getjTextField_barcode().getText();
+		refMain_Window.getjButton_modifier().setEnabled(false);
 		if(!text.isEmpty()){
 			System.out.println(text);
 			doubleCodebarBuffer = doubleCodebarBuffer.replaceFirst(text, "");
@@ -36,42 +42,44 @@ public class BarcodeScannerController implements ActionListener,KeyListener {
 		
 		if (searchResult.getType() == "box")
 		{
+			refMain_Window.getjButton_modifier().setEnabled(true);
 			refMain_Window.setjLabel_type("Type: Boîte");
-			/*
-			refMain_Window.setjTable_items("ID", 0, 0);
-			refMain_Window.setjTable_items(searchResult.box.id, 0, 1);
-			refMain_Window.setjTable_items("Format", 1, 0);
-			refMain_Window.setjTable_items(searchResult.box.size, 1, 1);
-			refMain_Window.setjTable_items("Poid", 2, 0);
-			refMain_Window.setjTable_items(searchResult.box.weight, 2, 1);
-			refMain_Window.setjTable_items("Dernière modification", 3, 0);
-			refMain_Window.setjTable_items(searchResult.box.modified, 3, 1);*/
+			BoxSearchResult box = (BoxSearchResult)searchResult;	
+			refMain_Window.barcode = box.getBox().getBarcode();
+			refMain_Window.idContainer = box.getBox().getId();
+			
+			String col[] = {"#id","Format","Poids", "Dernière modification"};
+	        DefaultTableModel model = new DefaultTableModel(col, 0);
+	        Object o[] = {box.getBox().getId(), box.getBox().getSize(), box.getBox().getWeight(), box.getBox().getModified()};
+	        model.addRow(o);
+	        refMain_Window.getjTable_items().setModel(model);
+	        refMain_Window.getjTable_items().changeSelection(0, 0, false, false);
+			
 		}
 		else if (searchResult.getType() == "product")
 		{
 			refMain_Window.setjLabel_type("Type: Item");
-			/*
-			refMain_Window.setjTable_items("ID", 0, 0);
-			refMain_Window.setjTable_items(searchResult.product.id, 0, 1);
-			refMain_Window.setjTable_items("Nom", 1, 0);
-			refMain_Window.setjTable_items(searchResult.product.size, 1, 1);
-			refMain_Window.setjTable_items("Quantité", 2, 0);
-			refMain_Window.setjTable_items(searchResult.product.weight, 2, 1);
-			refMain_Window.setjTable_items("Poid", 3, 0);
-			refMain_Window.setjTable_items(searchResult.product.modified, 3, 1);*/
+			ProductSearchResult product = (ProductSearchResult)searchResult;
+			
+			String col[] = {"#id","Nom","Quantité", "Poids"};
+	        DefaultTableModel model = new DefaultTableModel(col, 0);
+	        Object o[] = {product.getProduct().getId(), product.getProduct().getName() , /*product.getProduct().getQuantity()*/"50" , product.getProduct().getWeight()};
+	        model.addRow(o);
+	        refMain_Window.getjTable_items().setModel(model);
+	        refMain_Window.getjTable_items().changeSelection(0, 0, false, false);
+	
 		}
 		else if (searchResult.getType() == "shelf")
 		{
-			refMain_Window.setjLabel_type("Type: Étagère");
+			refMain_Window.setjLabel_type("Type: étagère");
 			/*
-			refMain_Window.setjTable_items("ID", 0, 0);
-			refMain_Window.setjTable_items(searchResult.shelf.id, 0, 1);
-			refMain_Window.setjTable_items("Emplacement", 1, 0);
-			refMain_Window.setjTable_items(searchResult.shelf.size, 1, 1);
-			refMain_Window.setjTable_items("Quantité", 2, 0);
-			refMain_Window.setjTable_items(searchResult.shelf.weight, 2, 1);
-			refMain_Window.setjTable_items("Poid", 3, 0);
-			refMain_Window.setjTable_items(searchResult.shelf.modified, 3, 1);*/
+			String col[] = {"#id","Emplacement","Quantité", "Poids"};
+	        DefaultTableModel model = new DefaultTableModel(col, 0);
+	        Object o[] = {shelf.getShelf().getId(), shelf.getShelf().getLocation(),shelf.getShelf().getQuantity(), shelf.getShelf().getWeight()};
+	        model.addRow(o);
+	        refMain_Window.getjTable_items().setModel(model);
+	        refMain_Window.getjTable_items().changeSelection(0, 0, false, false);
+	        */
 		}
 		else 
 			refMain_Window.setjLabel_type(searchResult.getType());
