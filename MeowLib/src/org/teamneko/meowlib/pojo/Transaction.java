@@ -1,5 +1,8 @@
 package org.teamneko.meowlib.pojo;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Transaction {
 	private int idUser;
 	private int idProduct;
