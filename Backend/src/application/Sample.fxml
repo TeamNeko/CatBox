@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+import javafx.application.Application;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage; -->
+
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.Label?>	
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.SplitPane.Divider?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SampleController">
+	<SplitPane>
+	<!-- 
+		<VBox prefWidth="320" prefHeight="240" fillWidth="true">
+			<children>
+				<Text text = "This is some text" />
+				<Label text = "This is some label"/>
+				<TextArea minWidth="320">
+					Enter some text here
+				</TextArea>
+			</children>
+		</VBox>
+		<VBox>
+		</VBox> -->
+	<SplitPane.Divider position="0.2"/>
+	<SplitPane.Divider position="0.7"/>
+	</SplitPane>
+</BorderPane>
