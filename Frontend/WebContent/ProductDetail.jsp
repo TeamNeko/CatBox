@@ -93,7 +93,7 @@
 			</tr>
 			<core:forEach var="row" items="${inventory.rows}" begin="<%=currentPage*perPage%>" end="<%=perPage*(currentPage+1)-1 %>">
 				<tr>
-				 	<td><a href="FrontendBoxDetail?Box=${row.id}"><core:out value="${row.idBox}"/></a></td>
+				 	<td><a href="BoxDetail.jsp?box=${row.id}"><core:out value="${row.idBox}"/></a></td>
 				 	<td><core:out value="${row.quantity}"/></td>
 				 	<td><core:out value="${row.weight}"/></td>
 				 	<td><core:out value="${row.size}"/></td>
