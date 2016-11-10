@@ -17,16 +17,23 @@ import org.teamneko.schrodinger.client.SchrodingerClient;
 
  
 public class main_window extends javax.swing.JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private ProductListModel products = new ProductListModel();
-	private SchrodingerClient client = new SchrodingerClient("http://localhost:8080/rest");
-	
+	public SchrodingerClient client = new SchrodingerClient("http://localhost:8080/rest");
+	private BarcodeScannerController controller = new BarcodeScannerController();
     /**
      * Creates new form main_window
      */
     public main_window() {
         initComponents();
-        this.addKeyListener(new BarcodeScannerController());
+        controller.setMainWindow(this);
+        jTextField_barcode.addActionListener(controller);
         jTextField_barcode.requestFocus();
+        this.addKeyListener(controller);
+        //jTextField_barcode.setEnabled(false);
     }
         
     /**
@@ -534,7 +541,7 @@ public class main_window extends javax.swing.JFrame {
             }
         });
 
-        jLabel_type.setText("Type: Étagère");
+        jLabel_type.setText("Type:");
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/teamneko/schrodinger/backend/gui/myimageapp/-Barcode_32896.jpg"))); // NOI18N
         jLabel1.setText("jLabel1");
@@ -550,7 +557,11 @@ public class main_window extends javax.swing.JFrame {
                 "# Item", "Nom", "Qty Actuelle", "Qty Modifié"
             }
         ) {
-            Class[] types = new Class [] {
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+			Class[] types = new Class [] {
                 java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
@@ -640,7 +651,20 @@ public class main_window extends javax.swing.JFrame {
     	jSplitPane.setLeftComponent(jPanel_Button_control);
         jTextField_barcode.setEnabled(false);
         jTable_items.requestFocus();
+        
+        //Affichage dans le tableau des valeurs dans jTable_items
+        
+        
+        
+        
+        
+        
+        
+        
         jTable_items.changeSelection(0, 0, false, false);
+        
+        
+        
     }//GEN-LAST:event_jButton_modifierActionPerformed
 
     private void jTextField_barcodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField_barcodeActionPerformed
@@ -682,17 +706,17 @@ public class main_window extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton_minusActionPerformed
 
     private void jButton_okActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_okActionPerformed
-        String message = "Voici les changement éfecctué:"
+        String message = "Voici les changements effectués:"
                 + "";
-        String title = "Confirmation des changements effectué";
+        String title = "Confirmation des changements effectués";
         int reply = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.YES_NO_OPTION);
         
 	    if (reply == JOptionPane.YES_OPTION)
 	    {
 	      jSplitPane.setLeftComponent(jPanel_Button);
 	      TransactionRequest transaction = new TransactionRequest();
-	      //Set User ID
-	      //Set Box Barcode
+	      String user_id = "C5236209FG";//Set User ID
+	      String barcode = jTextField_barcode.getText();//Set Box Barcode
 	      transaction.setProductsAdded(products.getProductsAdded());
 	      transaction.setProductsRemoved(products.getProductsRemoved());
 	      client.postTransaction(transaction);
@@ -875,7 +899,7 @@ public class main_window extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel_type;
-    private javax.swing.JPanel jPanel1;
+	private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel_Button;
     private javax.swing.JPanel jPanel_Button_control;
@@ -890,4 +914,30 @@ public class main_window extends javax.swing.JFrame {
     private javax.swing.JTable jTable_items;
     private javax.swing.JTextField jTextField_barcode;
     // End of variables declaration//GEN-END:variables
+    public javax.swing.JTable getjTable_items() {
+		return jTable_items;
+	}
+
+	public void setjTable_items(Object aValue, int row , int column ) {
+		this.jTable_items.setValueAt(aValue, row, column);
+	}
+	
+    
+
+	public javax.swing.JTextField getjTextField_barcode() {
+		return jTextField_barcode;
+	}
+
+	public void setjTextField_barcode(String string) {
+		this.jTextField_barcode.setText(string);
+	}
+	
+	public javax.swing.JLabel getjLabel_type() {
+		return jLabel_type;
+	}
+
+	public void setjLabel_type(String jLabel_type) {
+		this.jLabel_type.setText(jLabel_type);
+	}
 }
+

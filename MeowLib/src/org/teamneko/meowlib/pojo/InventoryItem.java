@@ -1,5 +1,8 @@
 package org.teamneko.meowlib.pojo;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class InventoryItem {
 	private int idBox;
 	private int idProduct;
