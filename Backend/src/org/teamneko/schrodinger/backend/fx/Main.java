@@ -1,4 +1,4 @@
-package application;
+package org.teamneko.schrodinger.backend.fx;
 	
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -12,9 +12,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			//BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("Sample.fxml"));
-			SplitPane root = FXMLLoader.load(getClass().getResource("SplitPane.fxml"));
-			SplitPane.setResizableWithParent(root, Boolean.FALSE);
+			SplitPane root = FXMLLoader.load(getClass().getResource("ProductList.fxml"));
 			Scene scene = new Scene(root,320,240);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.initStyle(StageStyle.UNDECORATED);
