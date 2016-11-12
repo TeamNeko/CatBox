@@ -919,6 +919,7 @@ public class main_window extends javax.swing.JFrame {
     private javax.swing.JSplitPane jSplitPane;
     private javax.swing.JTable jTable_items;
     private javax.swing.JTextField jTextField_barcode;
+    
     // End of variables declaration//GEN-END:variables
     public javax.swing.JTable getjTable_items() {
 		return jTable_items;
