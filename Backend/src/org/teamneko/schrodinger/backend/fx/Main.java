@@ -9,10 +9,11 @@ import javafx.fxml.FXMLLoader;
 
 
 public class Main extends Application {
+	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			SplitPane root = FXMLLoader.load(getClass().getResource("ProductList.fxml"));
+			SplitPane root = FXMLLoader.load(getClass().getResource("MainWindow.fxml"));
 			Scene scene = new Scene(root,320,240);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.initStyle(StageStyle.UNDECORATED);
