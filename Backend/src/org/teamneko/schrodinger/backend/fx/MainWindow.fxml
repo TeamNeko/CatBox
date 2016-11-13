@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<SplitPane fx:id="mainPane" maxHeight="240" maxWidth="320" minHeight="240" minWidth="320" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="org.teamneko.schrodinger.backend.fx.Controller">
+  <items>
+    <AnchorPane minHeight="240" minWidth="110">
+         <children>
+            <Button onAction="#modifier" layoutX="1" layoutY="1" prefWidth="106" prefHeight="118" text="Modifier" />
+            <Button onAction="#quitter" layoutX="1" layoutY="120" prefWidth="106" prefHeight="118" text="Quittter" />
+         </children>
+    </AnchorPane>
+    <fx:include source="AnimationPane.fxml"/>
+  </items>
+</SplitPane>
