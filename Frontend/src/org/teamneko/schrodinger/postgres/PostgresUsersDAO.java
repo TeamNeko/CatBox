@@ -19,7 +19,7 @@ private PostgresDatabase database;
 	public Optional<User> search(String number) {
 		try {
 			//Prepare Statement
-			PreparedStatement ps = database.prepare("SELECT * FROM \"Users\" WHERE number=?");
+			PreparedStatement ps = database.prepare("SELECT * FROM users WHERE number=?");
 			ps.setString(1, number);
 			
 			//Execute

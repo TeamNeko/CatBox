@@ -50,12 +50,12 @@
      
 <core:if test="${keyWord == -1}">
 	<sql:query dataSource="${snapshot}" var="box"> 
-		SELECT * FROM "Boxes" ORDER BY "${sortColumnName}" ${sortColumnOrder} LIMIT 50;
+		SELECT * FROM boxes ORDER BY "${sortColumnName}" ${sortColumnOrder} LIMIT 50;
 	</sql:query>
 </core:if>
 <core:if test="${keyWord != -1}">
 	<sql:query dataSource="${snapshot}" var="box">
-		SELECT * FROM "Boxes" WHERE id = ? ORDER BY "${sortColumnName}" ${sortColumnOrder} LIMIT 50;
+		SELECT * FROM boxes WHERE id = ? ORDER BY "${sortColumnName}" ${sortColumnOrder} LIMIT 50;
 		<sql:param value="${keyWord}" />
 	</sql:query>
 </core:if>

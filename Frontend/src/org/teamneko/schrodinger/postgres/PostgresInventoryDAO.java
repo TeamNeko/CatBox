@@ -22,7 +22,7 @@ public class PostgresInventoryDAO implements InventoryDAO {
 		Integer id = null;
 		
 		try {
-			PreparedStatement ps = database.prepare("SELECT id FROM \"Inventory\" WHERE \"idProduct\"=? AND \"idBox\" = ? LIMIT 1");
+			PreparedStatement ps = database.prepare("SELECT id FROM inventory WHERE id_product=? AND id_box = ? LIMIT 1");
 			ps.setInt(1, item.getIdProduct());
 			ps.setInt(2, item.getIdBox());
 			
@@ -40,7 +40,7 @@ public class PostgresInventoryDAO implements InventoryDAO {
 	
 	private void create(InventoryItem item) {
 		try {
-			PreparedStatement ps = database.prepare("INSERT INTO \"Inventory\"(\"idProduct\", \"idBox\", quantity) VALUES (?, ?, ?)");
+			PreparedStatement ps = database.prepare("INSERT INTO inventory(id_product, id_box, quantity) VALUES (?, ?, ?)");
 			ps.setInt(1, item.getIdProduct());
 			ps.setInt(2, item.getIdBox());
 			ps.setInt(3, item.getQuantity());
@@ -52,7 +52,7 @@ public class PostgresInventoryDAO implements InventoryDAO {
 	
 	private void update(int id, int qty) {
 		try {
-			PreparedStatement ps = database.prepare("UPDATE \"Inventory\" SET quantity = quantity + ? WHERE id = ?");
+			PreparedStatement ps = database.prepare("UPDATE inventory SET quantity = quantity + ? WHERE id = ?");
 			ps.setInt(1, qty);
 			ps.setInt(2, id);
 			ps.executeUpdate();
@@ -94,7 +94,7 @@ public class PostgresInventoryDAO implements InventoryDAO {
 		ArrayList<NamedProduct> products = new ArrayList<NamedProduct>();
 		
 		try {
-			PreparedStatement ps = database.prepare("SELECT quantity, \"idProduct\", \"Products\".name FROM \"Inventory\" INNER JOIN \"Products\" ON \"Inventory\".\"idProduct\" = \"Products\".id WHERE \"Inventory\".\"idBox\" = ?");
+			PreparedStatement ps = database.prepare("SELECT quantity, id_product, products.name FROM inventory INNER JOIN products ON inventory.id_product = products.id WHERE inventory.id_box = ?");
 			ps.setInt(1, idBox);
 			ResultSet rs = ps.executeQuery();
 			

@@ -22,7 +22,7 @@ public class PostgresProductDAO implements ProductsDAO {
 		List<Product> products = new ArrayList<Product>();
 		
 		try {
-			ResultSet rs = database.executeQuery("SELECT * FROM \"Products\"");
+			ResultSet rs = database.executeQuery("SELECT * FROM products");
 			while(rs.next()) {
 				Product product = new Product();
 				product.setId(rs.getInt("id"));
@@ -42,7 +42,7 @@ public class PostgresProductDAO implements ProductsDAO {
 	@Override
 	public Optional<Product> search(String barcode) {
 		try {
-			PreparedStatement ps = database.prepare("SELECT * FROM \"Products\" WHERE barcode=?");
+			PreparedStatement ps = database.prepare("SELECT * FROM products WHERE barcode=?");
 			ps.setString(1, barcode);
 			
 			ResultSet rs = ps.executeQuery();

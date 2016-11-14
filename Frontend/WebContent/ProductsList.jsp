@@ -44,18 +44,12 @@
 <core:set var="sortColumnOrder" value="<%=sortColumnOrder %>"/>
 <core:set var="sortColumnName" value="<%=sortColumnName %>"/>
 
-<!--
-<sql:setDataSource var="snapshot" driver="org.postgresql.Driver"
-     url="jdbc:postgresql://localhost/catbox"
-     user="jaune"  password="yolo"/>
--->
-
 <sql:setDataSource var="snapshot" driver="org.postgresql.Driver"
      url="jdbc:postgresql://elmer.db.elephantsql.com:5432/jmtntlek"
      user="jmtntlek"  password="vaYxsY1WBNr5gYMMd-74kLrc98gqNhqI"/>
 
 <sql:query dataSource="${snapshot}" var="products">
-	SELECT * FROM "Products" 
+	SELECT * FROM products 
 	<core:if test="${not empty keyWord}">
 		WHERE name = ?
 		<sql:param value="${keyWord}" />

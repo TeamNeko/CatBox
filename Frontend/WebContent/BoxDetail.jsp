@@ -37,7 +37,7 @@
 
 <core:if test="<%=needUpdate %>">
 	<sql:update dataSource="${snapshot}">
-		UPDATE "Boxes" SET weight = ?, size = ? WHERE id = ?;
+		UPDATE boxes SET weight = ?, size = ? WHERE id = ?;
 		<sql:param value="${weight}" />
 		<sql:param value="${size}" />
 		<sql:param value="${boxId}" />
@@ -45,7 +45,7 @@
 </core:if>
 
 <sql:query dataSource="${snapshot}" var="box">
-		SELECT * FROM "Boxes" WHERE id = ?;
+		SELECT * FROM boxes WHERE id = ?;
 		<sql:param value="${boxId}" />
 </sql:query>
 
