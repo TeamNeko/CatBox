@@ -54,21 +54,23 @@
 <title>Création d'utilisateur</title>
 </head>
 <body>
-	<div id="header">
+<div class="container-fluid">
+	<div>
 		<jsp:include page="Header.jsp" />
 	</div>
-		<core:if test="${SQLException != null}">
-			Une erreur s'est produite. Cliquez <a href="CreateUser.jsp">ici</a> pour recommencer.
-		</core:if>
-		<core:if test="${SQLException == null}">
-		L'utilisateur :
-			<ul>
-				<li><core:out value="${firstName}"/></li>
-				<li><core:out value="${lastName}"/></li>
-				<li><core:out value="${userNum}"/></li>
-				<li><core:out value="${userType}"/></li>
-			</ul>
-		<p>a été ajouté .</p>
-		</core:if>
+	<core:if test="${SQLException != null}">
+		Une erreur s'est produite. Cliquez <a href="CreateUser.jsp">ici</a> pour recommencer.
+	</core:if>
+	<core:if test="${SQLException == null}">
+	L'utilisateur :
+		<ul>
+			<li><core:out value="${firstName}"/></li>
+			<li><core:out value="${lastName}"/></li>
+			<li><core:out value="${userNum}"/></li>
+			<li><core:out value="${userType}"/></li>
+		</ul>
+	<p>a été ajouté .</p>
+	</core:if>
+</div>
 </body>
 </html>

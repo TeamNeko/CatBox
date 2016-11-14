@@ -56,7 +56,8 @@
 <title>Soprema - Boite <core:out value="${boxId}"/></title>
 </head>
 <body>
-	<div id="header">
+<div class="container-fluid">
+	<div>
 		<jsp:include page="Header.jsp" />
 	</div>
 	<core:if test="${boxId != -1}">
@@ -79,5 +80,6 @@
 			<input type="submit" value="Ajouter"/>
 		</form>
 	</core:if>
+</div>
 </body>
 </html>
