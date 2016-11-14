@@ -50,12 +50,12 @@
      
 <core:if test="${keyWord == -1}">
 	<sql:query dataSource="${snapshot}" var="box"> 
-		SELECT * FROM "Boxes" ORDER BY "${sortColumnName}" ${sortColumnOrder} LIMIT 50;
+		SELECT * FROM boxes ORDER BY "${sortColumnName}" ${sortColumnOrder} LIMIT 50;
 	</sql:query>
 </core:if>
 <core:if test="${keyWord != -1}">
 	<sql:query dataSource="${snapshot}" var="box">
-		SELECT * FROM "Boxes" WHERE id = ? ORDER BY "${sortColumnName}" ${sortColumnOrder} LIMIT 50;
+		SELECT * FROM boxes WHERE id = ? ORDER BY "${sortColumnName}" ${sortColumnOrder} LIMIT 50;
 		<sql:param value="${keyWord}" />
 	</sql:query>
 </core:if>
@@ -93,32 +93,34 @@
 <title>Soprema - Liste de boite</title>
 </head>
 <body>
-	<div id="header">
+<div class="container-fluid">
+	<div>
 		<jsp:include page="Header.jsp" />
 	</div>
 	<div class="search">
 	 	<form>
 			search: <input type="text" name="search">
-			<button type="submit" id="search"></button>
+			<button type="submit" class="glyphicon glyphicon-search"></button>
 			Ordre d'affichage:  
-				<select name="sort">
-					<option value="Asc-id" <%=sortString.equals("Asc-id") ? "selected" : ""%>>Ordre croissant d'ID</option>
-					<option value="Des-id" <%=sortString.equals("Des-id")? "selected" : ""%>>Ordre décroissant d'ID</option>
-					<option value="Asc-barcode" <%=sortString.equals("Asc-barcode") ? "selected" : ""%>>Ordre croissant de code barre</option>
-					<option value="Des-barcode" <%=sortString.equals("Des-barcode")? "selected" : ""%>>Ordre décroissant de code barre</option>
-					<option value="Asc-weight" <%=sortString.equals("Asc-weight") ? "selected" : ""%>>Ordre croissant de poids</option>
-					<option value="Des-weight" <%=sortString.equals("Des-weight") ? "selected" : ""%>>Ordre décroissant de poids</option>
-					<option value="Asc-size" <%=sortString.equals("Asc-size") ? "selected" : ""%>>Ordre croissant de taille</option>
-					<option value="Des-size" <%=sortString.equals("Des-size") ? "selected" : ""%>>Ordre décroissant de taille</option>
-					<option value="Asc-creation_date" <%=sortString.equals("Asc-creation_date") ? "selected" : ""%>>Ordre croissant de création</option>
-					<option value="Des-creation_date" <%=sortString.equals("Des-creation_date") ? "selected" : ""%>>Ordre décroissant de création</option>
-					<option value="Asc-last_modified" <%=sortString.equals("Asc-last_modified") ? "selected" : ""%>>Ordre croissant de retrait</option>
-					<option value="Des-last_modified" <%=sortString.equals("Des-last_modified") ? "selected" : ""%>>Ordre décroissant de retrait</option>
-				</select>
+			<select name="sort" class="form-control">
+				<option value="Asc-id" <%=sortString.equals("Asc-id") ? "selected" : ""%>>Ordre croissant d'ID</option>
+				<option value="Des-id" <%=sortString.equals("Des-id")? "selected" : ""%>>Ordre décroissant d'ID</option>
+				<option value="Asc-barcode" <%=sortString.equals("Asc-barcode") ? "selected" : ""%>>Ordre croissant de code barre</option>
+				<option value="Des-barcode" <%=sortString.equals("Des-barcode")? "selected" : ""%>>Ordre décroissant de code barre</option>
+				<option value="Asc-weight" <%=sortString.equals("Asc-weight") ? "selected" : ""%>>Ordre croissant de poids</option>
+				<option value="Des-weight" <%=sortString.equals("Des-weight") ? "selected" : ""%>>Ordre décroissant de poids</option>
+				<option value="Asc-size" <%=sortString.equals("Asc-size") ? "selected" : ""%>>Ordre croissant de taille</option>
+				<option value="Des-size" <%=sortString.equals("Des-size") ? "selected" : ""%>>Ordre décroissant de taille</option>
+				<option value="Asc-creation_date" <%=sortString.equals("Asc-creation_date") ? "selected" : ""%>>Ordre croissant de création</option>
+				<option value="Des-creation_date" <%=sortString.equals("Des-creation_date") ? "selected" : ""%>>Ordre décroissant de création</option>
+				<option value="Asc-last_modified" <%=sortString.equals("Asc-last_modified") ? "selected" : ""%>>Ordre croissant de retrait</option>
+				<option value="Des-last_modified" <%=sortString.equals("Des-last_modified") ? "selected" : ""%>>Ordre décroissant de retrait</option>
+			</select>
 		</form>
 	</div>
-	<div class="list">
-		<table width="59%" border="1">
+	<div>	
+		<table class="table table-striped>">
+		<thead>
 			<tr>
 				<th>ID</th>
 				<th>Code barre</th>
@@ -127,6 +129,8 @@
 				<th>Date de création</th>
 				<th>Date de modification</th>
 			</tr>
+		</thead>
+		<tbody>
 			<core:set var="total" scope="session" value="${fn:length(box.rows)}"/>
 			<core:set var="perPage" scope="session"  value="10"/>
 			<core:set var="pageStart" value="${param.start}"/>
@@ -146,10 +150,12 @@
 					<td><core:out value="${row.last_modified}"/></td>
 				</tr>
 			</core:forEach>
+		</tbody>
 		</table>
 		<a href="?start=<%=(currentPage-1)+urlSaver%>">Previous</a>
 		<%=currentPage*perPage+1 %> - <%=perPage*(currentPage+1) %>
 		<a href="?start=<%=(currentPage+1)+urlSaver%>">Next</a><br/>
 	</div>
+</div>
 </body>
 </html>

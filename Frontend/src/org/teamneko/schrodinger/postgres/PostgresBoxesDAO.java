@@ -18,7 +18,7 @@ public class PostgresBoxesDAO implements BoxesDAO {
 	@Override
 	public boolean exists(String barcode) {
 		try {
-			PreparedStatement ps = database.prepare("SELECT exists(SELECT 1 FROM \"Boxes\" WHERE barcode = ?)");
+			PreparedStatement ps = database.prepare("SELECT exists(SELECT 1 FROM boxes WHERE barcode = ?)");
 			ps.setString(1, barcode);
 			
 			ResultSet rs = ps.executeQuery();
@@ -32,7 +32,7 @@ public class PostgresBoxesDAO implements BoxesDAO {
 	@Override
 	public void create(String barcode) {
 		try {
-			PreparedStatement ps = database.prepare("INSERT INTO \"Boxes\"(barcode) VALUES (?)");
+			PreparedStatement ps = database.prepare("INSERT INTO boxes(barcode) VALUES (?)");
 			ps.setString(1, barcode);
 			ps.executeUpdate();
 		} catch (SQLException e) {
@@ -42,7 +42,7 @@ public class PostgresBoxesDAO implements BoxesDAO {
 	public int getId(String barcode) {
 		PreparedStatement ps;
 		try {
-			ps = database.prepare("SELECT id FROM \"Boxes\" WHERE barcode = ?");
+			ps = database.prepare("SELECT id FROM boxes WHERE barcode = ?");
 			ps.setString(1, barcode);
 			
 			ResultSet rs = ps.executeQuery();
@@ -56,7 +56,7 @@ public class PostgresBoxesDAO implements BoxesDAO {
 	public Optional<Box> search(String barcode) {
 		PreparedStatement ps;
 		try {
-			ps = database.prepare("SELECT * FROM \"Boxes\" WHERE barcode = ?");
+			ps = database.prepare("SELECT * FROM boxes WHERE barcode = ?");
 			ps.setString(1, barcode);
 			
 			ResultSet rs = ps.executeQuery();

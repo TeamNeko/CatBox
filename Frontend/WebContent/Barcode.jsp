@@ -16,7 +16,8 @@ function generate() {
 </script>
 </head>
 <body>
-	<div id="header">
+<div class="container-fluid">
+	<div>
 		<jsp:include page="Header.jsp" />
 	</div>
 	<div>
@@ -24,5 +25,6 @@ function generate() {
 		<input type="text" id="value" oninput="generate()"/>
 		<canvas id="barcode"></canvas>
 	</div>
+</div>
 </body>
 </html>

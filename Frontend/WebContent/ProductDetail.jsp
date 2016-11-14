@@ -3,11 +3,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<!--
-<sql:setDataSource var="snapshot" driver="org.postgresql.Driver"
-     url="jdbc:postgresql://localhost/catbox"
-     user="jaune"  password="yolo"/>
--->
 
 <sql:setDataSource var="snapshot" driver="org.postgresql.Driver"
      url="jdbc:postgresql://elmer.db.elephantsql.com:5432/jmtntlek"
@@ -29,7 +24,7 @@
 <core:set var="productId" value="<%=productId%>"/>
 
 <sql:query dataSource="${snapshot}" var="inventory">
-		SELECT * FROM "Inventory" INNER JOIN "Boxes" ON ("Inventory"."idBox" = "Boxes".id) WHERE "idProduct" = ? LIMIT 10;
+		SELECT * FROM inventory INNER JOIN boxes ON (inventory.id_box = boxes.id) WHERE id_product = ? LIMIT 10;
 		<sql:param value="${productId}" />
 </sql:query>
 
@@ -67,7 +62,8 @@
 	<title>Soprema - Produit <core:out value="${productId}"/></title>
 </head>
 <body>
-	<div id="header">
+<div class="container-fluid">
+	<div>
 		<jsp:include page="Header.jsp" />
 	</div>
 	Information du produit <core:out value="${productId}"/>
@@ -81,7 +77,8 @@
 		<core:if test="${total <= pageStart}">
 		    <core:set var="pageStart" value="${total}"/>
 		</core:if>	
-		<table width="59%" border="1">
+		<table class="table table-striped>">
+			<thead>
 			<tr>
 				<td>ID</td>
 			 	<td>Quantité</td>
@@ -91,9 +88,11 @@
 			 	<td>Date de modification</td>
 				<td>Code barre</td>
 			</tr>
+			</thead>
+			<tbody>
 			<core:forEach var="row" items="${inventory.rows}" begin="<%=currentPage*perPage%>" end="<%=perPage*(currentPage+1)-1 %>">
 				<tr>
-				 	<td><a href="BoxDetail.jsp?box=${row.id}"><core:out value="${row.idBox}"/></a></td>
+				 	<td><a href="BoxDetail.jsp?box=${row.id}"><core:out value="${row.id_box}"/></a></td>
 				 	<td><core:out value="${row.quantity}"/></td>
 				 	<td><core:out value="${row.weight}"/></td>
 				 	<td><core:out value="${row.size}"/></td>
@@ -102,10 +101,12 @@
 					<td><core:out value="${row.barcode}"/></td>
 				</tr>
 			</core:forEach>
+			</tbody>
 		</table>
 		<a href="?start=<%=(currentPage-1)+urlSaver%>">Previous</a>
 		<%=currentPage*perPage+1 %> - <%=perPage*(currentPage+1) %>
 		<a href="?start=<%=(currentPage+1)+urlSaver%>">Next</a><br/>
 	</div>
+</div>
 </body>
 </html>

@@ -44,18 +44,12 @@
 <core:set var="sortColumnOrder" value="<%=sortColumnOrder %>"/>
 <core:set var="sortColumnName" value="<%=sortColumnName %>"/>
 
-<!--
-<sql:setDataSource var="snapshot" driver="org.postgresql.Driver"
-     url="jdbc:postgresql://localhost/catbox"
-     user="jaune"  password="yolo"/>
--->
-
 <sql:setDataSource var="snapshot" driver="org.postgresql.Driver"
      url="jdbc:postgresql://elmer.db.elephantsql.com:5432/jmtntlek"
      user="jmtntlek"  password="vaYxsY1WBNr5gYMMd-74kLrc98gqNhqI"/>
 
 <sql:query dataSource="${snapshot}" var="products">
-	SELECT * FROM "Products" 
+	SELECT * FROM products 
 	<core:if test="${not empty keyWord}">
 		WHERE name = ?
 		<sql:param value="${keyWord}" />
@@ -71,12 +65,15 @@
 	try 
 	{
 		totalRecords =  (int)pageContext.getAttribute("total");
-		totalPage = totalRecords/perPage;
+		totalPage = totalRecords/perPage-1;
 		lastPageItem = totalRecords%perPage;
 		currentPage = Integer.parseInt(request.getParameter("start"));
 		if(currentPage > totalPage)
 		{
-			currentPage = totalPage;
+			if(lastPageItem == 0)
+				currentPage = totalPage;
+			else
+				currentPage = totalPage + 1;
 		}
 		else if (currentPage < 0)
 		{
@@ -95,35 +92,42 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="Intranet.css">
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	<title>Soprema - Liste de produits</title>
 </head>
 <body>
-	<div id="header">
+<div class="container-fluid">
+	<div>
 		<jsp:include page="Header.jsp" />
 	</div>
 	<div class="search">
 	 	<form>
 			search: <input type="text" name="search">
-			<button type="submit" id="search"></button>
+			<button type="submit" class="glyphicon glyphicon-search"></button>
 			Ordre d'affichage:  
-				<select name="sort">
-					<option value="Asc-id" <%=sortString.equals("Asc-id") ? "selected" : ""%>>Ordre croissant d'ID</option>
-					<option value="Des-id" <%=sortString.equals("Des-id")? "selected" : ""%>>Ordre décroissant d'ID</option>
-					<option value="Asc-barcode" <%=sortString.equals("Asc-barcode") ? "selected" : ""%>>Ordre croissant de code barre</option>
-					<option value="Des-barcode" <%=sortString.equals("Des-barcode") ? "selected" : ""%>>Ordre décroissant de code barre</option>
-					<option value="Asc-name" <%=sortString.equals("Asc-name") ? "selected" : ""%>>Ordre croissant de nom de produit</option>
-					<option value="Des-name" <%=sortString.equals("Des-name")? "selected" : ""%>>Ordre décroissant de nom de produit</option>
-					<option value="Asc-weight" <%=sortString.equals("Asc-weight") ? "selected" : ""%>>Ordre croissant de poids</option>
-					<option value="Des-weight" <%=sortString.equals("Des-weight") ? "selected" : ""%>>Ordre décroissant de poids</option>
-					<option value="Asc-date_added" <%=sortString.equals("Asc-date_added") ? "selected" : ""%>>Ordre croissant de création</option>
-					<option value="Des-date_added" <%=sortString.equals("Des-date_added") ? "selected" : ""%>>Ordre décroissant de création</option>
-					<option value="Asc-date_retired" <%=sortString.equals("Asc-date_retired") ? "selected" : ""%>>Ordre croissant de retrait</option>
-					<option value="Des-date_retired" <%=sortString.equals("Des-date_retired") ? "selected" : ""%>>Ordre décroissant de retrait</option>
-				</select>
+			<select name="sort" class="form-control">
+				<option value="Asc-id" <%=sortString.equals("Asc-id") ? "selected" : ""%>>Ordre croissant d'ID</option>
+				<option value="Des-id" <%=sortString.equals("Des-id")? "selected" : ""%>>Ordre décroissant d'ID</option>
+				<option value="Asc-barcode" <%=sortString.equals("Asc-barcode") ? "selected" : ""%>>Ordre croissant de code barre</option>
+				<option value="Des-barcode" <%=sortString.equals("Des-barcode") ? "selected" : ""%>>Ordre décroissant de code barre</option>
+				<option value="Asc-name" <%=sortString.equals("Asc-name") ? "selected" : ""%>>Ordre croissant de nom de produit</option>
+				<option value="Des-name" <%=sortString.equals("Des-name")? "selected" : ""%>>Ordre décroissant de nom de produit</option>
+				<option value="Asc-weight" <%=sortString.equals("Asc-weight") ? "selected" : ""%>>Ordre croissant de poids</option>
+				<option value="Des-weight" <%=sortString.equals("Des-weight") ? "selected" : ""%>>Ordre décroissant de poids</option>
+				<option value="Asc-date_added" <%=sortString.equals("Asc-date_added") ? "selected" : ""%>>Ordre croissant de création</option>
+				<option value="Des-date_added" <%=sortString.equals("Des-date_added") ? "selected" : ""%>>Ordre décroissant de création</option>
+				<option value="Asc-date_retired" <%=sortString.equals("Asc-date_retired") ? "selected" : ""%>>Ordre croissant de retrait</option>
+				<option value="Des-date_retired" <%=sortString.equals("Des-date_retired") ? "selected" : ""%>>Ordre décroissant de retrait</option>
+			</select>
 		</form>
 	</div>
-	<div class="list">
-		<table width="59%" border="1">
+	<div>
+		<table class="table table-striped>">
+		<thead>
 			<tr>
 				<th>ID</th>
 				<th>Name</th>
@@ -134,7 +138,8 @@
 				<th>Date de retrait</th>
 				<th>Total</th>
 			</tr>
-			
+		</thead>
+		<tbody>
 			<core:forEach var="row" items="${products.rows}" begin="<%=currentPage*perPage%>" end="<%=perPage*(currentPage+1)-1 %>">
 				<tr>
 					<td><a href="ProductDetail.jsp?item=${row.id}"><core:out value="${row.id}"/></a></td>
@@ -146,10 +151,12 @@
 					<td><core:out value="${row.date_retired}"/></td>
 				</tr>
 			</core:forEach>
+			</tbody>
 		</table>
 		<a href="?start=<%=(currentPage-1)+urlSaver%>">Previous</a>
 		<%=currentPage*perPage+1 %> - <%=perPage*(currentPage+1) %>
 		<a href="?start=<%=(currentPage+1)+urlSaver%>">Next</a><br/>
+	</div>
 	</div>
 </body>
 </html>
