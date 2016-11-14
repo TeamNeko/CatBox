@@ -1,15 +1,6 @@
 @CHARSET "ISO-8859-1";
 
-#search {
-	background: url('img/loupe.png') no-repeat;
-    width: 25px;
-    height: 25px;
-    display: inline-block;
-}
-
 .creationList ul
 {
 	list-style-type: none;
 }
-
-

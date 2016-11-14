@@ -26,7 +26,7 @@
 				
 				<label for="type">Type d'utilisateur: </label>
 				<select id="type" class="form-control" name="type">
-					<option value="Employé" Selected>Employé</option>
+					<option value="Employe" Selected>Employé</option>
 					<option value="Gestionnaire">Gestionnaire</option>
 				</select>
 			</div>

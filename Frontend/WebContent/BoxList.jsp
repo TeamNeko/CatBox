@@ -98,24 +98,29 @@
 		<jsp:include page="Header.jsp" />
 	</div>
 	<div class="search">
-	 	<form>
-			search: <input type="text" name="search">
-			<button type="submit" class="glyphicon glyphicon-search"></button>
-			Ordre d'affichage:  
-			<select name="sort" class="form-control">
-				<option value="Asc-id" <%=sortString.equals("Asc-id") ? "selected" : ""%>>Ordre croissant d'ID</option>
-				<option value="Des-id" <%=sortString.equals("Des-id")? "selected" : ""%>>Ordre décroissant d'ID</option>
-				<option value="Asc-barcode" <%=sortString.equals("Asc-barcode") ? "selected" : ""%>>Ordre croissant de code barre</option>
-				<option value="Des-barcode" <%=sortString.equals("Des-barcode")? "selected" : ""%>>Ordre décroissant de code barre</option>
-				<option value="Asc-weight" <%=sortString.equals("Asc-weight") ? "selected" : ""%>>Ordre croissant de poids</option>
-				<option value="Des-weight" <%=sortString.equals("Des-weight") ? "selected" : ""%>>Ordre décroissant de poids</option>
-				<option value="Asc-size" <%=sortString.equals("Asc-size") ? "selected" : ""%>>Ordre croissant de taille</option>
-				<option value="Des-size" <%=sortString.equals("Des-size") ? "selected" : ""%>>Ordre décroissant de taille</option>
-				<option value="Asc-creation_date" <%=sortString.equals("Asc-creation_date") ? "selected" : ""%>>Ordre croissant de création</option>
-				<option value="Des-creation_date" <%=sortString.equals("Des-creation_date") ? "selected" : ""%>>Ordre décroissant de création</option>
-				<option value="Asc-last_modified" <%=sortString.equals("Asc-last_modified") ? "selected" : ""%>>Ordre croissant de retrait</option>
-				<option value="Des-last_modified" <%=sortString.equals("Des-last_modified") ? "selected" : ""%>>Ordre décroissant de retrait</option>
-			</select>
+	 	<form class="form-horizontal">
+			<div class="form-group">
+				<label for="search">Recherche: </label>
+				<input type="text" id="search" name="search">
+				<button type="submit" class="glyphicon glyphicon-search"></button>
+			</div>
+			<div class="form-group">
+				<label for="sort">Ordre d'affichage: </label> 
+				<select name="sort" class="form-control">
+					<option value="Asc-id" <%=sortString.equals("Asc-id") ? "selected" : ""%>>Ordre croissant d'ID</option>
+					<option value="Des-id" <%=sortString.equals("Des-id")? "selected" : ""%>>Ordre décroissant d'ID</option>
+					<option value="Asc-barcode" <%=sortString.equals("Asc-barcode") ? "selected" : ""%>>Ordre croissant de code barre</option>
+					<option value="Des-barcode" <%=sortString.equals("Des-barcode")? "selected" : ""%>>Ordre décroissant de code barre</option>
+					<option value="Asc-weight" <%=sortString.equals("Asc-weight") ? "selected" : ""%>>Ordre croissant de poids</option>
+					<option value="Des-weight" <%=sortString.equals("Des-weight") ? "selected" : ""%>>Ordre décroissant de poids</option>
+					<option value="Asc-size" <%=sortString.equals("Asc-size") ? "selected" : ""%>>Ordre croissant de taille</option>
+					<option value="Des-size" <%=sortString.equals("Des-size") ? "selected" : ""%>>Ordre décroissant de taille</option>
+					<option value="Asc-creation_date" <%=sortString.equals("Asc-creation_date") ? "selected" : ""%>>Ordre croissant de création</option>
+					<option value="Des-creation_date" <%=sortString.equals("Des-creation_date") ? "selected" : ""%>>Ordre décroissant de création</option>
+					<option value="Asc-last_modified" <%=sortString.equals("Asc-last_modified") ? "selected" : ""%>>Ordre croissant de retrait</option>
+					<option value="Des-last_modified" <%=sortString.equals("Des-last_modified") ? "selected" : ""%>>Ordre décroissant de retrait</option>
+				</select>
+			</div>
 		</form>
 	</div>
 	<div>	
