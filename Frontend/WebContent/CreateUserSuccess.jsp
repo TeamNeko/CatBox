@@ -24,7 +24,7 @@
 %>     
 
 <sql:query dataSource="${snapshot}" var="user">
-	SELECT * FROM "Users";
+	SELECT * FROM users;
 </sql:query>
 
 <core:catch var="SQLException">
@@ -39,7 +39,7 @@
 <core:set var="userType" value="<%=userType%>"/>
 
 <sql:update dataSource="${snapshot}">
-	INSERT INTO "Users" VALUES (?, ?, ?, ?, ?);
+	INSERT INTO users VALUES (?, ?, ?, ?, ?);
 	<sql:param value="${id}" />
 	<sql:param value="${firstName}" />
 	<sql:param value="${lastName}" />

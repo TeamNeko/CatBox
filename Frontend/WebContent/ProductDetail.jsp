@@ -67,7 +67,7 @@
 		<jsp:include page="Header.jsp" />
 	</div>
 	Information du produit <core:out value="${productId}"/>
-	<div class="list">
+	<div>
 		<core:set var="total" scope="session" value="${fn:length(inventory.rows)}"/>
 		<core:set var="perPage" scope="session"  value="10"/>
 		<core:set var="pageStart" value="${param.start}"/>
