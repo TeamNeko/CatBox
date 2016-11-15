@@ -10,22 +10,28 @@
 
 <%
 	int boxId = -1, size = 0;
+	String barcode = "";
 	float weight = 0;
 	boolean needUpdate = false;
 	try{
 		boxId = Integer.parseInt(request.getParameter("box"));
+		barcode = request.getParameter("barcode");
 		weight = Float.parseFloat(request.getParameter("weight"));
 		size = Integer.parseInt(request.getParameter("size"));
 	}
 	catch(NumberFormatException e)
 	{
-		e.printStackTrace();
+		boxId = -1;
+		size = 0;
+		weight = 0;
 	}
 	catch(NullPointerException e)
 	{ 
-		e.printStackTrace();
+		barcode = "";
+		size = 0;
+		weight = 0;
 	}
-	if(weight!=0 || size != 0)
+	if(weight != 0 || size != 0 || barcode != "")
 	{
 		needUpdate = true;
 	}
@@ -58,12 +64,14 @@
 %>
 
 <core:set var="boxId" value="<%=boxId%>"/>
+<core:set var="barcode" value="<%=barcode%>"/>
 <core:set var="weight" value="<%=weight%>"/>
 <core:set var="size" value="<%=size%>"/>
 
 <core:if test="<%=needUpdate %>">
 	<sql:update dataSource="${snapshot}">
-		UPDATE boxes SET weight = ?, size = ? WHERE id = ?;
+		UPDATE boxes SET barcode = ?, weight = ?, size = ? WHERE id = ?;
+		<sql:param value="${barcode}" />
 		<sql:param value="${weight}" />
 		<sql:param value="${size}" />
 		<sql:param value="${boxId}" />
@@ -105,7 +113,7 @@
 	}
 	catch (NumberFormatException e)
 	{
-		e.printStackTrace();
+		currentPage = 0;
 	}
 %>
 
@@ -137,44 +145,16 @@
 	<core:if test="${boxId != -1}">
 		<core:forEach var="row" items="${box.rows}">
 			<form action="?box=${boxId}" method="Post">
-				ID: <input type="text" value="${row.id}" disabled>
-				Poids: <input type="text" name="weight" value="${row.weight}">
-				Taille: <input type="text" name="size" value="${row.size}">
-				Code Barre: <input type="text" value="${row.barcode}">
+				<label for="barcode">Code Barre: </label>
+				<input type="text" id="barcode" name="barcode" value="${row.barcode}">
+				<label for="barcode">Poids: </label>
+				<input type="text" id="weight" name="weight" value="${row.weight}">
+				<label for="barcode">Taille: </label>
+				<input type="text" id="size" name="size" value="${row.size}">
 			<input type="submit" value="Modifier"/>
 		</form> 
 		</core:forEach>  
 	</core:if> 
-	<core:if test="${boxId == -1}">
-		<form>		
-			ID: <input type="text" value="${row.id}" disabled>
-			Poids: <input type="text" name="weight" value="${row.weight}">
-			Taille: <input type="text" name="size" value="${row.size}">
-			Code Barre: <input type="text" value="${row.barcode}">
-			<input type="submit" value="Ajouter"/>
-		</form>
-	</core:if>
-	<div>
-	 	<form>
-			<div class="form-group">
-				<label for="sort">Ordre d'affichage: </label>
-				<select name="sort" id="sort" class="form-control">
-					<option value="Asc-id" <%=sortString.equals("Asc-id") ? "selected" : ""%>>Ordre croissant d'ID</option>
-					<option value="Des-id" <%=sortString.equals("Des-id")? "selected" : ""%>>Ordre décroissant d'ID</option>
-					<option value="Asc-barcode" <%=sortString.equals("Asc-barcode") ? "selected" : ""%>>Ordre croissant de code barre</option>
-					<option value="Des-barcode" <%=sortString.equals("Des-barcode") ? "selected" : ""%>>Ordre décroissant de code barre</option>
-					<option value="Asc-name" <%=sortString.equals("Asc-name") ? "selected" : ""%>>Ordre croissant de nom de produit</option>
-					<option value="Des-name" <%=sortString.equals("Des-name")? "selected" : ""%>>Ordre décroissant de nom de produit</option>
-					<option value="Asc-weight" <%=sortString.equals("Asc-weight") ? "selected" : ""%>>Ordre croissant de poids</option>
-					<option value="Des-weight" <%=sortString.equals("Des-weight") ? "selected" : ""%>>Ordre décroissant de poids</option>
-					<option value="Asc-date_added" <%=sortString.equals("Asc-date_added") ? "selected" : ""%>>Ordre croissant de création</option>
-					<option value="Des-date_added" <%=sortString.equals("Des-date_added") ? "selected" : ""%>>Ordre décroissant de création</option>
-					<option value="Asc-date_retired" <%=sortString.equals("Asc-date_retired") ? "selected" : ""%>>Ordre croissant de retrait</option>
-					<option value="Des-date_retired" <%=sortString.equals("Des-date_retired") ? "selected" : ""%>>Ordre décroissant de retrait</option>
-				</select>
-			</div>
-		</form>
-	</div>
 	<div>
 		<table class="table table-striped>">
 		<thead>
@@ -201,9 +181,9 @@
 			</core:forEach>
 			</tbody>
 		</table>
-		<a href="?start=<%=(currentPage-1)+urlSaver%>">Previous</a>
+		<a href="?start=<%=(currentPage-1)+urlSaver%>">Précédent</a>
 		<%=currentPage*perPage+1 %> - <%=perPage*(currentPage+1) %>
-		<a href="?start=<%=(currentPage+1)+urlSaver%>">Next</a><br/>
+		<a href="?start=<%=(currentPage+1)+urlSaver%>">Suivant</a><br/>
 	</div>
 </div>
 </body>
