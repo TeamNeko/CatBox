@@ -9,7 +9,6 @@
      user="jmtntlek"  password="vaYxsY1WBNr5gYMMd-74kLrc98gqNhqI"/>
      
 <%
-	int id = 1;
 	String firstName = "", lastName = "", userType = "Employé",  userNum = "";
 	try{
 		userNum = request.getParameter("number");
@@ -23,24 +22,13 @@
 	}
 %>     
 
-<sql:query dataSource="${snapshot}" var="user">
-	SELECT * FROM users;
-</sql:query>
-
-<core:catch var="SQLException">
-	<core:forEach var="row" items="${user.rows}">
-		<% id++; %>
-	</core:forEach>
-</core:catch>
-<core:set var="id" value="<%=id%>"/>
 <core:set var="userNum" value="<%=userNum%>"/>
 <core:set var="firstName" value="<%=firstName%>"/>
 <core:set var="lastName" value="<%=lastName%>"/>
 <core:set var="userType" value="<%=userType%>"/>
 
 <sql:update dataSource="${snapshot}">
-	INSERT INTO users VALUES (?, ?, ?, ?, ?);
-	<sql:param value="${id}" />
+	INSERT INTO users (first_name,last_name,number,type) VALUES (?, ?, ?, ?);
 	<sql:param value="${firstName}" />
 	<sql:param value="${lastName}" />
 	<sql:param value="${userNum}" />

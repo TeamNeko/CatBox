@@ -4,3 +4,13 @@
 {
 	list-style-type: none;
 }
+
+.table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th {
+	 background-color: #108DCD;
+	 color:#FFFFFF
+}
+
+tr:hover {
+	 background-color: #108DCD;
+ 	 color:#FFFFFF
+}

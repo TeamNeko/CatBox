@@ -89,8 +89,22 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Soprema - Liste de boite</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<title>Soprema - Liste de boite</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script type="text/javascript">
+	// Rend les lignes cliquables
+		jQuery(document).ready(function($) {
+		    $(".clickable-row").click(function() {
+		        window.location = $(this).data("href");
+		    });
+		});
+	</script>
 </head>
 <body>
 <div class="container-fluid">
@@ -98,7 +112,7 @@
 		<jsp:include page="Header.jsp" />
 	</div>
 	<div class="search">
-	 	<form class="form-horizontal">
+	 	<form>
 			<div class="form-group">
 				<label for="search">Recherche: </label>
 				<input type="text" id="search" name="search">
@@ -127,7 +141,6 @@
 		<table class="table table-striped>">
 		<thead>
 			<tr>
-				<th>ID</th>
 				<th>Code barre</th>
 				<th>Poids</th>
 				<th>Taille</th>
@@ -146,8 +159,7 @@
 			    <core:set var="pageStart" value="${total}"/>
 			</core:if>			
 			<core:forEach var="row" items="${box.rows}" begin="<%=currentPage*perPage%>" end="<%=perPage*(currentPage+1)-1 %>">
-				<tr>
-					<td><a href="BoxDetail.jsp?box=${row.id}"><core:out value="${row.id}"/></a></td>
+				<tr class="clickable-row"  data-href="BoxDetail.jsp?box=${row.id}">
 					<td><core:out value="${row.barcode}"/></td>
 					<td><core:out value="${row.weight}"/></td>
 					<td><core:out value="${row.size}"/></td>
