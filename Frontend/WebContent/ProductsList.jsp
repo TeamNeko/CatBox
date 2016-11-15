@@ -38,6 +38,26 @@
 		sortString = "";
 	}
 	urlSaver.trim();
+	String addName="";
+	String addBarcode="";
+	String addDescription="";
+	float addWeight=0;
+	boolean insertTrue = false;
+	try
+	{
+		addName = request.getParameter("addName");
+		addBarcode = request.getParameter("addBarcode");
+		addDescription = request.getParameter("addDescription");
+		addWeight = Float.parseFloat(request.getParameter("addWeight"));
+		if(!addName.isEmpty() && !addBarcode.isEmpty())
+		{
+			insertTrue = true;
+		}
+	}
+	catch(NullPointerException e)
+	{
+		e.printStackTrace();
+	}
 %>
 
 <core:set var="keyWord" value="<%=keyWord %>"/>
@@ -48,6 +68,7 @@
      url="jdbc:postgresql://elmer.db.elephantsql.com:5432/jmtntlek"
      user="jmtntlek"  password="vaYxsY1WBNr5gYMMd-74kLrc98gqNhqI"/>
 
+
 <sql:query dataSource="${snapshot}" var="products">
 	SELECT * FROM products 
 	<core:if test="${not empty keyWord}">
@@ -56,7 +77,27 @@
 	</core:if> 
 	ORDER BY "${sortColumnName}" ${sortColumnOrder} LIMIT 50;
 </sql:query>
+
 <core:set var="total" value="${fn:length(products.rows)}"/>
+
+<sql:query dataSource="${snapshot}" var="user">
+	SELECT * FROM users;
+</sql:query>
+
+<core:set var="addName" value="<%=addName%>"/>
+<core:set var="addBarcode" value="<%=addBarcode%>"/>
+<core:set var="addDescription" value="<%=addDescription%>"/>
+<core:set var="addWeight" value="<%=addWeight%>"/>
+
+<core:if test="<%=insertTrue%>">
+	<sql:query dataSource="${snapshot}" var="products">
+		INSERT INTO products (name,barcode,description,weight) VALUES (?, ?, ?, ?);
+		<sql:param value="${addName}" />
+		<sql:param value="${addBarcode}" />
+		<sql:param value="${addDescription}" />
+		<sql:param value="${addWeight}" />
+	</sql:query>
+</core:if>
 
 <% 
 	int perPage = 5;
@@ -92,11 +133,16 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="Intranet.css">
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script>
+	// Rend les lignes cliquables
+		jQuery(document).ready(function($) {
+		    $(".clickable-row").click(function() {
+		        window.location = $(this).data("href");
+		    });
+		});
+	</script>
 	<title>Soprema - Liste de produits</title>
 </head>
 <body>
@@ -105,7 +151,7 @@
 		<jsp:include page="Header.jsp" />
 	</div>
 	<div>
-	 	<form class="form-horizontal">
+	 	<form>
 			<div class="form-group">
 				<label for="search">Recherche: </label>
 				<input type="text" id="search" name="search">
@@ -131,10 +177,9 @@
 		</form>
 	</div>
 	<div>
-		<table class="table table-striped>">
+	<table class="table table-striped>">
 		<thead>
 			<tr>
-				<th>ID</th>
 				<th>Name</th>
 				<th>Barcode</th>
 				<th>Description</th>
@@ -146,8 +191,7 @@
 		</thead>
 		<tbody>
 			<core:forEach var="row" items="${products.rows}" begin="<%=currentPage*perPage%>" end="<%=perPage*(currentPage+1)-1 %>">
-				<tr>
-					<td><a href="ProductDetail.jsp?item=${row.id}"><core:out value="${row.id}"/></a></td>
+				<tr class='clickable-row table-hover' data-href="ProductDetail.jsp?item=${row.id}">
 					<td><core:out value="${row.name}"/></td>
 					<td><core:out value="${row.barcode}"/></td>
 					<td><core:out value="${row.description}"/></td>
@@ -163,5 +207,37 @@
 		<a href="?start=<%=(currentPage+1)+urlSaver%>">Next</a><br/>
 	</div>
 	</div>
+	<button type="button" class="btn btn-info btn-md pull-right" data-toggle="modal" data-target="#addWindow">Open Modal</button>
+	<div id="addWindow" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+	    <div class="modal-content">
+	      	<div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <h4 class="modal-title">Ajouter un produit</h4>
+	     	</div>
+	    	<div class="modal-body">
+		    	<form role="form">
+			    	<div class="form-group">
+						<label for="addName">Nom: </label>
+						<input id="addName" class="form-control" type="text" name="addName">
+						
+						<label for="addBarcode">Code bar: </label>
+						<input id="addBarcode" class="form-control" type="text" name="addBarcode">
+						
+						<label for="addDescription">Description: </label>
+						<input id="addDescription" class="form-control" type="text" name="addDescription">
+						
+						<label for="addWeight">Poids: </label>
+						<input id="addWeight" class="form-control" type="text" name="addWeight">
+					</div>
+					<input type="submit" class="btn btn-success" value="Ajouter"/>
+				</form>
+	      	</div>
+	      	<div class="modal-footer">
+	        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	     	 </div>
+    	</div>
+  	</div>
+</div>
 </body>
 </html>
