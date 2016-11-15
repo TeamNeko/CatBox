@@ -221,12 +221,12 @@
 			</core:forEach>
 			</tbody>
 		</table>
-		<a href="?start=<%=(currentPage-1)+urlSaver%>">Previous</a>
+		<a href="?start=<%=(currentPage-1)+urlSaver%>">Précédent</a>
 		<%=currentPage*perPage+1 %> - <%=perPage*(currentPage+1) %>
-		<a href="?start=<%=(currentPage+1)+urlSaver%>">Next</a><br/>
+		<a href="?start=<%=(currentPage+1)+urlSaver%>">Suivant</a><br/>
 	</div>
 	</div>
-	<button type="button" class="btn btn-info btn-md pull-right" data-toggle="modal" data-target="#addWindow">Open Modal</button>
+	<button type="button" class="btn btn-info btn-md pull-right" data-toggle="modal" data-target="#addWindow">Ajouter un produit</button>
 	<div id="addWindow" class="modal fade" role="dialog">
     <div class="modal-dialog">
 	    <div class="modal-content">
