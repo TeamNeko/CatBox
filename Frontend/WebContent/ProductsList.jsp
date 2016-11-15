@@ -90,13 +90,13 @@
 <core:set var="addWeight" value="<%=addWeight%>"/>
 
 <core:if test="<%=insertTrue%>">
-	<sql:query dataSource="${snapshot}" var="products">
+	<sql:update dataSource="${snapshot}">
 		INSERT INTO products (name,barcode,description,weight) VALUES (?, ?, ?, ?);
 		<sql:param value="${addName}" />
 		<sql:param value="${addBarcode}" />
 		<sql:param value="${addDescription}" />
 		<sql:param value="${addWeight}" />
-	</sql:query>
+	</sql:update>
 </core:if>
 
 <% 
