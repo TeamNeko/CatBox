@@ -38,6 +38,26 @@
 		sortString = "";
 	}
 	urlSaver.trim();
+	String addName="";
+	String addBarcode="";
+	String addDescription="";
+	float addWeight=0;
+	boolean insertTrue = false;
+	try
+	{
+		addName = request.getParameter("addName");
+		addBarcode = request.getParameter("addBarcode");
+		addDescription = request.getParameter("addDescription");
+		addWeight = Float.parseFloat(request.getParameter("addWeight"));
+		if(!addName.isEmpty() && !addBarcode.isEmpty())
+		{
+			insertTrue = true;
+		}
+	}
+	catch(NullPointerException e)
+	{
+		e.printStackTrace();
+	}
 %>
 
 <core:set var="keyWord" value="<%=keyWord %>"/>
@@ -56,7 +76,30 @@
 	</core:if> 
 	ORDER BY "${sortColumnName}" ${sortColumnOrder} LIMIT 50;
 </sql:query>
+
+<sql:query dataSource="${snapshot}" var="alerts">
+	  SELECT * FROM alerts INNER JOIN alert_messages ON (alerts.id_message = alert_messages.id) INNER JOIN products ON (alerts.id_product = products.id)
+</sql:query>
 <core:set var="total" value="${fn:length(products.rows)}"/>
+
+<sql:query dataSource="${snapshot}" var="user">
+	SELECT * FROM users;
+</sql:query>
+
+<core:set var="addName" value="<%=addName%>"/>
+<core:set var="addBarcode" value="<%=addBarcode%>"/>
+<core:set var="addDescription" value="<%=addDescription%>"/>
+<core:set var="addWeight" value="<%=addWeight%>"/>
+
+<core:if test="<%=insertTrue%>">
+	<sql:update dataSource="${snapshot}">
+		INSERT INTO products (name,barcode,description,weight) VALUES (?, ?, ?, ?);
+		<sql:param value="${addName}" />
+		<sql:param value="${addBarcode}" />
+		<sql:param value="${addDescription}" />
+		<sql:param value="${addWeight}" />
+	</sql:update>
+</core:if>
 
 <% 
 	int perPage = 5;
@@ -92,57 +135,82 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="Intranet.css">
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script>
+	// Rend les lignes cliquables
+		jQuery(document).ready(function($) {
+		    $(".clickable-row").click(function() {
+		        window.location = $(this).data("href");
+		    });
+		});
+	</script>
 	<title>Soprema - Liste de produits</title>
 </head>
 <body>
 <div class="container-fluid">
 	<div>
 		<jsp:include page="Header.jsp" />
-	</div>
-	<div class="search">
+	</div> 
+	<core:if test="${alerts.rowCount > 0}">
+		<div id="alerts" class="list-group">
+ 	    	<button class="list-group-item list-group-item-warning" data-toggle="collapse" data-target="#collapseAlerts">
+				Afficher/Cacher les alertes (<core:out value="${alerts.rowCount}" />)
+			</button>
+      		<div class="panel-collapse collapse " id="collapseAlerts">
+				<core:forEach var="row" items="${alerts.rows}">
+					<core:set var="message" value="${row.message}" />
+					<core:set var="message" value="${fn:replace(message,\"{productName}\", row.name)}" />
+					
+					<p class="list-group-item list-group-item-warning">
+						<b><core:out value="${message}" /></b><br/>
+						at <core:out value="${row.time}" />
+					</p>
+				</core:forEach>
+			</div>
+		</div>
+	</core:if>
+	<div>
 	 	<form>
-			search: <input type="text" name="search">
-			<button type="submit" class="glyphicon glyphicon-search"></button>
-			Ordre d'affichage:  
-			<select name="sort" class="form-control">
-				<option value="Asc-id" <%=sortString.equals("Asc-id") ? "selected" : ""%>>Ordre croissant d'ID</option>
-				<option value="Des-id" <%=sortString.equals("Des-id")? "selected" : ""%>>Ordre décroissant d'ID</option>
-				<option value="Asc-barcode" <%=sortString.equals("Asc-barcode") ? "selected" : ""%>>Ordre croissant de code barre</option>
-				<option value="Des-barcode" <%=sortString.equals("Des-barcode") ? "selected" : ""%>>Ordre décroissant de code barre</option>
-				<option value="Asc-name" <%=sortString.equals("Asc-name") ? "selected" : ""%>>Ordre croissant de nom de produit</option>
-				<option value="Des-name" <%=sortString.equals("Des-name")? "selected" : ""%>>Ordre décroissant de nom de produit</option>
-				<option value="Asc-weight" <%=sortString.equals("Asc-weight") ? "selected" : ""%>>Ordre croissant de poids</option>
-				<option value="Des-weight" <%=sortString.equals("Des-weight") ? "selected" : ""%>>Ordre décroissant de poids</option>
-				<option value="Asc-date_added" <%=sortString.equals("Asc-date_added") ? "selected" : ""%>>Ordre croissant de création</option>
-				<option value="Des-date_added" <%=sortString.equals("Des-date_added") ? "selected" : ""%>>Ordre décroissant de création</option>
-				<option value="Asc-date_retired" <%=sortString.equals("Asc-date_retired") ? "selected" : ""%>>Ordre croissant de retrait</option>
-				<option value="Des-date_retired" <%=sortString.equals("Des-date_retired") ? "selected" : ""%>>Ordre décroissant de retrait</option>
-			</select>
+			<div class="form-group">
+				<label for="search">Recherche: </label>
+				<input type="text" id="search" name="search">
+				<button type="submit" class="glyphicon glyphicon-search"></button>
+			</div>
+			<div class="form-group">
+				<label for="sort">Ordre d'affichage: </label>
+				<select name="sort" id="sort" class="form-control">
+					<option value="Asc-id" <%=sortString.equals("Asc-id") ? "selected" : ""%>>Ordre croissant d'ID</option>
+					<option value="Des-id" <%=sortString.equals("Des-id")? "selected" : ""%>>Ordre dï¿½croissant d'ID</option>
+					<option value="Asc-barcode" <%=sortString.equals("Asc-barcode") ? "selected" : ""%>>Ordre croissant de code barre</option>
+					<option value="Des-barcode" <%=sortString.equals("Des-barcode") ? "selected" : ""%>>Ordre dï¿½croissant de code barre</option>
+					<option value="Asc-name" <%=sortString.equals("Asc-name") ? "selected" : ""%>>Ordre croissant de nom de produit</option>
+					<option value="Des-name" <%=sortString.equals("Des-name")? "selected" : ""%>>Ordre dï¿½croissant de nom de produit</option>
+					<option value="Asc-weight" <%=sortString.equals("Asc-weight") ? "selected" : ""%>>Ordre croissant de poids</option>
+					<option value="Des-weight" <%=sortString.equals("Des-weight") ? "selected" : ""%>>Ordre dï¿½croissant de poids</option>
+					<option value="Asc-date_added" <%=sortString.equals("Asc-date_added") ? "selected" : ""%>>Ordre croissant de crï¿½ation</option>
+					<option value="Des-date_added" <%=sortString.equals("Des-date_added") ? "selected" : ""%>>Ordre dï¿½croissant de crï¿½ation</option>
+					<option value="Asc-date_retired" <%=sortString.equals("Asc-date_retired") ? "selected" : ""%>>Ordre croissant de retrait</option>
+					<option value="Des-date_retired" <%=sortString.equals("Des-date_retired") ? "selected" : ""%>>Ordre dï¿½croissant de retrait</option>
+				</select>
+			</div>
 		</form>
 	</div>
 	<div>
-		<table class="table table-striped>">
+	<table class="table">
 		<thead>
 			<tr>
-				<th>ID</th>
 				<th>Name</th>
 				<th>Barcode</th>
 				<th>Description</th>
 				<th>Poids (kg)</th>
 				<th>Date d'ajout</th>
 				<th>Date de retrait</th>
-				<th>Total</th>
 			</tr>
 		</thead>
 		<tbody>
 			<core:forEach var="row" items="${products.rows}" begin="<%=currentPage*perPage%>" end="<%=perPage*(currentPage+1)-1 %>">
-				<tr>
-					<td><a href="ProductDetail.jsp?item=${row.id}"><core:out value="${row.id}"/></a></td>
+				<tr class='clickable-row table-hover' data-href="ProductDetail.jsp?item=${row.id}">
 					<td><core:out value="${row.name}"/></td>
 					<td><core:out value="${row.barcode}"/></td>
 					<td><core:out value="${row.description}"/></td>
@@ -153,10 +221,42 @@
 			</core:forEach>
 			</tbody>
 		</table>
-		<a href="?start=<%=(currentPage-1)+urlSaver%>">Previous</a>
+		<a href="?start=<%=(currentPage-1)+urlSaver%>">Précédent</a>
 		<%=currentPage*perPage+1 %> - <%=perPage*(currentPage+1) %>
-		<a href="?start=<%=(currentPage+1)+urlSaver%>">Next</a><br/>
+		<a href="?start=<%=(currentPage+1)+urlSaver%>">Suivant</a><br/>
 	</div>
 	</div>
+	<button type="button" class="btn btn-info btn-md pull-right" data-toggle="modal" data-target="#addWindow">Ajouter un produit</button>
+	<div id="addWindow" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+	    <div class="modal-content">
+	      	<div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <h4 class="modal-title">Ajouter un produit</h4>
+	     	</div>
+	    	<div class="modal-body">
+		    	<form role="form">
+			    	<div class="form-group">
+						<label for="addName">Nom: </label>
+						<input id="addName" class="form-control" type="text" name="addName">
+						
+						<label for="addBarcode">Code bar: </label>
+						<input id="addBarcode" class="form-control" type="text" name="addBarcode">
+						
+						<label for="addDescription">Description: </label>
+						<input id="addDescription" class="form-control" type="text" name="addDescription">
+						
+						<label for="addWeight">Poids: </label>
+						<input id="addWeight" class="form-control" type="text" name="addWeight">
+					</div>
+					<input type="submit" class="btn btn-success" value="Ajouter"/>
+				</form>
+	      	</div>
+	      	<div class="modal-footer">
+	        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	     	 </div>
+    	</div>
+  	</div>
+</div>
 </body>
 </html>

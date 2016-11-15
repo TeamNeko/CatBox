@@ -89,8 +89,22 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Soprema - Liste de boite</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<title>Soprema - Liste de boite</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script type="text/javascript">
+	// Rend les lignes cliquables
+		jQuery(document).ready(function($) {
+		    $(".clickable-row").click(function() {
+		        window.location = $(this).data("href");
+		    });
+		});
+	</script>
 </head>
 <body>
 <div class="container-fluid">
@@ -99,30 +113,34 @@
 	</div>
 	<div class="search">
 	 	<form>
-			search: <input type="text" name="search">
-			<button type="submit" class="glyphicon glyphicon-search"></button>
-			Ordre d'affichage:  
-			<select name="sort" class="form-control">
-				<option value="Asc-id" <%=sortString.equals("Asc-id") ? "selected" : ""%>>Ordre croissant d'ID</option>
-				<option value="Des-id" <%=sortString.equals("Des-id")? "selected" : ""%>>Ordre décroissant d'ID</option>
-				<option value="Asc-barcode" <%=sortString.equals("Asc-barcode") ? "selected" : ""%>>Ordre croissant de code barre</option>
-				<option value="Des-barcode" <%=sortString.equals("Des-barcode")? "selected" : ""%>>Ordre décroissant de code barre</option>
-				<option value="Asc-weight" <%=sortString.equals("Asc-weight") ? "selected" : ""%>>Ordre croissant de poids</option>
-				<option value="Des-weight" <%=sortString.equals("Des-weight") ? "selected" : ""%>>Ordre décroissant de poids</option>
-				<option value="Asc-size" <%=sortString.equals("Asc-size") ? "selected" : ""%>>Ordre croissant de taille</option>
-				<option value="Des-size" <%=sortString.equals("Des-size") ? "selected" : ""%>>Ordre décroissant de taille</option>
-				<option value="Asc-creation_date" <%=sortString.equals("Asc-creation_date") ? "selected" : ""%>>Ordre croissant de création</option>
-				<option value="Des-creation_date" <%=sortString.equals("Des-creation_date") ? "selected" : ""%>>Ordre décroissant de création</option>
-				<option value="Asc-last_modified" <%=sortString.equals("Asc-last_modified") ? "selected" : ""%>>Ordre croissant de retrait</option>
-				<option value="Des-last_modified" <%=sortString.equals("Des-last_modified") ? "selected" : ""%>>Ordre décroissant de retrait</option>
-			</select>
+			<div class="form-group">
+				<label for="search">Recherche: </label>
+				<input type="text" id="search" name="search">
+				<button type="submit" class="glyphicon glyphicon-search"></button>
+			</div>
+			<div class="form-group">
+				<label for="sort">Ordre d'affichage: </label> 
+				<select name="sort" class="form-control">
+					<option value="Asc-id" <%=sortString.equals("Asc-id") ? "selected" : ""%>>Ordre croissant d'ID</option>
+					<option value="Des-id" <%=sortString.equals("Des-id")? "selected" : ""%>>Ordre décroissant d'ID</option>
+					<option value="Asc-barcode" <%=sortString.equals("Asc-barcode") ? "selected" : ""%>>Ordre croissant de code barre</option>
+					<option value="Des-barcode" <%=sortString.equals("Des-barcode")? "selected" : ""%>>Ordre décroissant de code barre</option>
+					<option value="Asc-weight" <%=sortString.equals("Asc-weight") ? "selected" : ""%>>Ordre croissant de poids</option>
+					<option value="Des-weight" <%=sortString.equals("Des-weight") ? "selected" : ""%>>Ordre décroissant de poids</option>
+					<option value="Asc-size" <%=sortString.equals("Asc-size") ? "selected" : ""%>>Ordre croissant de taille</option>
+					<option value="Des-size" <%=sortString.equals("Des-size") ? "selected" : ""%>>Ordre décroissant de taille</option>
+					<option value="Asc-creation_date" <%=sortString.equals("Asc-creation_date") ? "selected" : ""%>>Ordre croissant de création</option>
+					<option value="Des-creation_date" <%=sortString.equals("Des-creation_date") ? "selected" : ""%>>Ordre décroissant de création</option>
+					<option value="Asc-last_modified" <%=sortString.equals("Asc-last_modified") ? "selected" : ""%>>Ordre croissant de retrait</option>
+					<option value="Des-last_modified" <%=sortString.equals("Des-last_modified") ? "selected" : ""%>>Ordre décroissant de retrait</option>
+				</select>
+			</div>
 		</form>
 	</div>
 	<div>	
 		<table class="table table-striped>">
 		<thead>
 			<tr>
-				<th>ID</th>
 				<th>Code barre</th>
 				<th>Poids</th>
 				<th>Taille</th>
@@ -141,8 +159,7 @@
 			    <core:set var="pageStart" value="${total}"/>
 			</core:if>			
 			<core:forEach var="row" items="${box.rows}" begin="<%=currentPage*perPage%>" end="<%=perPage*(currentPage+1)-1 %>">
-				<tr>
-					<td><a href="BoxDetail.jsp?box=${row.id}"><core:out value="${row.id}"/></a></td>
+				<tr class="clickable-row"  data-href="BoxDetail.jsp?box=${row.id}">
 					<td><core:out value="${row.barcode}"/></td>
 					<td><core:out value="${row.weight}"/></td>
 					<td><core:out value="${row.size}"/></td>
