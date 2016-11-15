@@ -118,7 +118,6 @@
 		<table class="table">
 			<thead>
 			<tr>
-				<td>ID</td>
 			 	<td>Quantité</td>
 			 	<td>Poids</td>
 			 	<td>Taille</td>
