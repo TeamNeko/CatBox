@@ -68,7 +68,6 @@
      url="jdbc:postgresql://elmer.db.elephantsql.com:5432/jmtntlek"
      user="jmtntlek"  password="vaYxsY1WBNr5gYMMd-74kLrc98gqNhqI"/>
 
-
 <sql:query dataSource="${snapshot}" var="products">
 	SELECT * FROM products 
 	<core:if test="${not empty keyWord}">
@@ -78,6 +77,9 @@
 	ORDER BY "${sortColumnName}" ${sortColumnOrder} LIMIT 50;
 </sql:query>
 
+<sql:query dataSource="${snapshot}" var="alerts">
+	  SELECT * FROM alerts INNER JOIN alert_messages ON (alerts.id_message = alert_messages.id) INNER JOIN products ON (alerts.id_product = products.id)
+</sql:query>
 <core:set var="total" value="${fn:length(products.rows)}"/>
 
 <sql:query dataSource="${snapshot}" var="user">
@@ -149,7 +151,25 @@
 <div class="container-fluid">
 	<div>
 		<jsp:include page="Header.jsp" />
-	</div>
+	</div> 
+	<core:if test="${alerts.rowCount > 0}">
+		<div id="alerts" class="list-group">
+ 	    	<button class="list-group-item list-group-item-warning" data-toggle="collapse" data-target="#collapseAlerts">
+				Afficher/Cacher les alertes (<core:out value="${alerts.rowCount}" />)
+			</button>
+      		<div class="panel-collapse collapse " id="collapseAlerts">
+				<core:forEach var="row" items="${alerts.rows}">
+					<core:set var="message" value="${row.message}" />
+					<core:set var="message" value="${fn:replace(message,\"{productName}\", row.name)}" />
+					
+					<p class="list-group-item list-group-item-warning">
+						<b><core:out value="${message}" /></b><br/>
+						at <core:out value="${row.time}" />
+					</p>
+				</core:forEach>
+			</div>
+		</div>
+	</core:if>
 	<div>
 	 	<form>
 			<div class="form-group">
@@ -161,23 +181,23 @@
 				<label for="sort">Ordre d'affichage: </label>
 				<select name="sort" id="sort" class="form-control">
 					<option value="Asc-id" <%=sortString.equals("Asc-id") ? "selected" : ""%>>Ordre croissant d'ID</option>
-					<option value="Des-id" <%=sortString.equals("Des-id")? "selected" : ""%>>Ordre décroissant d'ID</option>
+					<option value="Des-id" <%=sortString.equals("Des-id")? "selected" : ""%>>Ordre dï¿½croissant d'ID</option>
 					<option value="Asc-barcode" <%=sortString.equals("Asc-barcode") ? "selected" : ""%>>Ordre croissant de code barre</option>
-					<option value="Des-barcode" <%=sortString.equals("Des-barcode") ? "selected" : ""%>>Ordre décroissant de code barre</option>
+					<option value="Des-barcode" <%=sortString.equals("Des-barcode") ? "selected" : ""%>>Ordre dï¿½croissant de code barre</option>
 					<option value="Asc-name" <%=sortString.equals("Asc-name") ? "selected" : ""%>>Ordre croissant de nom de produit</option>
-					<option value="Des-name" <%=sortString.equals("Des-name")? "selected" : ""%>>Ordre décroissant de nom de produit</option>
+					<option value="Des-name" <%=sortString.equals("Des-name")? "selected" : ""%>>Ordre dï¿½croissant de nom de produit</option>
 					<option value="Asc-weight" <%=sortString.equals("Asc-weight") ? "selected" : ""%>>Ordre croissant de poids</option>
-					<option value="Des-weight" <%=sortString.equals("Des-weight") ? "selected" : ""%>>Ordre décroissant de poids</option>
-					<option value="Asc-date_added" <%=sortString.equals("Asc-date_added") ? "selected" : ""%>>Ordre croissant de création</option>
-					<option value="Des-date_added" <%=sortString.equals("Des-date_added") ? "selected" : ""%>>Ordre décroissant de création</option>
+					<option value="Des-weight" <%=sortString.equals("Des-weight") ? "selected" : ""%>>Ordre dï¿½croissant de poids</option>
+					<option value="Asc-date_added" <%=sortString.equals("Asc-date_added") ? "selected" : ""%>>Ordre croissant de crï¿½ation</option>
+					<option value="Des-date_added" <%=sortString.equals("Des-date_added") ? "selected" : ""%>>Ordre dï¿½croissant de crï¿½ation</option>
 					<option value="Asc-date_retired" <%=sortString.equals("Asc-date_retired") ? "selected" : ""%>>Ordre croissant de retrait</option>
-					<option value="Des-date_retired" <%=sortString.equals("Des-date_retired") ? "selected" : ""%>>Ordre décroissant de retrait</option>
+					<option value="Des-date_retired" <%=sortString.equals("Des-date_retired") ? "selected" : ""%>>Ordre dï¿½croissant de retrait</option>
 				</select>
 			</div>
 		</form>
 	</div>
 	<div>
-	<table class="table table-striped>">
+	<table class="table">
 		<thead>
 			<tr>
 				<th>Name</th>
@@ -186,7 +206,6 @@
 				<th>Poids (kg)</th>
 				<th>Date d'ajout</th>
 				<th>Date de retrait</th>
-				<th>Total</th>
 			</tr>
 		</thead>
 		<tbody>
