@@ -16,6 +16,7 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
 
 import org.teamneko.meowlib.Alert;
+import org.teamneko.meowlib.HistoryItem;
 import org.teamneko.meowlib.InventoryItem;
 import org.teamneko.meowlib.NamedProduct;
 import org.teamneko.meowlib.Product;
@@ -23,6 +24,7 @@ import org.teamneko.meowlib.Transaction;
 import org.teamneko.meowlib.TransactionRequest;
 import org.teamneko.schrodinger.dao.AlertsDAO;
 import org.teamneko.schrodinger.dao.BoxesDAO;
+import org.teamneko.schrodinger.dao.HistoryDAO;
 import org.teamneko.schrodinger.dao.InventoryDAO;
 import org.teamneko.schrodinger.dao.ProductsDAO;
 import org.teamneko.schrodinger.dao.TransactionsDAO;
@@ -35,9 +37,10 @@ public class BoxResource {
 	
 	private AlertsDAO alerts = Database.getDAOFactory().getAlertsDAO();
 	private BoxesDAO boxes = Database.getDAOFactory().getBoxesDAO();
-	private TransactionsDAO transactions = Database.getDAOFactory().getTransactionsDAO();
+	private HistoryDAO history = Database.getDAOFactory().getHistoryDAO();
 	private InventoryDAO inventory = Database.getDAOFactory().getInventoryDAO();
 	private ProductsDAO products = Database.getDAOFactory().getProductsDAO();
+	private TransactionsDAO transactions = Database.getDAOFactory().getTransactionsDAO();
 	
 	@Context
 	UriInfo uriInfo;
@@ -70,14 +73,15 @@ public class BoxResource {
 		
 		int idBox = boxes.getId(content.getBox());
 		for(TransactionRequest.Product product : content.getProductsModified()) {
-			
 			if(product.getQuantity() != 0) {
 				Optional<Product> dbProduct = products.get(product.getId());
 				if(dbProduct.isPresent())
 				{
-					addTransaction(content.getUser(), idBox, product);
-					updateInventory(idBox, product.getId(), product.getQuantity());
-					setAlerts(dbProduct.get());
+					if(updateInventory(idBox, product.getId(), product.getQuantity())) {
+						addTransaction(content.getUser(), idBox, product);
+						setAlerts(dbProduct.get());
+						addToHistory(dbProduct.get());
+					}
 				}
 			}
 		}
@@ -112,6 +116,11 @@ public class BoxResource {
 		transactions.addTransaction(transaction);
 	}
 	
+	private void addToHistory(Product product) {
+		int stock = inventory.getStock(product.getId());
+		history.add(new HistoryItem(-1, product.getId(), stock, new Date()));
+	}
+	
 	private void setAlerts(Product product) {
 		int quantity = inventory.getStock(product.getId());
 		
@@ -141,7 +150,28 @@ public class BoxResource {
 		}
 	}
 	
-	private void updateInventory(int idBox, int idProduct, int quantity) {
-		inventory.addToInventory(new InventoryItem(idBox, idProduct, quantity));	
+	private boolean updateInventory(int idBox, int idProduct, int quantity) {
+		InventoryItem item = inventory.get(idBox, idProduct).orElse(new InventoryItem(-1, idBox, idProduct, 0));;
+		
+		int newQuantity = item.getQuantity() + quantity;
+		
+		if(newQuantity < 0) {
+			//Impossible to have a negative count of objects in a box
+			return false;
+		}
+		else if(newQuantity == 0 && item.getId() != -1) {
+			//Delete entry, the product is no longer in the box
+			inventory.delete(item);
+		} else {
+			//Set the new quantity in inventory
+			item.setQuantity(newQuantity);
+			
+			if(item.getId() == -1)
+				inventory.insert(item);
+			else
+				inventory.update(item);
+		}
+			
+		return true;
 	}
 }

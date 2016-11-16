@@ -1,46 +1,58 @@
 package org.teamneko.meowlib;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement
 public class InventoryItem {
-	private int idBox;
-	private int idProduct;
+	private int id;
+	private int id_box;
+	private int id_product;
 	private int quantity;
 	
 	public InventoryItem() {
 	}
 	
-	public InventoryItem(int idBox, int idProduct, int quantity) {
-		this.idBox = idBox;
-		this.idProduct = idProduct;
+	public InventoryItem(int id, int idBox, int idProduct, int quantity) {
+		this.id = id;
+		this.id_box = idBox;
+		this.id_box = idProduct;
 		this.quantity = quantity;
 	}
 
-	public int getIdBox() {
-		return idBox;
+	public int getId() {
+		return id;
 	}
 
-	public int getIdProduct() {
-		return idProduct;
+	public int getId_box() {
+		return id_box;
+	}
+
+	public int getId_product() {
+		return id_product;
 	}
 
 	public int getQuantity() {
 		return quantity;
 	}
 
-	public void setIdBox(int idBox) {
-		this.idBox = idBox;
+	public void setId(int id) {
+		this.id = id;
 	}
 
-	public void setIdProduct(int idProduct) {
-		this.idProduct = idProduct;
+	public void setId_box(int id_box) {
+		this.id_box = id_box;
+	}
+
+	public void setId_product(int id_product) {
+		this.id_product = id_product;
 	}
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
+
+	@Override
+	public String toString() {
+		return "InventoryItem [id=" + id + ", id_box=" + id_box + ", id_product=" + id_product + ", quantity="
+				+ quantity + "]";
+	}
 	
-
-
+	
 }

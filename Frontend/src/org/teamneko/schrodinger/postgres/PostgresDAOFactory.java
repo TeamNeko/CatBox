@@ -3,6 +3,7 @@ package org.teamneko.schrodinger.postgres;
 import org.teamneko.schrodinger.dao.AbstractDAOFactory;
 import org.teamneko.schrodinger.dao.AlertsDAO;
 import org.teamneko.schrodinger.dao.BoxesDAO;
+import org.teamneko.schrodinger.dao.HistoryDAO;
 import org.teamneko.schrodinger.dao.InventoryDAO;
 import org.teamneko.schrodinger.dao.ProductsDAO;
 import org.teamneko.schrodinger.dao.TransactionsDAO;
@@ -25,6 +26,11 @@ public class PostgresDAOFactory extends AbstractDAOFactory {
 		return new PostgresBoxesDAO(database);
 	}
 
+	@Override
+	public HistoryDAO getHistoryDAO() {
+		return new PostgresHistoryDAO(database);
+	}
+	
 	@Override
 	public InventoryDAO getInventoryDAO() {
 		return new PostgresInventoryDAO(database);
