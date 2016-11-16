@@ -70,28 +70,22 @@ public class BoxResource {
 		//Set Time
 		t.setTime(new Date().getTime());
 		
-		//Set type to add
-		t.setType("add");
-		for(TransactionRequest.Product product : content.getProductsAdded()) {
-			//Add transaction
-			t.setIdProduct(product.getId());
-			t.setQuantity(product.getQuantity());
-			transactions.addTransaction(t);
-			
-			//Update Inventory
-			inventory.addToInventory(new InventoryItem(t.getIdBox(), product.getId(), product.getQuantity()));
-		}
-		
-		//Set type to remove
-		t.setType("remove");
-		for(TransactionRequest.Product product : content.getProductsRemoved()) {
-			//Add transaction
-			t.setIdProduct(product.getId());
-			t.setQuantity(product.getQuantity());
-			transactions.addTransaction(t);
-			
-			//Update Inventory
-			inventory.removeFromInventory(new InventoryItem(t.getIdBox(), product.getId(), product.getQuantity()));
+		for(TransactionRequest.Product product : content.getProductsModified()) {
+			if(product.getQuantity() != 0) {
+				//Add transaction
+				t.setIdProduct(product.getId());
+				t.setQuantity(product.getQuantity());
+				
+				if(product.getQuantity() > 0)
+					t.setType("add");
+				else
+					t.setType("remove");
+				
+				transactions.addTransaction(t);
+				
+				//Update Inventory
+				inventory.addToInventory(new InventoryItem(t.getIdBox(), product.getId(), product.getQuantity()));
+			}
 		}
 	}
 }

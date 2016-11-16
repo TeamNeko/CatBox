@@ -2,6 +2,8 @@ package org.teamneko.schrodinger.client.test;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.junit.Test;
 import org.teamneko.meowlib.dto.BoxSearchResult;
 import org.teamneko.meowlib.dto.NamedProduct;
@@ -44,14 +46,13 @@ public class SchrodingerClientTest {
 	
 	public void testPostTransaction() {
 		TransactionRequest transaction = new TransactionRequest();
-		TransactionRequest.Product[] added = new TransactionRequest.Product[2];
+		List<TransactionRequest.Product> modifiedProducts = transaction.getProductsModified();
 		
 		transaction.setUser(1);
 		transaction.setBox("123456789152");
 		
-		added[0] = new TransactionRequest.Product(1, 5);
-		added[1] = new TransactionRequest.Product(2, 5);
-		transaction.setProductsAdded(added);
+		modifiedProducts.add(new TransactionRequest.Product(1, 5));
+		modifiedProducts.add(new TransactionRequest.Product(2, 5));
 		
 		c.postTransaction(transaction);
 	}

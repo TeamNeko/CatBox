@@ -1,38 +1,34 @@
 package org.teamneko.meowlib.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class TransactionRequest {
 	private int user;
 	private String box;
-	private Product[] productsAdded;
-	private Product[] productsRemoved;
+	private List<Product> productsModified;
 	
-	public TransactionRequest(int user, String box, Product[] productsAdded, Product[] productsRemoved) {
+	public TransactionRequest(int user, String box, List<Product> productsModified) {
 		this.user = user;
 		this.box = box;
-		this.productsAdded = productsAdded;
-		this.productsRemoved = productsRemoved;
+		this.productsModified = productsModified;
 	}
 	
 	public TransactionRequest() {
 		this.user = -1;
 		this.box = "";
-		this.productsAdded = new Product[0];
-		this.productsRemoved = new Product[0];
+		this.productsModified = new ArrayList<Product>();
 	}
 
 	public String getBox() {
 		return box;
 	}
-
-	public Product[] getProductsAdded() {
-		return productsAdded;
-	}
-
-	public Product[] getProductsRemoved() {
-		return productsRemoved;
+	
+	public List<Product> getProductsModified() {
+		return productsModified;
 	}
 	
 	public int getUser() {
@@ -42,19 +38,15 @@ public class TransactionRequest {
 	public void setBox(String box) {
 		this.box = box;
 	}
-
-	public void setProductsAdded(Product[] productsAdded) {
-		this.productsAdded = productsAdded;
-	}
 	
-	public void setProductsRemoved(Product[] productsRemoved) {
-		this.productsRemoved = productsRemoved;
+	public void setProductsModified(List<Product> productsModified) {
+		this.productsModified = productsModified;
 	}
 	
 	public void setUser(int user) {
 		this.user = user;
 	}
-	
+
 	public static class Product {
 		private int id;
 		private int quantity;

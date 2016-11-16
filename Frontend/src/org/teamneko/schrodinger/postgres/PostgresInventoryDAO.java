@@ -100,7 +100,7 @@ public class PostgresInventoryDAO implements InventoryDAO {
 			
 			while(rs.next()) {
 				NamedProduct product = new NamedProduct();
-				product.setId(rs.getInt("idProduct"));
+				product.setId(rs.getInt("id_product"));
 				product.setQuantity(rs.getInt("quantity"));
 				product.setName(rs.getString("name"));
 				products.add(product);
