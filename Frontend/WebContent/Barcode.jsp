@@ -9,15 +9,26 @@
 <script type="text/javascript">
 function generate() {
 	var value = document.getElementById("value").value;
-	if(value.length == 11)
+	if(value.length >= 11)
 	{
-		JsBarcode("#barcode", document.getElementById("value").value, {format: "UPC"});
+		JsBarcode("#barcode", document.getElementById("value").value, {format: getRadioChecked("barcodeOpt")});
 		document.getElementById("printBtn").disabled = false;
 	}
 	else 
 	{
 		document.getElementById("printBtn").disabled = true;
 	}
+}
+function getRadioChecked(radioGrp)
+{
+    var elements = document.getElementsByName(radioGrp);
+    for (var i = 0, l = elements.length; i < l; i++)
+    {
+        if (elements[i].checked)
+        {
+            return elements[i].value;
+        }
+    }
 }
 function print(){
 
@@ -35,7 +46,11 @@ function print(){
 	<div>
 		<jsp:include page="Header.jsp" />
 	</div>
-	<div>
+	<div>	
+		<div>
+			<label class="radio-inline"><input type="radio" name="barcodeOpt" value="UPC" checked="true">UPC</label>
+			<label class="radio-inline"><input type="radio" name="barcodeOpt" value="EAN13">EAN</label>
+		</div>
 		<h3> Entrez un code barre à générer </h3>
 		<input type="text" id="value" oninput="generate()"/>
 		</br>
