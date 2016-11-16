@@ -41,7 +41,8 @@
 	String addName="";
 	String addBarcode="";
 	String addDescription="";
-	float addWeight=0;
+	float addWeight = 0;
+	int addThreshold = 0;
 	boolean insertTrue = false;
 	try
 	{
@@ -49,14 +50,19 @@
 		addBarcode = request.getParameter("addBarcode");
 		addDescription = request.getParameter("addDescription");
 		addWeight = Float.parseFloat(request.getParameter("addWeight"));
-		if(!addName.isEmpty() && !addBarcode.isEmpty())
+		addThreshold = Integer.parseInt(request.getParameter("addThreshold"));
+		if(addName != null && addBarcode != null )
 		{
 			insertTrue = true;
 		}
 	}
 	catch(NullPointerException e)
 	{
-		e.printStackTrace();
+		addName="";
+		addBarcode="";
+		addDescription="";
+		addWeight = 0;
+		addThreshold = 0;
 	}
 %>
 
@@ -93,11 +99,12 @@
 
 <core:if test="<%=insertTrue%>">
 	<sql:update dataSource="${snapshot}">
-		INSERT INTO products (name,barcode,description,weight) VALUES (?, ?, ?, ?);
+		INSERT INTO products (name,barcode,description,weight,threshold) VALUES (?, ?, ?, ?, ?);
 		<sql:param value="${addName}" />
 		<sql:param value="${addBarcode}" />
 		<sql:param value="${addDescription}" />
 		<sql:param value="${addWeight}" />
+		<sql:param value="${addThreshold}" />
 	</sql:update>
 </core:if>
 
@@ -125,7 +132,7 @@
 	}
 	catch (NumberFormatException e)
 	{
-		e.printStackTrace();
+		currentPage = 0;
 	}
 %>  
 
@@ -180,18 +187,16 @@
 			<div class="form-group">
 				<label for="sort">Ordre d'affichage: </label>
 				<select name="sort" id="sort" class="form-control">
-					<option value="Asc-id" <%=sortString.equals("Asc-id") ? "selected" : ""%>>Ordre croissant d'ID</option>
-					<option value="Des-id" <%=sortString.equals("Des-id")? "selected" : ""%>>Ordre dï¿½croissant d'ID</option>
 					<option value="Asc-barcode" <%=sortString.equals("Asc-barcode") ? "selected" : ""%>>Ordre croissant de code barre</option>
-					<option value="Des-barcode" <%=sortString.equals("Des-barcode") ? "selected" : ""%>>Ordre dï¿½croissant de code barre</option>
+					<option value="Des-barcode" <%=sortString.equals("Des-barcode") ? "selected" : ""%>>Ordre décroissant de code barre</option>
 					<option value="Asc-name" <%=sortString.equals("Asc-name") ? "selected" : ""%>>Ordre croissant de nom de produit</option>
-					<option value="Des-name" <%=sortString.equals("Des-name")? "selected" : ""%>>Ordre dï¿½croissant de nom de produit</option>
+					<option value="Des-name" <%=sortString.equals("Des-name")? "selected" : ""%>>Ordre décroissant de nom de produit</option>
 					<option value="Asc-weight" <%=sortString.equals("Asc-weight") ? "selected" : ""%>>Ordre croissant de poids</option>
-					<option value="Des-weight" <%=sortString.equals("Des-weight") ? "selected" : ""%>>Ordre dï¿½croissant de poids</option>
-					<option value="Asc-date_added" <%=sortString.equals("Asc-date_added") ? "selected" : ""%>>Ordre croissant de crï¿½ation</option>
-					<option value="Des-date_added" <%=sortString.equals("Des-date_added") ? "selected" : ""%>>Ordre dï¿½croissant de crï¿½ation</option>
+					<option value="Des-weight" <%=sortString.equals("Des-weight") ? "selected" : ""%>>Ordre décroissant de poids</option>
+					<option value="Asc-date_added" <%=sortString.equals("Asc-date_added") ? "selected" : ""%>>Ordre croissant de création</option>
+					<option value="Des-date_added" <%=sortString.equals("Des-date_added") ? "selected" : ""%>>Ordre décroissant de création</option>
 					<option value="Asc-date_retired" <%=sortString.equals("Asc-date_retired") ? "selected" : ""%>>Ordre croissant de retrait</option>
-					<option value="Des-date_retired" <%=sortString.equals("Des-date_retired") ? "selected" : ""%>>Ordre dï¿½croissant de retrait</option>
+					<option value="Des-date_retired" <%=sortString.equals("Des-date_retired") ? "selected" : ""%>>Ordre décroissant de retrait</option>
 				</select>
 			</div>
 		</form>
@@ -206,6 +211,7 @@
 				<th>Poids (kg)</th>
 				<th>Date d'ajout</th>
 				<th>Date de retrait</th>
+				<th>Seuil d'alerte</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -217,6 +223,7 @@
 					<td><core:out value="${row.weight}"/></td>
 					<td><core:out value="${row.date_added}"/></td>
 					<td><core:out value="${row.date_retired}"/></td>
+					<td><core:out value="${row.threshold}"/></td>
 				</tr>
 			</core:forEach>
 			</tbody>
@@ -226,7 +233,7 @@
 		<a href="?start=<%=(currentPage+1)+urlSaver%>">Suivant</a><br/>
 	</div>
 	</div>
-	<button type="button" class="btn btn-info btn-md pull-right" data-toggle="modal" data-target="#addWindow">Ajouter un produit</button>
+	<button type="button" class="btn btn-info btn-md pull-right" data-toggle="modal" data-target="#addWindow">Open Modal</button>
 	<div id="addWindow" class="modal fade" role="dialog">
     <div class="modal-dialog">
 	    <div class="modal-content">
@@ -248,6 +255,9 @@
 						
 						<label for="addWeight">Poids: </label>
 						<input id="addWeight" class="form-control" type="text" name="addWeight">
+						
+						<label for="addThreshold">Seuil d'alerte: </label>
+						<input id="addThreshold" class="form-control" type="text" name="addThreshold">
 					</div>
 					<input type="submit" class="btn btn-success" value="Ajouter"/>
 				</form>

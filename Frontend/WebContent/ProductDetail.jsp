@@ -9,19 +9,84 @@
      user="jmtntlek"  password="vaYxsY1WBNr5gYMMd-74kLrc98gqNhqI"/>
 
 <%
-	int productId;
+	int productId = -1;
+	boolean needUpdate = false;
 	String urlSaver = "";
+	String name = "";
+	String barcode = ""; 
+	String description = "";
+	float weight = 0; 
+	int threshold = 0;
 	try{
-			productId = Integer.parseInt(request.getParameter("item"));
-			urlSaver = "&item=" + productId; 
+		productId = Integer.parseInt(request.getParameter("item"));
+		urlSaver = "?item=" + productId; 
+		name = request.getParameter("name");
+		barcode = request.getParameter("barcode");
+		description = request.getParameter("description");
+		weight = Float.parseFloat(request.getParameter("weight"));
+		threshold = Integer.parseInt(request.getParameter("threshold"));
+		needUpdate = true;
 	}
 	catch(NumberFormatException e)
 	{
 		productId = -1;
 	}
+	catch(NullPointerException e)
+	{
+		needUpdate = false;
+	}
 	urlSaver.trim();	
+	//if (name != null && barcode != null && description != null && weight != 0 && threshold != 0)
+	//{
+	//	needUpdate = true;
+	//}
+	
+	String sortString = request.getParameter("sort");
+	String sortColumnOrder = "ASC";
+	String sortColumnName = "id";
+	
+	if(sortString != null)
+	{
+		String[] sortArguments = sortString.split("-");
+		sortColumnOrder = sortArguments[0];
+		sortColumnName = sortArguments[1];
+		urlSaver += "&sort=" + sortColumnOrder + "-" + sortColumnName;
+		if(sortColumnOrder.equals("Des"))
+		{
+			sortColumnOrder = "DESC";
+		}
+		else 
+		{
+			sortColumnOrder = "ASC";
+		}
+	}
+	else
+	{
+		sortString = "";
+	}
+	urlSaver.trim();
 %>
+
+<core:set var="name" value="<%=name%>"/>
+<core:set var="barcode" value="<%=barcode%>"/>
+<core:set var="description" value="<%=description%>"/>
+<core:set var="weight" value="<%=weight%>"/>
+<core:set var="threshold" value="<%=threshold%>"/>
 <core:set var="productId" value="<%=productId%>"/>
+
+<core:if test="<%=needUpdate%>">
+	<sql:update dataSource="${snapshot}">
+		UPDATE products SET name = ?, barcode = ?, description = ?, weight = ?, threshold = ? WHERE id = ?;
+		<sql:param value="${name}" />
+		<sql:param value="${barcode}" />
+		<sql:param value="${description}" />
+		<sql:param value="${weight}" />
+		<sql:param value="${threshold}" />
+		<sql:param value="${productId}" />
+	</sql:update>
+</core:if>
+  
+  
 <sql:query dataSource="${snapshot}" var="products">
 	SELECT * FROM products WHERE id = ? LIMIT 1
 	<sql:param value="${productId}" />
@@ -34,6 +99,11 @@
 <core:forEach var="row" items="${products.rows}">
 	<core:set var="productName" value="${row.name}" />    
 </core:forEach>
+
+<sql:query dataSource="${snapshot}" var="products">
+		SELECT * FROM products WHERE id = ?;
+		<sql:param value="${productId}" />
+</sql:query>
  
 <sql:query dataSource="${snapshot}" var="inventory">
 	SELECT * FROM inventory INNER JOIN boxes ON (inventory.id_box = boxes.id) WHERE id_product = ? LIMIT 10;
@@ -67,7 +137,7 @@
 	}
 	catch (NumberFormatException e)
 	{
-		e.printStackTrace();
+		currentPage = 0;
 	}
 %>  
 
@@ -93,6 +163,23 @@
 		<jsp:include page="Header.jsp" />
 	</div>
 	<h1><core:out value="${productName}"/></h1>
+	<core:if test="${productId != -1}">
+		<core:forEach var="row" items="${products.rows}">
+			<form action="?item=${productId}" method="Post">
+				<label for="name">Name: </label>
+				<input type="text" id="name" name="name" value="${row.name}">
+				<label for="barcode">Code barre: </label>
+				<input type="text" id="barcode" name="barcode" value="${row.barcode}">
+				<label for="description">Description: </label>
+				<input type="text" id="description" name="description" value="${row.description}">
+				<label for="weight">Poids (kg): </label>
+				<input type="text" id="weight" name="weight" value="${row.weight}">
+				<label for="threshold">Seuil d'alerte: </label>
+				<input type="text" id="threshold" name="threshold" value="${row.threshold}">
+			<input type="submit" value="Modifier"/>
+		</form> 
+		</core:forEach>  
+	</core:if> 
 	<core:if test="${alerts.rowCount > 0}"> 
 		<div id="alerts" class="list-group"> 
       		<core:forEach var="row" items="${alerts.rows}">
@@ -105,44 +192,33 @@
 			</core:forEach>
 		</div>
 	</core:if>
-	<div>
-		<core:set var="total" scope="session" value="${fn:length(inventory.rows)}"/>
-		<core:set var="perPage" scope="session"  value="10"/>
-		<core:set var="pageStart" value="${param.start}"/>
-		<core:if test="${empty pageStart or pageStart < 0}">
-		    <core:set var="pageStart" value="0"/>
-		</core:if>
-		<core:if test="${total <= pageStart}">
-		    <core:set var="pageStart" value="${total}"/>
-		</core:if>	
-		<table class="table">
-			<thead>
-			<tr>
-			 	<td>Quantité</td>
-			 	<td>Poids</td>
-			 	<td>Taille</td>
-			 	<td>Date de création</td>
-			 	<td>Date de modification</td>
-				<td>Code barre</td>
+	<table class="table">
+		<thead>
+		<tr>
+		 	<th>Quantité</th>
+		 	<th>Poids</th>
+		 	<th>Taille</th>
+		 	<th>Date de création</th>
+		 	<th>Date de modification</th>
+			<th>Code barre</th>
+		</tr>
+		</thead>
+		<tbody>
+		<core:forEach var="row" items="${inventory.rows}" begin="<%=currentPage*perPage%>" end="<%=perPage*(currentPage+1)-1 %>">
+			<tr class='clickable-row table-hover' data-href="BoxDetail.jsp?box=${row.id}">
+			 	<td><core:out value="${row.quantity}"/></td>
+			 	<td><core:out value="${row.weight}"/></td>
+			 	<td><core:out value="${row.size}"/></td>
+			 	<td><core:out value="${row.creation_date}"/></td>
+			 	<td><core:out value="${row.last_modified}"/></td>
+				<td><core:out value="${row.barcode}"/></td>
 			</tr>
-			</thead>
-			<tbody>
-			<core:forEach var="row" items="${inventory.rows}" begin="<%=currentPage*perPage%>" end="<%=perPage*(currentPage+1)-1 %>">
-				<tr class='clickable-row table-hover' data-href="BoxDetail.jsp?box=${row.id}">
-				 	<td><core:out value="${row.quantity}"/></td>
-				 	<td><core:out value="${row.weight}"/></td>
-				 	<td><core:out value="${row.size}"/></td>
-				 	<td><core:out value="${row.creation_date}"/></td>
-				 	<td><core:out value="${row.last_modified}"/></td>
-					<td><core:out value="${row.barcode}"/></td>
-				</tr>
-			</core:forEach>
-			</tbody>
-		</table>
-		<a href="?start=<%=(currentPage-1)+urlSaver%>">Previous</a>
-		<%=currentPage*perPage+1 %> - <%=perPage*(currentPage+1) %>
-		<a href="?start=<%=(currentPage+1)+urlSaver%>">Next</a><br/>
-	</div>
+		</core:forEach>
+		</tbody>
+	</table>
+	<a href="?start=<%=(currentPage-1)+urlSaver%>">Précédent</a>
+	<%=currentPage*perPage+1 %> - <%=perPage*(currentPage+1) %>
+	<a href="?start=<%=(currentPage+1)+urlSaver%>">Suivant</a><br/>
 </div>
 </body>
 </html>

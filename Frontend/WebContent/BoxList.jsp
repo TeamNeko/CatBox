@@ -5,17 +5,17 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
      
 <% 
+	String barcode = "";
 	String urlSaver = ""; 
-	int boxId;
-	try{
-		boxId = Integer.parseInt(request.getParameter("search"));
-		System.out.println(boxId);
-		urlSaver += "&search=" + boxId;
-	}
-	catch(NumberFormatException e)
+	String keyWord = request.getParameter("search");
+	if (keyWord != null)
 	{
-		boxId = -1;
+		if(!keyWord.isEmpty())
+		{
+			urlSaver += "&search=" + keyWord;
+		}
 	}
+	urlSaver += "&search=" + barcode;
 	String sortString = request.getParameter("sort");
 	String sortColumnOrder = "ASC";
 	String sortColumnName = "id";
@@ -40,7 +40,7 @@
 	urlSaver.trim();
 %>
 
-<core:set var="keyWord" value="<%=boxId %>"/>
+<core:set var="keyWord" value="<%=barcode%>"/>
 <core:set var="sortColumnOrder" value="<%=sortColumnOrder %>"/>
 <core:set var="sortColumnName" value="<%=sortColumnName %>"/>
 
@@ -48,14 +48,14 @@
      url="jdbc:postgresql://elmer.db.elephantsql.com:5432/jmtntlek"
      user="jmtntlek"  password="vaYxsY1WBNr5gYMMd-74kLrc98gqNhqI"/>
      
-<core:if test="${keyWord == -1}">
+<core:if test="${empty keyWord}">
 	<sql:query dataSource="${snapshot}" var="box"> 
 		SELECT * FROM boxes ORDER BY "${sortColumnName}" ${sortColumnOrder} LIMIT 50;
 	</sql:query>
 </core:if>
-<core:if test="${keyWord != -1}">
+<core:if test="${not empty keyWord}">
 	<sql:query dataSource="${snapshot}" var="box">
-		SELECT * FROM boxes WHERE id = ? ORDER BY "${sortColumnName}" ${sortColumnOrder} LIMIT 50;
+		SELECT * FROM boxes WHERE barcode = ? ORDER BY "${sortColumnName}" ${sortColumnOrder} LIMIT 50;
 		<sql:param value="${keyWord}" />
 	</sql:query>
 </core:if>
@@ -68,12 +68,15 @@
 	try 
 	{
 		totalRecords =  (int)pageContext.getAttribute("total");
-		totalPage = totalRecords/perPage;
+		totalPage = totalRecords/perPage-1;
 		lastPageItem = totalRecords%perPage;
 		currentPage = Integer.parseInt(request.getParameter("start"));
 		if(currentPage > totalPage)
 		{
-			currentPage = totalPage;
+			if(lastPageItem == 0)
+				currentPage = totalPage;
+			else
+				currentPage = totalPage + 1;
 		}
 		else if (currentPage < 0)
 		{
@@ -82,7 +85,7 @@
 	}
 	catch (NumberFormatException e)
 	{
-		e.printStackTrace();
+		currentPage = 0;
 	}
 %>  
     
@@ -121,8 +124,6 @@
 			<div class="form-group">
 				<label for="sort">Ordre d'affichage: </label> 
 				<select name="sort" class="form-control">
-					<option value="Asc-id" <%=sortString.equals("Asc-id") ? "selected" : ""%>>Ordre croissant d'ID</option>
-					<option value="Des-id" <%=sortString.equals("Des-id")? "selected" : ""%>>Ordre décroissant d'ID</option>
 					<option value="Asc-barcode" <%=sortString.equals("Asc-barcode") ? "selected" : ""%>>Ordre croissant de code barre</option>
 					<option value="Des-barcode" <%=sortString.equals("Des-barcode")? "selected" : ""%>>Ordre décroissant de code barre</option>
 					<option value="Asc-weight" <%=sortString.equals("Asc-weight") ? "selected" : ""%>>Ordre croissant de poids</option>
@@ -169,9 +170,9 @@
 			</core:forEach>
 		</tbody>
 		</table>
-		<a href="?start=<%=(currentPage-1)+urlSaver%>">Previous</a>
+		<a href="?start=<%=(currentPage-1)+urlSaver%>">Précédent</a>
 		<%=currentPage*perPage+1 %> - <%=perPage*(currentPage+1) %>
-		<a href="?start=<%=(currentPage+1)+urlSaver%>">Next</a><br/>
+		<a href="?start=<%=(currentPage+1)+urlSaver%>">Suivant</a><br/>
 	</div>
 </div>
 </body>
