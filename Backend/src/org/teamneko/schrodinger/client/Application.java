@@ -37,8 +37,7 @@ public class Application {
 		do 
 		{
 			System.out.print("Entrer code utilisateur: ");
-			//userCode = inputScanner.nextLine();
-			System.out.println(userCode = "C5236209FG");
+			userCode = inputScanner.nextLine();
 		} while (!application.loginUser(userCode));
 		
 		System.out.println("Bon matin " + application.getUser().getFirstName());
