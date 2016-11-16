@@ -1,3 +1,5 @@
+var threshold = 0;
+
 var stockDataset = {
 		label: "",
 		backgroundColor: 'rgba(0, 255, 0, 0.5)',
@@ -6,16 +8,27 @@ var stockDataset = {
         data: []
 };
 
+var thresholdDataset = {
+	  data: [],
+	  fill: true,
+	  radius: 0,
+	  borderColor: "rgb(255, 255, 0)",
+	  backgroundColor: "rgba(255,255,0, 0.2)"
+};
+
 var config = {
 	type: 'line',
 	data: {
 		labels: [],
-		datasets: [stockDataset]
+		datasets: [stockDataset, thresholdDataset]
 	},
 	options: {
         title:{
-            text: "Stock over time",
+            text: "Niveau d'inventaire selon le temps",
         },
+        legend: {
+            display: false
+         },
 		scales: {
 			xAxes: [{
 				type: "time",
@@ -26,13 +39,13 @@ var config = {
 				},
 				scaleLabel: {
 					display: true,
-					labelString: 'Date'
+					labelString: 'Temps'
 				}
 			}, ],
 			yAxes: [{
 				scaleLabel: {
 					display: true,
-					labelString: 'Stock'
+					labelString: 'Quantité'
 				}
 			}]
 		},
@@ -43,6 +56,7 @@ function updateGraph() {
 	$.getJSON("rest/product/history/" + productId, function(data) {
     	$.each(data.stockDataPoint, function(key, value) {
     		stockDataset.data.push({"x": moment(value.time), "y": value.quantity});
+    		thresholdDataset.data.push({"x": moment(value.time), "y": threshold});
     	});
     	
     	window.myLine = new Chart($("#canvas"), config);

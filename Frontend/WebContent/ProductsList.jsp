@@ -226,7 +226,7 @@
 		<a href="?start=<%=(currentPage+1)+urlSaver%>">Suivant</a><br/>
 	</div>
 	</div>
-	<button type="button" class="btn btn-info btn-md pull-right" data-toggle="modal" data-target="#addWindow">Open Modal</button>
+	<button type="button" class="btn btn-info btn-md pull-right" data-toggle="modal" data-target="#addWindow">Ajouter Produit</button>
 	<div id="addWindow" class="modal fade" role="dialog">
     <div class="modal-dialog">
 	    <div class="modal-content">

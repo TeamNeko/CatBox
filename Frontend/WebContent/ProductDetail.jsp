@@ -97,7 +97,8 @@
 </core:if>
 
 <core:forEach var="row" items="${products.rows}">
-	<core:set var="productName" value="${row.name}" />    
+	<core:set var="productName" value="${row.name}" />
+	<core:set var="threshold" value="${row.threshold}" />
 </core:forEach>
 
 <sql:query dataSource="${snapshot}" var="products">
@@ -156,6 +157,7 @@
 		var productId = <core:out value="${productId}"/>
 		var productName = "<core:out value="${productName}"/>"
 		stockDataset.label = productName;
+		threshold = "<core:out value="${threshold}"/>"
 		
 		jQuery(document).ready(function($) {
 			updateGraph();
@@ -192,14 +194,14 @@
 			<input type="submit" value="Modifier"/>
 		</form> 
 	</core:forEach>	
-	<h2>Boï¿½tes</h2>
+	<h2>Boîtes</h2>
 		<table class="table">
 			<thead>
 			<tr>
-			 	<th>Quantitï¿½</th>
+			 	<th>Quantité</th>
 			 	<th>Poids</th>
 			 	<th>Taille</th>
-			 	<th>Date de crï¿½ation</th>
+			 	<th>Date de cré½ation</th>
 			 	<th>Date de modification</th>
 				<th>Code barre</th>
 			</tr>
@@ -221,13 +223,11 @@
 	    <button class="list-group-item list-group-item-info" data-toggle="collapse" data-target="#collapseChart">
 			Graphique d'inventaire
 		</button>
-     	<div class="panel-collapse collapse " id="collapseChart">
+     	<!--  <div class="panel-collapse collapse " id="collapseChart"> -->
+     	<div>
 			<canvas id="canvas"></canvas>
 		</div>
 	</div>
-		<a href="?start=<%=(currentPage-1)+urlSaver%>">Prï¿½cï¿½dent</a>
-		<%=currentPage*perPage+1 %> - <%=perPage*(currentPage+1) %>
-		<a href="?start=<%=(currentPage+1)+urlSaver%>">Suivant</a><br/>
-		</div>
+	</div>
 	</body>
 </html>
