@@ -9,10 +9,10 @@ public class InventoryRow {
 	public InventoryRow() {
 	}
 	
-	public InventoryRow(int id, int idBox, int idProduct, int quantity) {
+	public InventoryRow(int id, int id_box, int id_product, int quantity) {
 		this.id = id;
-		this.id_box = idBox;
-		this.id_box = idProduct;
+		this.id_box = id_box;
+		this.id_product = id_product;
 		this.quantity = quantity;
 	}
 
