@@ -177,6 +177,7 @@
 					<td><core:out value="${row.weight}"/></td>
 					<td><core:out value="${row.date_added}"/></td>
 					<td><core:out value="${row.date_retired}"/></td>
+					<td><core:out value="${row.quantity}"/></td>
 				</tr>
 			</core:forEach>
 			</tbody>

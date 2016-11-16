@@ -68,12 +68,15 @@
 	try 
 	{
 		totalRecords =  (int)pageContext.getAttribute("total");
-		totalPage = totalRecords/perPage;
+		totalPage = totalRecords/perPage-1;
 		lastPageItem = totalRecords%perPage;
 		currentPage = Integer.parseInt(request.getParameter("start"));
 		if(currentPage > totalPage)
 		{
-			currentPage = totalPage;
+			if(lastPageItem == 0)
+				currentPage = totalPage;
+			else
+				currentPage = totalPage + 1;
 		}
 		else if (currentPage < 0)
 		{

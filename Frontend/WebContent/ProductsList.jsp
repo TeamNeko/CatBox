@@ -41,7 +41,8 @@
 	String addName="";
 	String addBarcode="";
 	String addDescription="";
-	float addWeight=0;
+	float addWeight = 0;
+	int addThreshold = 0;
 	boolean insertTrue = false;
 	try
 	{
@@ -49,6 +50,7 @@
 		addBarcode = request.getParameter("addBarcode");
 		addDescription = request.getParameter("addDescription");
 		addWeight = Float.parseFloat(request.getParameter("addWeight"));
+		addThreshold = Integer.parseInt(request.getParameter("addThreshold"));
 		if(addName != null && addBarcode != null )
 		{
 			insertTrue = true;
@@ -59,7 +61,8 @@
 		addName="";
 		addBarcode="";
 		addDescription="";
-		addWeight=0;
+		addWeight = 0;
+		addThreshold = 0;
 	}
 %>
 
@@ -96,11 +99,12 @@
 
 <core:if test="<%=insertTrue%>">
 	<sql:update dataSource="${snapshot}">
-		INSERT INTO products (name,barcode,description,weight) VALUES (?, ?, ?, ?);
+		INSERT INTO products (name,barcode,description,weight,threshold) VALUES (?, ?, ?, ?, ?);
 		<sql:param value="${addName}" />
 		<sql:param value="${addBarcode}" />
 		<sql:param value="${addDescription}" />
 		<sql:param value="${addWeight}" />
+		<sql:param value="${addThreshold}" />
 	</sql:update>
 </core:if>
 
@@ -207,6 +211,7 @@
 				<th>Poids (kg)</th>
 				<th>Date d'ajout</th>
 				<th>Date de retrait</th>
+				<th>Seuil d'alerte</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -218,6 +223,7 @@
 					<td><core:out value="${row.weight}"/></td>
 					<td><core:out value="${row.date_added}"/></td>
 					<td><core:out value="${row.date_retired}"/></td>
+					<td><core:out value="${row.threshold}"/></td>
 				</tr>
 			</core:forEach>
 			</tbody>
@@ -249,6 +255,9 @@
 						
 						<label for="addWeight">Poids: </label>
 						<input id="addWeight" class="form-control" type="text" name="addWeight">
+						
+						<label for="addThreshold">Seuil d'alerte: </label>
+						<input id="addThreshold" class="form-control" type="text" name="addThreshold">
 					</div>
 					<input type="submit" class="btn btn-success" value="Ajouter"/>
 				</form>
