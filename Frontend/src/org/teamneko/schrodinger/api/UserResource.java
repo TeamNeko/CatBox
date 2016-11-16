@@ -9,7 +9,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
 
-import org.teamneko.meowlib.User;
+import org.teamneko.meowlib.json.User;
 import org.teamneko.schrodinger.dao.UsersDAO;
 import org.teamneko.schrodinger.sql.Database;
 

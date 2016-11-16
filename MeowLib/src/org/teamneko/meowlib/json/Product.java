@@ -1,4 +1,4 @@
-package org.teamneko.meowlib;
+package org.teamneko.meowlib.json;
 
 import java.util.Date;
 
@@ -15,6 +15,16 @@ public class Product {
 	private int threshold;
 
 	public Product() {
+	}
+
+	public Product(int id, String name, String description, Date added, Date removed, double weight, int threshold) {
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.added = added;
+		this.removed = removed;
+		this.weight = weight;
+		this.threshold = threshold;
 	}
 
 	public int getId() {

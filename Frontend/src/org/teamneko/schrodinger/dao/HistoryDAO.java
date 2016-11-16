@@ -1,7 +1,10 @@
 package org.teamneko.schrodinger.dao;
 
-import org.teamneko.meowlib.HistoryItem;
+import java.util.List;
+
+import org.teamneko.meowlib.sql.HistoryRow;
 
 public interface HistoryDAO {
-	public void add(HistoryItem item);
+	public void add(HistoryRow item);
+	public List<HistoryRow> getFullHistory(int idProduct);
 }

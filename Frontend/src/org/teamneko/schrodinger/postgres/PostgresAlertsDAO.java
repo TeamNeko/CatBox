@@ -6,19 +6,19 @@ import java.util.Optional;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
-import org.teamneko.meowlib.Alert;
+import org.teamneko.meowlib.sql.AlertRow;
 import org.teamneko.schrodinger.dao.AlertsDAO;
 
 public class PostgresAlertsDAO implements AlertsDAO {
 	private QueryRunner runner;
-	private ResultSetHandler<Alert> alertHandler = new BeanHandler<Alert>(Alert.class);
+	private ResultSetHandler<AlertRow> alertHandler = new BeanHandler<AlertRow>(AlertRow.class);
 
 	public PostgresAlertsDAO(PostgresDatabase database) {
 		runner = new QueryRunner(database.getDataSource());
 	}
 
 	@Override
-	public Optional<Alert> getAlert(int idProduct) {
+	public Optional<AlertRow> getAlert(int idProduct) {
 		try {
 			return Optional
 					.ofNullable(runner.query("SELECT * FROM alerts WHERE id_product=? LIMIT 1", alertHandler, idProduct));

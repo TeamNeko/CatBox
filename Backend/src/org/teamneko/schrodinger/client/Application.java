@@ -4,17 +4,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
-import org.teamneko.meowlib.Box;
-import org.teamneko.meowlib.BoxSearchResult;
-import org.teamneko.meowlib.NamedProduct;
-import org.teamneko.meowlib.Product;
-import org.teamneko.meowlib.ProductSearchResult;
-import org.teamneko.meowlib.SearchResult;
-import org.teamneko.meowlib.TransactionRequest;
-import org.teamneko.meowlib.User;
-import org.teamneko.meowlib.UserSearchResult;
+import org.teamneko.meowlib.json.Box;
+import org.teamneko.meowlib.json.BoxSearchResult;
+import org.teamneko.meowlib.json.NamedProduct;
+import org.teamneko.meowlib.json.Product;
+import org.teamneko.meowlib.json.ProductSearchResult;
+import org.teamneko.meowlib.json.SearchResult;
+import org.teamneko.meowlib.json.TransactionRequest;
+import org.teamneko.meowlib.json.User;
 
-import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
 import com.sun.jersey.api.client.UniformInterfaceException;
 
 public class Application {

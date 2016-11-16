@@ -1,5 +1,7 @@
 package org.teamneko.schrodinger.api;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -15,13 +17,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
 
-import org.teamneko.meowlib.Alert;
-import org.teamneko.meowlib.HistoryItem;
-import org.teamneko.meowlib.InventoryItem;
-import org.teamneko.meowlib.NamedProduct;
-import org.teamneko.meowlib.Product;
-import org.teamneko.meowlib.Transaction;
-import org.teamneko.meowlib.TransactionRequest;
+import org.teamneko.meowlib.json.NamedProduct;
+import org.teamneko.meowlib.json.Transaction;
+import org.teamneko.meowlib.json.TransactionRequest;
+import org.teamneko.meowlib.sql.AlertRow;
+import org.teamneko.meowlib.sql.HistoryRow;
+import org.teamneko.meowlib.sql.InventoryRow;
+import org.teamneko.meowlib.sql.ProductRow;
 import org.teamneko.schrodinger.dao.AlertsDAO;
 import org.teamneko.schrodinger.dao.BoxesDAO;
 import org.teamneko.schrodinger.dao.HistoryDAO;
@@ -74,13 +76,13 @@ public class BoxResource {
 		int idBox = boxes.getId(content.getBox());
 		for(TransactionRequest.Product product : content.getProductsModified()) {
 			if(product.getQuantity() != 0) {
-				Optional<Product> dbProduct = products.get(product.getId());
-				if(dbProduct.isPresent())
+				Optional<ProductRow> productResult = products.get(product.getId());
+				if(productResult.isPresent())
 				{
 					if(updateInventory(idBox, product.getId(), product.getQuantity())) {
 						addTransaction(content.getUser(), idBox, product);
-						setAlerts(dbProduct.get());
-						addToHistory(dbProduct.get());
+						setAlerts(productResult.get());
+						addToHistory(productResult.get());
 					}
 				}
 			}
@@ -116,12 +118,12 @@ public class BoxResource {
 		transactions.addTransaction(transaction);
 	}
 	
-	private void addToHistory(Product product) {
+	private void addToHistory(ProductRow product) {
 		int stock = inventory.getStock(product.getId());
-		history.add(new HistoryItem(-1, product.getId(), stock, new Date()));
+		history.add(new HistoryRow(-1, product.getId(), stock, Timestamp.from(Instant.now())));
 	}
 	
-	private void setAlerts(Product product) {
+	private void setAlerts(ProductRow product) {
 		int quantity = inventory.getStock(product.getId());
 		
 		if(quantity != -1) {
@@ -140,7 +142,7 @@ public class BoxResource {
 	}
 
 	private void setAlertToLevel(int idProduct, int level) {
-		Optional<Alert> currentAlert = alerts.getAlert(idProduct);
+		Optional<AlertRow> currentAlert = alerts.getAlert(idProduct);
 		
 		if(currentAlert.isPresent()) {
 			if(currentAlert.get().getId_message() != level)
@@ -151,7 +153,7 @@ public class BoxResource {
 	}
 	
 	private boolean updateInventory(int idBox, int idProduct, int quantity) {
-		InventoryItem item = inventory.get(idBox, idProduct).orElse(new InventoryItem(-1, idBox, idProduct, 0));;
+		InventoryRow item = inventory.get(idBox, idProduct).orElse(new InventoryRow(-1, idBox, idProduct, 0));;
 		
 		int newQuantity = item.getQuantity() + quantity;
 		

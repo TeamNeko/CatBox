@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 
 import org.apache.commons.dbutils.QueryRunner;
-import org.teamneko.meowlib.Transaction;
+import org.teamneko.meowlib.json.Transaction;
 import org.teamneko.schrodinger.dao.TransactionsDAO;
 
 public class PostgresTransactionsDAO implements TransactionsDAO {

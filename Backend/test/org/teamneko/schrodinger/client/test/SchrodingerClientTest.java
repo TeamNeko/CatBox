@@ -5,12 +5,12 @@ import static org.junit.Assert.*;
 import java.util.List;
 
 import org.junit.Test;
-import org.teamneko.meowlib.BoxSearchResult;
-import org.teamneko.meowlib.NamedProduct;
-import org.teamneko.meowlib.ProductSearchResult;
-import org.teamneko.meowlib.TransactionRequest;
-import org.teamneko.meowlib.User;
-import org.teamneko.meowlib.UserSearchResult;
+import org.teamneko.meowlib.json.BoxSearchResult;
+import org.teamneko.meowlib.json.NamedProduct;
+import org.teamneko.meowlib.json.ProductSearchResult;
+import org.teamneko.meowlib.json.TransactionRequest;
+import org.teamneko.meowlib.json.User;
+import org.teamneko.meowlib.json.UserSearchResult;
 import org.teamneko.schrodinger.client.SchrodingerClient;
 
 import com.sun.jersey.api.client.UniformInterfaceException;

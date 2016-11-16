@@ -7,7 +7,7 @@ import java.util.Optional;
 
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
-import org.teamneko.meowlib.Box;
+import org.teamneko.meowlib.json.Box;
 import org.teamneko.schrodinger.dao.BoxesDAO;
 
 public class PostgresBoxesDAO implements BoxesDAO {

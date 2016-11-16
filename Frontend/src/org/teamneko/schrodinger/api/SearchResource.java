@@ -11,13 +11,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
 
-import org.teamneko.meowlib.Box;
-import org.teamneko.meowlib.BoxSearchResult;
-import org.teamneko.meowlib.Product;
-import org.teamneko.meowlib.ProductSearchResult;
-import org.teamneko.meowlib.SearchResult;
-import org.teamneko.meowlib.User;
-import org.teamneko.meowlib.UserSearchResult;
+import org.teamneko.meowlib.adapters.ProductAdapter;
+import org.teamneko.meowlib.json.Box;
+import org.teamneko.meowlib.json.BoxSearchResult;
+import org.teamneko.meowlib.json.ProductSearchResult;
+import org.teamneko.meowlib.json.SearchResult;
+import org.teamneko.meowlib.json.User;
+import org.teamneko.meowlib.json.UserSearchResult;
+import org.teamneko.meowlib.sql.ProductRow;
 import org.teamneko.schrodinger.dao.BoxesDAO;
 import org.teamneko.schrodinger.dao.ProductsDAO;
 import org.teamneko.schrodinger.dao.UsersDAO;
@@ -42,9 +43,9 @@ public class SearchResource {
 		if(boxResult.isPresent())
 			return new BoxSearchResult(boxResult.get());
 		
-		Optional<Product> productResult = products.search(barcode);
+		Optional<ProductRow> productResult = products.search(barcode);
 		if(productResult.isPresent())
-			return new ProductSearchResult(productResult.get());
+			return new ProductSearchResult(ProductAdapter.toJSONProduct(productResult.get()));
 		
 		Optional<User> userResult = users.search(barcode);
 		if(userResult.isPresent())

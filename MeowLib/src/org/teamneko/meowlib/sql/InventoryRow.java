@@ -1,15 +1,15 @@
-package org.teamneko.meowlib;
+package org.teamneko.meowlib.sql;
 
-public class InventoryItem {
+public class InventoryRow {
 	private int id;
 	private int id_box;
 	private int id_product;
 	private int quantity;
 	
-	public InventoryItem() {
+	public InventoryRow() {
 	}
 	
-	public InventoryItem(int id, int idBox, int idProduct, int quantity) {
+	public InventoryRow(int id, int idBox, int idProduct, int quantity) {
 		this.id = id;
 		this.id_box = idBox;
 		this.id_box = idProduct;

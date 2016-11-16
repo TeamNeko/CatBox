@@ -1,21 +1,21 @@
-package org.teamneko.meowlib;
+package org.teamneko.meowlib.sql;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
-public class HistoryItem {
+public class HistoryRow {
 	private int id;
 	private int id_product;
 	private int quantity;
-	private Date time;
+	private Timestamp time;
 	
-	public HistoryItem() {
+	public HistoryRow() {
 		this.id = -1;
 		this.id_product = -1;
 		this.quantity = -1;
-		this.time = new Date();
+		this.time = new Timestamp(0);
 	}
 
-	public HistoryItem(int id, int id_product, int quantity, Date time) {
+	public HistoryRow(int id, int id_product, int quantity, Timestamp time) {
 		this.id = id;
 		this.id_product = id_product;
 		this.quantity = quantity;
@@ -34,7 +34,7 @@ public class HistoryItem {
 		return quantity;
 	}
 
-	public Date getTime() {
+	public Timestamp getTime() {
 		return time;
 	}
 
@@ -50,7 +50,7 @@ public class HistoryItem {
 		this.quantity = quantity;
 	}
 
-	public void setTime(Date time) {
+	public void setTime(Timestamp time) {
 		this.time = time;
 	}
 

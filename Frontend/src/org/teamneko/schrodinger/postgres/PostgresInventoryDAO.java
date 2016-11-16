@@ -9,21 +9,20 @@ import java.util.Optional;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
-import org.teamneko.meowlib.Alert;
-import org.teamneko.meowlib.InventoryItem;
-import org.teamneko.meowlib.NamedProduct;
+import org.teamneko.meowlib.json.NamedProduct;
+import org.teamneko.meowlib.sql.InventoryRow;
 import org.teamneko.schrodinger.dao.InventoryDAO;
 
 public class PostgresInventoryDAO implements InventoryDAO {
 	private QueryRunner runner;
-	private ResultSetHandler<InventoryItem> itemHandler = new BeanHandler<InventoryItem>(InventoryItem.class);
+	private ResultSetHandler<InventoryRow> itemHandler = new BeanHandler<InventoryRow>(InventoryRow.class);
 
 
 	public PostgresInventoryDAO(PostgresDatabase database) {
 		runner = new QueryRunner(database.getDataSource());
 	}
 	
-	public Optional<InventoryItem> get(int idBox, int idProduct) {
+	public Optional<InventoryRow> get(int idBox, int idProduct) {
 		try {
 			return Optional.ofNullable(runner.query("SELECT * FROM inventory WHERE id_product=? AND id_box = ? LIMIT 1", itemHandler, idProduct, idBox));
 		} catch (SQLException e) {
@@ -83,7 +82,7 @@ public class PostgresInventoryDAO implements InventoryDAO {
 	}
 
 	@Override
-	public void update(InventoryItem item) {
+	public void update(InventoryRow item) {
 		try {
 			runner.update("UPDATE inventory SET quantity = ? WHERE id = ?", item.getQuantity(), item.getId());
 		} catch (SQLException e) {
@@ -92,7 +91,7 @@ public class PostgresInventoryDAO implements InventoryDAO {
 	}
 
 	@Override
-	public void insert(InventoryItem item) {
+	public void insert(InventoryRow item) {
 		try {
 			runner.update("INSERT INTO inventory(id_product, id_box, quantity) VALUES (?, ?, ?)", item.getId_product(), item.getId_box(), item.getQuantity());
 		} catch (SQLException e) {
@@ -101,7 +100,7 @@ public class PostgresInventoryDAO implements InventoryDAO {
 	}
 
 	@Override
-	public void delete(InventoryItem item) {
+	public void delete(InventoryRow item) {
 		try {
 			runner.update("DELETE FROM inventory WHERE id=?", item.getId());
 		} catch (SQLException e) {

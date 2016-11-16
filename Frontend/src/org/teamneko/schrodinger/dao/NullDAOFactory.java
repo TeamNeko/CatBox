@@ -13,6 +13,11 @@ public class NullDAOFactory extends AbstractDAOFactory {
 	}
 
 	@Override
+	public HistoryDAO getHistoryDAO() {
+		return null;
+	}
+
+	@Override
 	public InventoryDAO getInventoryDAO() {
 		return null;
 	}

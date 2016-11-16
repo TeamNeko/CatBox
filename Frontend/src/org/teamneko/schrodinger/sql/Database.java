@@ -10,7 +10,7 @@ import org.teamneko.schrodinger.postgres.PostgresDatabase;
 
 public class Database implements ServletContextListener {
 	private static final String url = "elmer.db.elephantsql.com";
-	private static final int port = 5432;
+	//private static final int port = 5432;
 	private static final String database = "jmtntlek";
 	private static final String user = "jmtntlek";
 	private static final String password = "vaYxsY1WBNr5gYMMd-74kLrc98gqNhqI";

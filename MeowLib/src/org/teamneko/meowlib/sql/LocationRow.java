@@ -1,6 +1,6 @@
-package org.teamneko.meowlib;
+package org.teamneko.meowlib.sql;
 
-public class Location {
+public class LocationRow {
 	private int id;
 	private int floor;
 	private String row;
@@ -9,7 +9,7 @@ public class Location {
 	private String pallet;
 	private String building;
 
-	public Location() {
+	public LocationRow() {
 	}
 
 	public int getId() {

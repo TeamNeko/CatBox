@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
-import org.teamneko.meowlib.User;
+import org.teamneko.meowlib.json.User;
 import org.teamneko.schrodinger.dao.UsersDAO;
 
 public class PostgresUsersDAO implements UsersDAO {
