@@ -4,15 +4,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
-import org.teamneko.meowlib.dto.Box;
-import org.teamneko.meowlib.dto.BoxSearchResult;
-import org.teamneko.meowlib.dto.NamedProduct;
-import org.teamneko.meowlib.dto.Product;
-import org.teamneko.meowlib.dto.ProductSearchResult;
-import org.teamneko.meowlib.dto.SearchResult;
-import org.teamneko.meowlib.dto.TransactionRequest;
-import org.teamneko.meowlib.dto.User;
-import org.teamneko.meowlib.dto.UserSearchResult;
+import org.teamneko.meowlib.Box;
+import org.teamneko.meowlib.BoxSearchResult;
+import org.teamneko.meowlib.NamedProduct;
+import org.teamneko.meowlib.Product;
+import org.teamneko.meowlib.ProductSearchResult;
+import org.teamneko.meowlib.SearchResult;
+import org.teamneko.meowlib.TransactionRequest;
+import org.teamneko.meowlib.User;
+import org.teamneko.meowlib.UserSearchResult;
 
 import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
 import com.sun.jersey.api.client.UniformInterfaceException;
@@ -107,7 +107,12 @@ public class Application {
 			produits.add(new TransactionRequest.Product(id, quantite));
 		}
 		
-		client.postTransaction(transaction);
+		try {
+			client.postTransaction(transaction);
+		} catch(UniformInterfaceException e) {
+			System.err.println("Erreur lors de l'envoi au serveur: " + e.getMessage());
+		}
+
 	}
 	public int lireMode() {
 		int mode = MODE_INVALIDE;

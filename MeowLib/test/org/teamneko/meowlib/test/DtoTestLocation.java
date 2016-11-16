@@ -1,10 +1,10 @@
-package org.teamneko.meowlib.test.dto;
+package org.teamneko.meowlib.test;
 
 import static org.junit.Assert.*;
 
-import org.teamneko.meowlib.dto.Location;
 import org.junit.Before;
 import org.junit.Test;
+import org.teamneko.meowlib.Location;
 
 public class DtoTestLocation {
 	

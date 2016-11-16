@@ -1,4 +1,4 @@
-package org.teamneko.meowlib.test.dto;
+package org.teamneko.meowlib.test;
 
 import static org.junit.Assert.*;
 
@@ -6,8 +6,8 @@ import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.teamneko.meowlib.dto.Product;
-import org.teamneko.meowlib.dto.ProductSearchResult;
+import org.teamneko.meowlib.Product;
+import org.teamneko.meowlib.ProductSearchResult;
 
 public class DtoTestProductSearchResult {
 

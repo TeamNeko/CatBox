@@ -2,7 +2,7 @@ package org.teamneko.schrodinger.dao;
 
 import java.util.Optional;
 
-import org.teamneko.meowlib.dto.Box;
+import org.teamneko.meowlib.Box;
 
 public interface BoxesDAO {
 	public boolean exists(String barcode);

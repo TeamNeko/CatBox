@@ -7,14 +7,14 @@ import com.sun.jersey.api.client.filter.LoggingFilter;
 
 import javax.ws.rs.core.MediaType;
 
-import org.teamneko.meowlib.dto.BoxSearchResult;
-import org.teamneko.meowlib.dto.CompositeSearchResult;
-import org.teamneko.meowlib.dto.NamedProduct;
-import org.teamneko.meowlib.dto.ProductSearchResult;
-import org.teamneko.meowlib.dto.SearchResult;
-import org.teamneko.meowlib.dto.TransactionRequest;
-import org.teamneko.meowlib.dto.User;
-import org.teamneko.meowlib.dto.UserSearchResult;
+import org.teamneko.meowlib.BoxSearchResult;
+import org.teamneko.meowlib.CompositeSearchResult;
+import org.teamneko.meowlib.NamedProduct;
+import org.teamneko.meowlib.ProductSearchResult;
+import org.teamneko.meowlib.SearchResult;
+import org.teamneko.meowlib.TransactionRequest;
+import org.teamneko.meowlib.User;
+import org.teamneko.meowlib.UserSearchResult;
 
 
 public class SchrodingerClient extends Client {

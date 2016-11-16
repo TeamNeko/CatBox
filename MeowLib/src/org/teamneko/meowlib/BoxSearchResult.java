@@ -1,4 +1,4 @@
-package org.teamneko.meowlib.dto;
+package org.teamneko.meowlib;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

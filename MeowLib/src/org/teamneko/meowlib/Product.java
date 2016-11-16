@@ -1,4 +1,4 @@
-package org.teamneko.meowlib.dto;
+package org.teamneko.meowlib;
 
 import java.util.Date;
 
@@ -12,6 +12,7 @@ public class Product {
 	private Date added;
 	private Date removed;
 	private double weight;
+	private int threshold;
 
 	public Product() {
 	}
@@ -40,6 +41,10 @@ public class Product {
 		return removed;
 	}
 
+	public int getThreshold() {
+		return threshold;
+	}
+	
 	public double getWeight() {
 		return weight;
 	}
@@ -60,6 +65,10 @@ public class Product {
 		this.removed = removed;
 	}
 
+	public void setThreshold(int threshold) {
+		this.threshold = threshold;
+	}
+	
 	public void setWeight(double d) {
 		this.weight = d;
 	}
@@ -67,7 +76,6 @@ public class Product {
 	@Override
 	public String toString() {
 		return "Product [id=" + id + ", name=" + name + ", description=" + description + ", added=" + added
-				+ ", removed=" + removed + ", weight=" + weight + "]";
+				+ ", removed=" + removed + ", weight=" + weight + ", threshold=" + threshold + "]";
 	}
-
 }

@@ -1,12 +1,12 @@
-package org.teamneko.meowlib.test.dto;
+package org.teamneko.meowlib.test;
 
 import static org.junit.Assert.*;
 
 import java.util.Date;
 
-import org.teamneko.meowlib.dto.Product;
 import org.junit.Before;
 import org.junit.Test;
+import org.teamneko.meowlib.Product;
 
 public class DtoTestProduct {
 

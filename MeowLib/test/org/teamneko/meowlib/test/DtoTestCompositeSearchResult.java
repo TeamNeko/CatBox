@@ -1,10 +1,4 @@
-package org.teamneko.meowlib.test.dto;
-
-import org.teamneko.meowlib.dto.Box;
-import org.teamneko.meowlib.dto.BoxSearchResult;
-import org.teamneko.meowlib.dto.CompositeSearchResult;
-import org.teamneko.meowlib.dto.Product;
-import org.teamneko.meowlib.dto.User;
+package org.teamneko.meowlib.test;
 
 import static org.junit.Assert.*;
 
@@ -12,6 +6,11 @@ import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.teamneko.meowlib.Box;
+import org.teamneko.meowlib.BoxSearchResult;
+import org.teamneko.meowlib.CompositeSearchResult;
+import org.teamneko.meowlib.Product;
+import org.teamneko.meowlib.User;
 
 
 public class DtoTestCompositeSearchResult {

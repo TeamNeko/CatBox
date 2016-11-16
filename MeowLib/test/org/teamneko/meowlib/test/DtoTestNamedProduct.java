@@ -1,10 +1,10 @@
-package org.teamneko.meowlib.test.dto;
+package org.teamneko.meowlib.test;
 
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.teamneko.meowlib.dto.NamedProduct;
+import org.teamneko.meowlib.NamedProduct;
 
 public class DtoTestNamedProduct {
 	
