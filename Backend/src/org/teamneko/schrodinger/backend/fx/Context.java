@@ -61,7 +61,7 @@ public class Context {
 	public boolean login(String userCode) {
 		try {
 	 		user = restClient.requestUser(userCode);
-	 		mainWindow.showTablePane();
+	 		mainWindow.showDetailPane();
 	 	} catch(UniformInterfaceException e) {
 	 		return false;
 	 	}
