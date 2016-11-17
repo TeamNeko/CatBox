@@ -13,6 +13,12 @@ public class LoginPane extends CustomAnchorPane {
 	}
 	
 	 @FXML protected void login(ActionEvent event) {
-		 Context.getInstance().login(rfidText.getText());
+		 if(Context.getInstance().login(rfidText.getText())){
+			 
+		 }
+		 else{
+			 
+		 }
+		 
 	 }
 }

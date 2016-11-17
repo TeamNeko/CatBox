@@ -4,12 +4,17 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.image.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.ImageView?>
 
-<fx:root type="javafx.scene.layout.AnchorPane" xmlns:fx="http://javafx.com/fxml">
-    <ImageView fitHeight="295" layoutX="0" layoutY="0" preserveRatio="true">
-		<image>
-			<Image url="file:res/220px-Iccard.gif" />
-		</image>
-	</ImageView>
+<fx:root type="javafx.scene.layout.AnchorPane" xmlns:fx="http://javafx.com/fxml" >	
+	<HBox alignment="CENTER" prefWidth="320"  prefHeight="240">
+	    <children>
+	    	<ImageView fx:id="etatLecture"></ImageView>
+	       <Label>Veuillez scanner votre carte RFID</Label>
+	    </children>
+	</HBox>
 	<TextField fx:id="rfidText" onAction="#login" prefWidth="320" prefHeight="20" layoutY="295"/>
 </fx:root>
