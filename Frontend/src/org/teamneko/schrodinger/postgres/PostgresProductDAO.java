@@ -1,64 +1,56 @@
 package org.teamneko.schrodinger.postgres;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.teamneko.meowlib.dto.Product;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.BeanHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.teamneko.meowlib.sql.ProductRow;
 import org.teamneko.schrodinger.dao.ProductsDAO;
 
 public class PostgresProductDAO implements ProductsDAO {
-	private PostgresDatabase database;
-	
+	private QueryRunner runner;
+	private ResultSetHandler<ProductRow> productHandler = new BeanHandler<ProductRow>(ProductRow.class);
+	private ResultSetHandler<List<ProductRow>> productListHandler = new BeanListHandler<ProductRow>(ProductRow.class);
+
 	public PostgresProductDAO(PostgresDatabase database) {
-		this.database = database;
-	}
-	
-	@Override
-	public List<Product> getProducts() {
-		List<Product> products = new ArrayList<Product>();
-		
-		try {
-			ResultSet rs = database.executeQuery("SELECT * FROM products");
-			while(rs.next()) {
-				Product product = new Product();
-				product.setId(rs.getInt("id"));
-				product.setName(rs.getString("name"));
-				product.setDescription(rs.getString("description"));
-				product.setAdded(rs.getDate("date_added"));
-				product.setRemoved(rs.getDate("date_retired"));
-				product.setWeight(rs.getDouble("weight"));
-				products.add(product);
-			}
-		} catch(SQLException e) {	
-		}
-		
-		return products;
+		runner = new QueryRunner(database.getDataSource());
 	}
 
 	@Override
-	public Optional<Product> search(String barcode) {
+	public List<ProductRow> getProducts() {
 		try {
-			PreparedStatement ps = database.prepare("SELECT * FROM products WHERE barcode=?");
-			ps.setString(1, barcode);
-			
-			ResultSet rs = ps.executeQuery();
-			if(rs.next()) {
-				Product product = new Product();
-				product.setId(rs.getInt("id"));
-				product.setName(rs.getString("name"));
-				product.setDescription(rs.getString("description"));
-				product.setAdded(rs.getDate("date_added"));
-				product.setRemoved(rs.getDate("date_retired"));
-				product.setWeight(rs.getDouble("weight"));
-				return Optional.of(product);
-			}
-		} catch(SQLException e) {	
+			return runner.query("SELECT * FROM products", productListHandler);
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-		
+
+		return new ArrayList<ProductRow>(0);
+	}
+
+	@Override
+	public Optional<ProductRow> search(String barcode) {
+		try {
+			return Optional.ofNullable(runner.query("SELECT * FROM products WHERE barcode=?", productHandler, barcode));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return Optional.empty();
+	}
+
+	@Override
+	public Optional<ProductRow> get(int id) {
+		try {
+			return Optional.ofNullable(runner.query("SELECT * FROM products WHERE id=? LIMIT 1", productHandler, id));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 		return Optional.empty();
 	}
 

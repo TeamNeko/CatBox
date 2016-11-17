@@ -93,11 +93,12 @@
 </sql:query>
   
 <core:if test="${products.rowCount ==  0}">
-	<% response.sendError(404, "Produit non trouvé"); %>
+	<% response.sendError(404, "Produit non trouvï¿½"); %>
 </core:if>
 
 <core:forEach var="row" items="${products.rows}">
-	<core:set var="productName" value="${row.name}" />    
+	<core:set var="productName" value="${row.name}" />
+	<core:set var="threshold" value="${row.threshold}" />
 </core:forEach>
 
 <sql:query dataSource="${snapshot}" var="products">
@@ -147,13 +148,19 @@
 	<link rel="stylesheet" type="text/css" href="Intranet.css">
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-	<title>Soprema - Produit <core:out value="${productId}"/></title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.16.0/moment.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.js"></script>
+	<script src="js/graph.js"></script>
+	<script src="js/util.js"></script>
+	<title>Soprema - Produit <core:out value="${productName}"/></title>
 	<script>
-	// Rend les lignes cliquables
+		var productId = <core:out value="${productId}"/>
+		var productName = "<core:out value="${productName}"/>"
+		stockDataset.label = productName;
+		threshold = "<core:out value="${threshold}"/>"
+		
 		jQuery(document).ready(function($) {
-		    $(".clickable-row").click(function() {
-		        window.location = $(this).data("href");
-		    });
+			updateGraph();
 		});
 	</script>
 </head>
@@ -162,8 +169,16 @@
 	<div>
 		<jsp:include page="Header.jsp" />
 	</div>
+	<core:if test="${alerts.rowCount > 0}"> 
+		<div id="alerts" class="alert alert-warning"> 
+      		<core:forEach var="row" items="${alerts.rows}">
+				<core:set var="message" value="${row.message}" />
+				<core:set var="message" value="${fn:replace(message,\"{productName}\", productName)}" />
+				<core:out value="${message}" />
+			</core:forEach>
+		</div>
+	</core:if>
 	<h1><core:out value="${productName}"/></h1>
-	<core:if test="${productId != -1}">
 		<core:forEach var="row" items="${products.rows}">
 			<form action="?item=${productId}" method="Post">
 				<label for="name">Name: </label>
@@ -178,47 +193,41 @@
 				<input type="text" id="threshold" name="threshold" value="${row.threshold}">
 			<input type="submit" value="Modifier"/>
 		</form> 
-		</core:forEach>  
-	</core:if> 
-	<core:if test="${alerts.rowCount > 0}"> 
-		<div id="alerts" class="list-group"> 
-      		<core:forEach var="row" items="${alerts.rows}">
-				<core:set var="message" value="${row.message}" />
-				<core:set var="message" value="${fn:replace(message,\"{productName}\", productName)}" />
-				<p class="list-group-item list-group-item-warning">
-					<b><core:out value="${message}" /></b><br/>
-					at <core:out value="${row.time}" />
-				</p>
-			</core:forEach>
-		</div>
-	</core:if>
-	<table class="table">
-		<thead>
-		<tr>
-		 	<th>Quantité</th>
-		 	<th>Poids</th>
-		 	<th>Taille</th>
-		 	<th>Date de création</th>
-		 	<th>Date de modification</th>
-			<th>Code barre</th>
-		</tr>
-		</thead>
-		<tbody>
-		<core:forEach var="row" items="${inventory.rows}" begin="<%=currentPage*perPage%>" end="<%=perPage*(currentPage+1)-1 %>">
-			<tr class='clickable-row table-hover' data-href="BoxDetail.jsp?box=${row.id}">
-			 	<td><core:out value="${row.quantity}"/></td>
-			 	<td><core:out value="${row.weight}"/></td>
-			 	<td><core:out value="${row.size}"/></td>
-			 	<td><core:out value="${row.creation_date}"/></td>
-			 	<td><core:out value="${row.last_modified}"/></td>
-				<td><core:out value="${row.barcode}"/></td>
+	</core:forEach>	
+	<h2>Boîtes</h2>
+		<table class="table">
+			<thead>
+			<tr>
+			 	<th>Quantité</th>
+			 	<th>Poids</th>
+			 	<th>Taille</th>
+			 	<th>Date de cré½ation</th>
+			 	<th>Date de modification</th>
+				<th>Code barre</th>
 			</tr>
-		</core:forEach>
-		</tbody>
-	</table>
-	<a href="?start=<%=(currentPage-1)+urlSaver%>">Précédent</a>
-	<%=currentPage*perPage+1 %> - <%=perPage*(currentPage+1) %>
-	<a href="?start=<%=(currentPage+1)+urlSaver%>">Suivant</a><br/>
-</div>
-</body>
+			</thead>
+			<tbody>
+			<core:forEach var="row" items="${inventory.rows}" begin="<%=currentPage*perPage%>" end="<%=perPage*(currentPage+1)-1 %>">
+				<tr class='clickable-row table-hover' data-href="BoxDetail.jsp?box=${row.id}">
+				 	<td><core:out value="${row.quantity}"/></td>
+				 	<td><core:out value="${row.weight}"/></td>
+				 	<td><core:out value="${row.size}"/></td>
+				 	<td><core:out value="${row.creation_date}"/></td>
+				 	<td><core:out value="${row.last_modified}"/></td>
+					<td><core:out value="${row.barcode}"/></td>
+				</tr>
+			</core:forEach>
+			</tbody>
+		</table>
+		<div id="stockchart" class="hidden">
+	    <button class="list-group-item list-group-item-info" data-toggle="collapse" data-target="#collapseChart">
+			Graphique d'inventaire
+		</button>
+     	<!--  <div class="panel-collapse collapse " id="collapseChart"> -->
+     	<div>
+			<canvas id="canvas"></canvas>
+		</div>
+	</div>
+	</div>
+	</body>
 </html>
