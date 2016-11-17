@@ -235,22 +235,22 @@
 	        <h4 class="modal-title">Ajouter un produit</h4>
 	     	</div>
 	    	<div class="modal-body">
-		    	<form role="form">
+		    	<form role="form" data-toggle="validator">
 			    	<div class="form-group">
 						<label for="addName">Nom: </label>
-						<input id="addName" class="form-control" type="text" name="addName">
+						<input id="addName" class="form-control" type="text" name="addName" required>
 						
 						<label for="addBarcode">Code bar: </label>
-						<input id="addBarcode" class="form-control" type="text" name="addBarcode">
+						<input id="addBarcode" class="form-control" type="text" name="addBarcode" required>
 						
 						<label for="addDescription">Description: </label>
-						<input id="addDescription" class="form-control" type="text" name="addDescription">
+						<input id="addDescription" class="form-control" type="text" name="addDescription" required>
 						
 						<label for="addWeight">Poids: </label>
-						<input id="addWeight" class="form-control" type="text" name="addWeight">
+						<input id="addWeight" class="form-control" type="text" name="addWeight" required>
 						
 						<label for="addThreshold">Seuil d'alerte: </label>
-						<input id="addThreshold" class="form-control" type="text" name="addThreshold">
+						<input id="addThreshold" class="form-control" type="text" name="addThreshold" required>
 					</div>
 					<input type="submit" class="btn btn-success" value="Ajouter"/>
 				</form>
