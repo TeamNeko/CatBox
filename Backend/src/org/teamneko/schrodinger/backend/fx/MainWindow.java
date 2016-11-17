@@ -32,6 +32,10 @@ public class MainWindow extends SplitPane {
 		setRightPane(new TablePane());
 	}
 	
+	public void showDetailPane() {
+		setRightPane(new DetailPane());
+	}
+	
 	public void showButtonPane() {
 		setLeftPane(new ButtonPane());
 	}
