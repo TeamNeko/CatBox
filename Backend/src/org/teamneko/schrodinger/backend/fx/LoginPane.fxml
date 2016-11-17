@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<fx:root type="javafx.scene.layout.AnchorPane" xmlns:fx="http://javafx.com/fxml">
+    <ImageView fitHeight="295" layoutX="0" layoutY="0" preserveRatio="true">
+		<image>
+			<Image url="file:res/220px-Iccard.gif" />
+		</image>
+	</ImageView>
+	<TextField fx:id="rfidText" onAction="#login" prefWidth="320" prefHeight="20" layoutY="295"/>
+</fx:root>
