@@ -12,13 +12,14 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.teamneko.meowlib.dto.Box;
-import org.teamneko.meowlib.dto.BoxSearchResult;
-import org.teamneko.meowlib.dto.Product;
-import org.teamneko.meowlib.dto.ProductSearchResult;
-import org.teamneko.meowlib.dto.SearchResult;
-import org.teamneko.meowlib.dto.User;
-import org.teamneko.meowlib.dto.UserSearchResult;
+import org.teamneko.meowlib.json.Box;
+import org.teamneko.meowlib.json.BoxSearchResult;
+import org.teamneko.meowlib.json.Product;
+import org.teamneko.meowlib.json.ProductSearchResult;
+import org.teamneko.meowlib.json.SearchResult;
+import org.teamneko.meowlib.json.User;
+import org.teamneko.meowlib.json.UserSearchResult;
+import org.teamneko.meowlib.sql.ProductRow;
 import org.teamneko.schrodinger.api.SearchResource;
 import org.teamneko.schrodinger.api.UserResource;
 import org.teamneko.schrodinger.dao.BoxesDAO;
@@ -38,7 +39,7 @@ public class SearchResourceTest {
 		UsersDAO usersDaoMock = mock(UsersDAO.class);
 
 		Optional<Box> mockBox = Optional.of(new Box());
-		Optional<Product> mockProduct = Optional.of(new Product());
+		Optional<ProductRow> mockProduct = Optional.of(new ProductRow());
 		Optional<User> mockUser = Optional.of(new User());
 
 		when(boxesDaoMock.search(boxNumber)).thenReturn(mockBox);
