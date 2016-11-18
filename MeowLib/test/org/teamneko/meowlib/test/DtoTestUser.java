@@ -1,10 +1,10 @@
 package org.teamneko.meowlib.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.teamneko.meowlib.User;
+import org.teamneko.meowlib.json.User;
 
 public class DtoTestUser {
 	

@@ -3,7 +3,6 @@ package org.teamneko.schrodinger.backend.fx;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 
 public class LoginPane extends CustomAnchorPane {
 	@FXML protected TextField rfidText;

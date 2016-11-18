@@ -1,15 +1,13 @@
 package org.teamneko.meowlib.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.teamneko.meowlib.Box;
-import org.teamneko.meowlib.BoxSearchResult;
-import org.teamneko.meowlib.Product;
-import org.teamneko.meowlib.User;
+import org.teamneko.meowlib.json.Box;
+import org.teamneko.meowlib.json.BoxSearchResult;
 
 public class DtoTestBoxSearchResult {
 	private BoxSearchResult testBoxSearchResult;

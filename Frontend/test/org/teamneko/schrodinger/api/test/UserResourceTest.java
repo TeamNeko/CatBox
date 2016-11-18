@@ -8,7 +8,7 @@ import java.lang.reflect.Field;
 import java.util.Optional;
 
 import org.junit.Test;
-import org.teamneko.meowlib.dto.User;
+import org.teamneko.meowlib.json.User;
 import org.teamneko.schrodinger.api.UserResource;
 import org.teamneko.schrodinger.dao.UsersDAO;
 

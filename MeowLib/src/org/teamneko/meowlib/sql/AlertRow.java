@@ -1,7 +1,6 @@
 package org.teamneko.meowlib.sql;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 public class AlertRow {
 	private int id;
