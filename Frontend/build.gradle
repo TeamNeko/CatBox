@@ -30,6 +30,7 @@ dependencies {
 	compile group: 'commons-dbutils', name: 'commons-dbutils', version: '1.6'
 	compile group: 'org.apache.tomcat', name: 'servlet-api', version: '6.0.47'
 	compile group: 'tomcat', name: 'jsp-api', version: '5.5.23'
+	compile group: 'org.mockito', name: 'mockito-core', version: '2.2.17'
 	
 	
     // Declare the dependency for your favourite test framework you want to use in your tests.
