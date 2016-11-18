@@ -1,13 +1,11 @@
 package org.teamneko.meowlib.test;
 
-import static org.junit.Assert.*;
-
-import java.util.Date;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.teamneko.meowlib.User;
-import org.teamneko.meowlib.UserSearchResult;
+import org.teamneko.meowlib.json.User;
+import org.teamneko.meowlib.json.UserSearchResult;
 
 public class DtoTestUserSearchResult {
 

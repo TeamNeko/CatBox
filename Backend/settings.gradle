@@ -1,0 +1,5 @@
+/*
+ * Adds MeowLib as a dependency
+*/
+include ':MeowLib'
+project(':MeowLib').projectDir = new File(settingsDir, '../MeowLib')

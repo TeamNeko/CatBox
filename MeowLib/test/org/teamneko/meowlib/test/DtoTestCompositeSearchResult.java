@@ -1,24 +1,21 @@
 package org.teamneko.meowlib.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.teamneko.meowlib.Box;
-import org.teamneko.meowlib.BoxSearchResult;
-import org.teamneko.meowlib.CompositeSearchResult;
-import org.teamneko.meowlib.Product;
-import org.teamneko.meowlib.User;
+import org.teamneko.meowlib.json.Box;
+import org.teamneko.meowlib.json.CompositeSearchResult;
+import org.teamneko.meowlib.json.Product;
+import org.teamneko.meowlib.json.User;
 
 
 public class DtoTestCompositeSearchResult {
 	private Box testBox;
 	private Product testProduct;
 	private User testUser;
-	private Date created;
-	private Date modified;
 	
 	@Before
 	public void initiateLinkage()

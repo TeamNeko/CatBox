@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root type="javafx.scene.layout.AnchorPane" xmlns:fx="http://javafx.com/fxml" >	
+	<TextField prefWidth="320" prefHeight="20" layoutX="0" layoutY="0"/>
+ 		<ListView fx:id="detailList" layoutX="0" layoutY="25" prefWidth="320" prefHeight="295">
+     		
+		</ListView>
+</fx:root>
+
