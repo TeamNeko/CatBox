@@ -1,7 +1,6 @@
 package org.teamneko.schrodinger.api;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.GET;
@@ -13,7 +12,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
 
-import org.teamneko.meowlib.json.Product;
 import org.teamneko.meowlib.json.StockDataPoint;
 import org.teamneko.meowlib.sql.HistoryRow;
 import org.teamneko.meowlib.sql.ProductRow;

@@ -1,10 +1,5 @@
 package org.teamneko.schrodinger.client;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.filter.LoggingFilter;
-
 import javax.ws.rs.core.MediaType;
 
 import org.teamneko.meowlib.json.BoxSearchResult;
@@ -15,6 +10,11 @@ import org.teamneko.meowlib.json.SearchResult;
 import org.teamneko.meowlib.json.TransactionRequest;
 import org.teamneko.meowlib.json.User;
 import org.teamneko.meowlib.json.UserSearchResult;
+
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.UniformInterfaceException;
+import com.sun.jersey.api.client.filter.LoggingFilter;
 
 
 public class SchrodingerClient extends Client {
