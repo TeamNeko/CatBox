@@ -23,7 +23,8 @@ public class PostgresUsersDAO implements UsersDAO {
 			@Override
 			public User handle(ResultSet rs) throws SQLException {
 				// Create User Object
-				rs.next();
+				if(!rs.next())
+					return null;
 
 				User resultUser = new User();
 				resultUser.setId(rs.getInt("id"));

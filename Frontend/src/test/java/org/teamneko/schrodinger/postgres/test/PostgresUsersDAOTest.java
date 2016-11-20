@@ -3,15 +3,12 @@ package org.teamneko.schrodinger.postgres.test;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.sql.SQLException;
 import java.util.Optional;
 
 import javax.sql.DataSource;
 
 import org.dbunit.DataSourceBasedDBTestCase;
-import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.xml.XmlDataSet;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.Test;
