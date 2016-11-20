@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <table name="alerts">
+    <column>id</column>
+    <column>time</column>
+    <column>id_product</column>
+    <column>id_message</column>
+    <row>
+      <value>1</value>
+      <value><![CDATA[1969-12-31 19:00:00.0]]></value>
+      <value>1</value>
+      <value>2</value>
+    </row>
+  </table>
+</dataset>

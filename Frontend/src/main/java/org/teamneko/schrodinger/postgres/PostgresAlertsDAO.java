@@ -1,59 +1,40 @@
 package org.teamneko.schrodinger.postgres;
 
-import java.sql.SQLException;
 import java.util.Optional;
 
-import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.teamneko.meowlib.sql.AlertRow;
 import org.teamneko.schrodinger.dao.AlertsDAO;
+import org.teamneko.schrodinger.sql.FilteredQueryRunner;
 
 public class PostgresAlertsDAO implements AlertsDAO {
-	private QueryRunner runner;
+	private FilteredQueryRunner runner;
 	private ResultSetHandler<AlertRow> alertHandler = new BeanHandler<AlertRow>(AlertRow.class);
 
 	public PostgresAlertsDAO(PostgresDatabase database) {
-		runner = new QueryRunner(database.getDataSource());
+		runner = new FilteredQueryRunner(database.getDataSource());
 	}
 
 	@Override
 	public Optional<AlertRow> getAlert(int idProduct) {
-		try {
-			return Optional
-					.ofNullable(runner.query("SELECT * FROM alerts WHERE id_product=? LIMIT 1", alertHandler, idProduct));
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return Optional.empty();
+		return Optional
+					.ofNullable(runner.queryFiltered("SELECT * FROM alerts WHERE id_product=? LIMIT 1", alertHandler, idProduct));
 	}
 
 	@Override
 	public void changeLevel(int idProduct, int level) {
-		try {
-			runner.update("UPDATE alerts SET id_message=? WHERE id_product=?", level, idProduct);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		runner.updateFiltered("UPDATE alerts SET id_message=? WHERE id_product=?", level, idProduct);
 	}
 
 	@Override
 	public void addAlert(int idProduct, int level) {
-		try {
-			runner.update("INSERT INTO alerts(id_product, id_message) VALUES (?, ?)", idProduct, level);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		runner.updateFiltered("INSERT INTO alerts(id_product, id_message) VALUES (?, ?)", idProduct, level);
 	}
 
 	@Override
 	public void removeAlert(int idProduct) {
-		try {
-			runner.update("DELETE FROM alerts WHERE id_product=?", idProduct);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		runner.updateFiltered("DELETE FROM alerts WHERE id_product=?", idProduct);
 	}
 
 }

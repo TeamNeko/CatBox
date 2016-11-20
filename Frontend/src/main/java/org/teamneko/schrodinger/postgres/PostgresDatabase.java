@@ -13,17 +13,10 @@ public class PostgresDatabase {
 		source.setDatabaseName(databaseName);
 		source.setUser(userName);
 		source.setPassword(password);
+		source.setCurrentSchema("public");
 	}
 
 	public DataSource getDataSource() {
 		return source;
 	}
-
-	/*
-	 * public ResultSet executeQuery(String query) throws SQLException { return
-	 * source.getConnection().createStatement().executeQuery(query); }
-	 * 
-	 * public PreparedStatement prepare(String sql) throws SQLException { return
-	 * source.getConnection().prepareStatement(sql); }
-	 */
 }
