@@ -13,18 +13,6 @@ import org.apache.commons.dbutils.ResultSetHandler;
  *
  */
 public class FilteredQueryRunner extends QueryRunner {
-	public FilteredQueryRunner() {
-		super();
-	}
-
-	public FilteredQueryRunner(boolean pmdKnownBroken) {
-		super(pmdKnownBroken);
-	}
-
-	public FilteredQueryRunner(DataSource ds, boolean pmdKnownBroken) {
-		super(ds, pmdKnownBroken);
-	}
-
 	public FilteredQueryRunner(DataSource ds) {
 		super(ds);
 	}

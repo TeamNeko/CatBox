@@ -1,4 +1,4 @@
-package org.teamneko.schrodinger.dao;
+package org.teamneko.schrodinger.dao.test;
 
 import static org.junit.Assert.*;
 
