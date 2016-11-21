@@ -1,116 +1,111 @@
 package org.teamneko.schrodinger.postgres;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import org.teamneko.meowlib.dto.NamedProduct;
-import org.teamneko.meowlib.pojo.InventoryItem;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.BeanHandler;
+import org.teamneko.meowlib.json.NamedProduct;
+import org.teamneko.meowlib.sql.InventoryRow;
 import org.teamneko.schrodinger.dao.InventoryDAO;
 
 public class PostgresInventoryDAO implements InventoryDAO {
-	PostgresDatabase database;
-	
+	private QueryRunner runner;
+	private ResultSetHandler<InventoryRow> itemHandler = new BeanHandler<InventoryRow>(InventoryRow.class);
+
+
 	public PostgresInventoryDAO(PostgresDatabase database) {
-		this.database = database;
-	}
-
-	private Integer getId(InventoryItem item)
-	{
-		Integer id = null;
-		
-		try {
-			PreparedStatement ps = database.prepare("SELECT id FROM \"Inventory\" WHERE \"idProduct\"=? AND \"idBox\" = ? LIMIT 1");
-			ps.setInt(1, item.getIdProduct());
-			ps.setInt(2, item.getIdBox());
-			
-			ResultSet rs = ps.executeQuery();
-			if(rs.next()) {
-				id = rs.getInt("id");
-			}
-			
-			ps.close();
-		} catch (SQLException e) {
-		}
-		
-		return id;
+		runner = new QueryRunner(database.getDataSource());
 	}
 	
-	private void create(InventoryItem item) {
+	public Optional<InventoryRow> get(int idBox, int idProduct) {
 		try {
-			PreparedStatement ps = database.prepare("INSERT INTO \"Inventory\"(\"idProduct\", \"idBox\", quantity) VALUES (?, ?, ?)");
-			ps.setInt(1, item.getIdProduct());
-			ps.setInt(2, item.getIdBox());
-			ps.setInt(3, item.getQuantity());
-			ps.executeUpdate();
-			ps.close();
+			return Optional.ofNullable(runner.query("SELECT * FROM inventory WHERE id_product=? AND id_box = ? LIMIT 1", itemHandler, idProduct, idBox));
 		} catch (SQLException e) {
-		}
-	}
-	
-	private void update(int id, int qty) {
-		try {
-			PreparedStatement ps = database.prepare("UPDATE \"Inventory\" SET quantity = quantity + ? WHERE id = ?");
-			ps.setInt(1, qty);
-			ps.setInt(2, id);
-			ps.executeUpdate();
-			ps.close();
-		} catch (SQLException e) {
-		}
-	}
-	
-	@Override
-	public void addToInventory(InventoryItem item) {
-		Integer id = getId(item);
-		//If item does not exists
-		if(id == null) {
-			//Create it
-			create(item);
-		} else {
-			//If it exists, update it
-			update(id, item.getQuantity());
-		}
-	}
-
-	@Override
-	public void removeFromInventory(InventoryItem item) {
-		Integer id = getId(item);
-		//If item does not exists
-		if(id == null) {
-			//Create it
-			item.setQuantity(0-item.getQuantity());
-			create(item);
-		} else {
-			//If it exists, update it
-			update(id, 0-item.getQuantity());
+			e.printStackTrace();
 		}
 
+		return Optional.empty();
 	}
 
 	@Override
 	public List<NamedProduct> getBoxContents(int idBox) {
-		ArrayList<NamedProduct> products = new ArrayList<NamedProduct>();
-		
 		try {
-			PreparedStatement ps = database.prepare("SELECT quantity, \"idProduct\", \"Products\".name FROM \"Inventory\" INNER JOIN \"Products\" ON \"Inventory\".\"idProduct\" = \"Products\".id WHERE \"Inventory\".\"idBox\" = ?");
-			ps.setInt(1, idBox);
-			ResultSet rs = ps.executeQuery();
-			
-			while(rs.next()) {
-				NamedProduct product = new NamedProduct();
-				product.setId(rs.getInt("idProduct"));
-				product.setQuantity(rs.getInt("quantity"));
-				product.setName(rs.getString("name"));
-				products.add(product);
-			}
-			
-			ps.close();
+			return runner.query(
+					"SELECT quantity, id_product, products.name FROM inventory INNER JOIN products ON inventory.id_product = products.id WHERE inventory.id_box = ?",
+					new ResultSetHandler<ArrayList<NamedProduct>>() {
+
+						@Override
+						public ArrayList<NamedProduct> handle(ResultSet rs) throws SQLException {
+							ArrayList<NamedProduct> products = new ArrayList<NamedProduct>();
+
+							while (rs.next()) {
+								NamedProduct product = new NamedProduct();
+								product.setId(rs.getInt("id_product"));
+								product.setQuantity(rs.getInt("quantity"));
+								product.setName(rs.getString("name"));
+								products.add(product);
+							}
+
+							return products;
+						}
+
+					}, idBox);
 		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-		
-		return products;
+
+		return new ArrayList<NamedProduct>(0);
+	}
+
+	@Override
+	public int getStock(int idProduct) {
+		try {
+			return runner.query("SELECT SUM(quantity) AS total FROM inventory WHERE id_product=?",
+					new ResultSetHandler<Integer>() {
+						@Override
+						public Integer handle(ResultSet rs) throws SQLException {
+							rs.next();
+							return rs.getInt("total");
+						}
+
+					}, idProduct);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return -1;
+	}
+
+	@Override
+	public void update(InventoryRow item) {
+		try {
+			runner.update("UPDATE inventory SET quantity = ? WHERE id = ?", item.getQuantity(), item.getId());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void insert(InventoryRow item) {
+		try {
+			runner.update("INSERT INTO inventory(id_product, id_box, quantity) VALUES (?, ?, ?)", item.getId_product(), item.getId_box(), item.getQuantity());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void delete(InventoryRow item) {
+		try {
+			runner.update("DELETE FROM inventory WHERE id=?", item.getId());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

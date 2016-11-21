@@ -8,23 +8,31 @@
 <title>Création d'utilisateur</title>
 </head>
 <body>
-	<div id="header">
+<div class="container-fluid">
+	<div>
 		<jsp:include page="Header.jsp" />
 	</div>
 	<div class="creationList">
 		<form action="CreateUserSuccess.jsp">
-			<ul>
-				<li>Prénom: <input type="text" name="first_name"></li>
-				<li>Nom: <input type="text" name="last_name"></li>
-				<li>Numéro d'employer: <input type="text" name="number"></li>
-				<li>Type d'utilisateur: 
-				<select name="type">
-					<option value="Employé" Selected>Employé</option>
+			<div class="form-group">
+				<label for="first_name">Prénom: </label>
+				<input id="first_name" class="form-control" type="text" name="first_name">
+				
+				<label for="last_name">Nom: </label>
+				<input id="last_name" class="form-control" type="text" name="last_name">
+				
+				<label for="number">Numéro d'employer: </label>
+				<input id="number" class="form-control" type="text" name="number">
+				
+				<label for="type">Type d'utilisateur: </label>
+				<select id="type" class="form-control" name="type">
+					<option value="Employe" Selected>Employé</option>
 					<option value="Gestionnaire">Gestionnaire</option>
-				</select></li>
-			</ul>
-			<input type="submit" value="Ajouter"/>
+				</select>
+			</div>
+			<input type="submit" class="btn btn-success" value="Ajouter"/>
 		</form>
 	</div>
+</div>
 </body>
 </html>
