@@ -11,9 +11,10 @@ public class DtoTestUser {
 	User testUser;
 	
 	@Before
-	public void initiateTestUser() {
+	public void initiateTestUser() 
+	{
 		testUser = new User();
-	}
+	} 
 	
 	@Test
 	public void getSetUserTest()
