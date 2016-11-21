@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <table name="products">
+    <column>id</column>
+    <column>name</column>
+    <column>description</column>
+    <column>date_added</column>
+    <column>date_retired</column>
+    <column>weight</column>
+    <column>barcode</column>
+    <column>threshold</column>
+    <row>
+      <value>1</value>
+      <value><![CDATA[Sample Product]]></value>
+      <value><![CDATA[Description of Sample Product]]></value>
+      <value><![CDATA[1969-12-31 19:00:00.0]]></value>
+      <null/>
+      <null/>
+      <value>1234567890</value>
+      <null/>
+    </row>
+    <row>
+      <value>2</value>
+      <value><![CDATA[Dla Marde]]></value>
+      <value><![CDATA[Maudit que les tests unitaire ca fait chier]]></value>
+      <value><![CDATA[1969-12-31 19:00:00.0]]></value>
+      <null/>
+      <null/>
+      <value>1234567891</value>
+      <null/>
+    </row>
+    <row>
+      <value>3</value>
+      <value><![CDATA[Des Unit Tests]]></value>
+      <value><![CDATA[Fuck DBUnit pis JUnit]]></value>
+      <value><![CDATA[1969-12-31 19:00:00.0]]></value>
+      <null/>
+      <null/>
+      <value>1234567892</value>
+      <null/>
+    </row>
+  </table>
+  <table name="boxes">
+    <column>id</column>
+    <column>barcode</column>
+    <column>creation_date</column>
+    <column>last_modified</column>
+    <column>size</column>
+    <column>weight</column>
+    <row>
+      <value>1</value>
+      <value><![CDATA[1234506781]]></value>
+      <value><![CDATA[1969-12-31 19:00:00.0]]></value>
+      <value><![CDATA[1969-12-31 19:00:00.0]]></value>
+      <value><![CDATA[10x10x10]]></value>
+      <value>1</value>
+    </row>
+    <row>
+      <value>2</value>
+      <value><![CDATA[1234506782]]></value>
+      <value><![CDATA[1969-12-31 19:00:00.0]]></value>
+      <value><![CDATA[1969-12-31 19:00:00.0]]></value>
+      <value><![CDATA[10x10x10]]></value>
+      <value>1</value>
+    </row>
+    <row>
+      <value>3</value>
+      <value><![CDATA[1234506783]]></value>
+      <value><![CDATA[1969-12-31 19:00:00.0]]></value>
+      <value><![CDATA[1969-12-31 19:00:00.0]]></value>
+      <value><![CDATA[10x10x10]]></value>
+      <value>1</value>
+    </row>
+    <row>
+      <value>4</value>
+      <value><![CDATA[1234506784]]></value>
+      <value><![CDATA[1969-12-31 19:00:00.0]]></value>
+      <value><![CDATA[1969-12-31 19:00:00.0]]></value>
+      <value><![CDATA[10x10x10]]></value>
+      <value>1</value>
+    </row>
+  </table>
+  <table name="inventory">
+  	<column>id</column>
+    <column>id_product</column>
+    <column>id_box</column>
+    <column>quantity</column>
+    <row>
+    	<value>1</value>
+    	<value>1</value>
+    	<value>1</value>
+    	<value>3</value>
+    </row>
+    <row>
+    	<value>2</value>
+    	<value>1</value>
+    	<value>2</value>
+    	<value>7</value>
+    </row>
+    <row>
+    	<value>3</value>
+    	<value>2</value>
+    	<value>1</value>
+    	<value>3</value>
+    </row>
+  </table>
+</dataset>

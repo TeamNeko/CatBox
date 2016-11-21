@@ -24,6 +24,7 @@ public class SearchResourceTest {
 	private static String boxNumber = "1000";
 	private static String productNumber = "1001";
 	private static String userNumber = "1002";
+	private static String notFoundNumber = "1003";
 
 	private SearchResource resource = new SearchResource();
 
@@ -62,24 +63,31 @@ public class SearchResourceTest {
 	}
 
 	@Test
-	public void testBox() {
+	public void testSearchBox() {
 		SearchResult result = resource.search(boxNumber);
 		assertEquals(result.getType(), "box");
 		assertEquals(result.getClass(), BoxSearchResult.class);
 	}
 
 	@Test
-	public void testProduct() {
+	public void testSearchProduct() {
 		SearchResult result = resource.search(productNumber);
 		assertEquals(result.getType(), "product");
 		assertEquals(result.getClass(), ProductSearchResult.class);
 	}
 
 	@Test
-	public void testUser() {
+	public void testSearchUser() {
 		SearchResult result = resource.search(userNumber);
 		assertEquals(result.getType(), "user");
 		assertEquals(result.getClass(), UserSearchResult.class);
+	}
+	
+	@Test
+	public void testSearchNotFound() {
+		SearchResult result = resource.search(notFoundNumber);
+		assertEquals(result.getType(), "not found");
+		assertEquals(result.getClass(), SearchResult.class);
 	}
 
 }

@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <table name="boxes">
+    <column>id</column>
+    <column>barcode</column>
+    <column>creation_date</column>
+    <column>last_modified</column>
+    <column>size</column>
+    <column>weight</column>
+    <row>
+      <value>1</value>
+      <value><![CDATA[1234506781]]></value>
+      <value><![CDATA[1969-12-31 19:00:00.0]]></value>
+      <value><![CDATA[1969-12-31 19:00:00.0]]></value>
+      <value><![CDATA[10x10x10]]></value>
+      <value>1</value>
+    </row>
+    <row>
+      <value>2</value>
+      <value><![CDATA[1234506782]]></value>
+      <value><![CDATA[1969-12-31 19:00:00.0]]></value>
+      <value><![CDATA[1969-12-31 19:00:00.0]]></value>
+      <value><![CDATA[10x10x10]]></value>
+      <value>1</value>
+    </row>
+    <row>
+      <value>3</value>
+      <value><![CDATA[1234506783]]></value>
+      <value><![CDATA[1969-12-31 19:00:00.0]]></value>
+      <value><![CDATA[1969-12-31 19:00:00.0]]></value>
+      <value><![CDATA[10x10x10]]></value>
+      <value>1</value>
+    </row>
+    <row>
+      <value>4</value>
+      <value><![CDATA[1234506784]]></value>
+      <value><![CDATA[1969-12-31 19:00:00.0]]></value>
+      <value><![CDATA[1969-12-31 19:00:00.0]]></value>
+      <value><![CDATA[10x10x10]]></value>
+      <value>1</value>
+    </row>
+  </table>
+</dataset>

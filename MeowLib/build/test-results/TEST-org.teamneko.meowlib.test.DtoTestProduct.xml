@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="org.teamneko.meowlib.test.DtoTestProduct" tests="2" skipped="0" failures="1" errors="0" timestamp="2016-11-18T21:26:15" hostname="suzuka" time="0.061">
+<testsuite name="org.teamneko.meowlib.test.DtoTestProduct" tests="2" skipped="0" failures="1" errors="0" timestamp="2016-11-19T22:57:02" hostname="suzuka" time="0.047">
   <properties/>
-  <testcase name="toStringProductTest" classname="org.teamneko.meowlib.test.DtoTestProduct" time="0.061">
+  <testcase name="toStringProductTest" classname="org.teamneko.meowlib.test.DtoTestProduct" time="0.046">
     <failure message="org.junit.ComparisonFailure: expected:&lt;...EST 1969, weight=1.1[]]&gt; but was:&lt;...EST 1969, weight=1.1[, threshold=0]]&gt;" type="org.junit.ComparisonFailure">org.junit.ComparisonFailure: expected:&lt;...EST 1969, weight=1.1[]]&gt; but was:&lt;...EST 1969, weight=1.1[, threshold=0]]&gt;
 	at org.junit.Assert.assertEquals(Assert.java:115)
 	at org.junit.Assert.assertEquals(Assert.java:144)
@@ -52,7 +52,7 @@
 	at java.lang.Thread.run(Thread.java:745)
 </failure>
   </testcase>
-  <testcase name="getsetProductTest" classname="org.teamneko.meowlib.test.DtoTestProduct" time="0.0"/>
+  <testcase name="getsetProductTest" classname="org.teamneko.meowlib.test.DtoTestProduct" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

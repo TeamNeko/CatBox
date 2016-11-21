@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="org.teamneko.meowlib.test.DtoTestLocationRow" tests="1" skipped="0" failures="0" errors="0" timestamp="2016-11-18T21:26:15" hostname="suzuka" time="0.003">
+<testsuite name="org.teamneko.meowlib.test.DtoTestLocationRow" tests="1" skipped="0" failures="0" errors="0" timestamp="2016-11-19T22:57:02" hostname="suzuka" time="0.001">
   <properties/>
-  <testcase name="getsetLocationRowTest" classname="org.teamneko.meowlib.test.DtoTestLocationRow" time="0.003"/>
+  <testcase name="getsetLocationRowTest" classname="org.teamneko.meowlib.test.DtoTestLocationRow" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

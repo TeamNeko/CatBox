@@ -26,19 +26,14 @@ public class DtoTestProduct {
 	@Test
 	public void getsetProductTest()
 	{
-		testProduct.setId(1);
-		testProduct.setName("TEST");
-		testProduct.setDescription("TESTDESC");
-		testProduct.setAdded(created);
-		testProduct.setRemoved(removed);
-		testProduct.setWeight(1.1);
-		
+		testProduct = new Product(1,"TEST","TESTDESC",created,removed,1.1,5);
 		assertEquals(1,testProduct.getId());
 		assertEquals("TEST",testProduct.getName());
 		assertEquals("TESTDESC",testProduct.getDescription());
 		assertEquals(created,testProduct.getAdded());
-		assertEquals(removed,testProduct.getRemoved());
+		assertEquals(removed,testProduct.getRemoved()); 
 		assertEquals(1.1,testProduct.getWeight(),0.01);
+		assertEquals(1.1,testProduct.getThreshold(),5);
 	} 
 	
 	@Test
@@ -50,7 +45,8 @@ public class DtoTestProduct {
 		testProduct.setAdded(created);
 		testProduct.setRemoved(removed);
 		testProduct.setWeight(1.1);
+		testProduct.setThreshold(5);
 		assertEquals("Product [id=1, name=TEST, description=TESTDESC, added=" + created
-				+ ", removed=" + removed + ", weight=1.1]", testProduct.toString());
+				+ ", removed=" + removed + ", weight=1.1, threshold=5]", testProduct.toString());
 	}
 }

@@ -54,7 +54,6 @@ public class BoxResource {
 	@Path("/exists/{barcode}")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String boxExists(@PathParam("barcode") String barcode) {
-		System.out.println(barcode);
 		return Boolean.toString(boxes.exists(barcode));
 	}
 	

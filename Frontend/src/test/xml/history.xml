@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <table name="products">
+    <column>id</column>
+    <column>name</column>
+    <column>description</column>
+    <column>date_added</column>
+    <column>date_retired</column>
+    <column>weight</column>
+    <column>barcode</column>
+    <column>threshold</column>
+    <row>
+      <value>1</value>
+      <value><![CDATA[Sample Product]]></value>
+      <value><![CDATA[Description of Sample Product]]></value>
+      <value><![CDATA[1969-12-31 19:00:00.0]]></value>
+      <null/>
+      <null/>
+      <value>1234567890</value>
+      <null/>
+    </row>
+    <row>
+      <value>2</value>
+      <value><![CDATA[Sample Product]]></value>
+      <value><![CDATA[Description of Sample Product]]></value>
+      <value><![CDATA[1969-12-31 19:00:00.0]]></value>
+      <null/>
+      <null/>
+      <value>1234567890</value>
+      <null/>
+    </row>
+  </table>
+  <table name="history">
+    <column>id</column>
+    <column>id_product</column>
+    <column>quantity</column>
+    <column>time</column>
+    <row>
+      <value>1</value>
+      <value>1</value>
+      <value>1</value>
+      <value><![CDATA[1969-12-31 19:00:00.0]]></value>
+    </row>
+    <row>
+      <value>2</value>
+      <value>1</value>
+      <value>2</value>
+      <value><![CDATA[1969-12-31 21:00:00.0]]></value>
+    </row>
+    <row>
+      <value>3</value>
+      <value>1</value>
+      <value>3</value>
+      <value><![CDATA[1969-12-31 23:00:00.0]]></value>
+    </row>
+  </table>
+</dataset>
