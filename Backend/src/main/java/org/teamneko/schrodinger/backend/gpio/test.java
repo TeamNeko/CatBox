@@ -1,4 +1,4 @@
-package org.teamneko.schrodinger.backend.RC522;
+package org.teamneko.schrodinger.backend.gpio;
 
 public class test {
 
@@ -6,7 +6,7 @@ public class test {
     {
 	    MFRC522 rfid;
 		try {
-			rfid = RFIDFactory.createMFRC522();
+			rfid = DeviceFactory.createMFRC522();
 		} catch (Pi4JMissingException e) {
 			System.out.println("Error 314: Could not open Pi4j");
 			System.out.println("This probably means you are not running on a Pi");
@@ -16,7 +16,7 @@ public class test {
 		}
 	        
 	    while (true){
-	    	if (rfid.readID());
+	    	if (rfid.read());
 	    	System.out.println("Detecte card: "+ rfid.currentID);
 	    }
 	

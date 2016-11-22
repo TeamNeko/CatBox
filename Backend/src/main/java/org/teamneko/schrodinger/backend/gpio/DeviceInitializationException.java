@@ -1,4 +1,4 @@
-package org.teamneko.schrodinger.backend.RC522;
+package org.teamneko.schrodinger.backend.gpio;
 
 public class DeviceInitializationException extends Exception {
 	private static final long serialVersionUID = -1465790667080873043L;

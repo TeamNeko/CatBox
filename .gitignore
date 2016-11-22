@@ -1,6 +1,8 @@
 .metadata
 bin/
+build/
 tmp/
+*.class
 *.tmp
 *.bak
 *.swp
@@ -9,6 +11,7 @@ local.properties
 .settings/
 .loadpath
 .recommenders
+.gradle/
 
 # Eclipse Core
 .project
@@ -48,5 +51,3 @@ local.properties
 
 # Code Recommenders
 .recommenders/
-/Interface RPI/nbproject/private/
-/Interface RPI/build/

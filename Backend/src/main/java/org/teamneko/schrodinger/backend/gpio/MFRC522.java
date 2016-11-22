@@ -1,9 +1,9 @@
-package org.teamneko.schrodinger.backend.RC522;
+package org.teamneko.schrodinger.backend.gpio;
 
 import com.pi4j.wiringpi.Gpio;
 import com.pi4j.wiringpi.Spi;
 
-public class MFRC522 {
+public class MFRC522 implements RFIDReader {
 
 	/*
 	 * Register overview, with their adress, their name (same as those in the
@@ -251,12 +251,18 @@ public class MFRC522 {
 		turnAntennaOn();
 	}
 
-	public boolean readID() throws InterruptedException {
-
-		return readID(500, 3);
-
+	public boolean read() {
+		try {
+			return readID(500, 3);
+		} catch(InterruptedException e) {
+			return false;
+		}
 	}
 
+	public String getID() {
+		return currentID;
+	}
+	
 	public boolean readID(int sleepTime, int nbHit) throws InterruptedException {
 
 		// Security if user enters an unallowed number of Hit

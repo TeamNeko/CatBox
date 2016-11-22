@@ -1,5 +1,6 @@
 package org.teamneko.schrodinger.backend.fx;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.Pane;
@@ -12,31 +13,30 @@ public class MainWindow extends SplitPane {
 	
 	public MainWindow() {
 		CustomAnchorPane.loadFXML("MainWindow.fxml", this);
-		showLoginPane();
-		showButtonPane();
 	}
 	
-	public void setLeftPane(Pane pane) {
-		mainPane.getItems().set(LEFT, pane);
-	}
-	
-	public void setRightPane(Pane pane) {
-		mainPane.getItems().set(RIGHT, pane);
+	private void setPane(final Pane pane, final int side) {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				mainPane.getItems().set(side, pane);
+			}
+		});
 	}
 	
 	public void showLoginPane() {
-		setRightPane(new LoginPane());
+		setPane(new LoginPane(), RIGHT);
 	}
 	
 	public void showTablePane() {
-		setRightPane(new TablePane());
+		setPane(new TablePane(), RIGHT);
 	}
 	
 	public void showDetailPane() {
-		setRightPane(new DetailPane());
+		setPane(new DetailPane(), RIGHT);
 	}
 	
 	public void showButtonPane() {
-		setLeftPane(new ButtonPane());
+		setPane(new ButtonPane(), LEFT);
 	}
 }
