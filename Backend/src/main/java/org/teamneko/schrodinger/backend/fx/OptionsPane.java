@@ -1,5 +1,7 @@
 package org.teamneko.schrodinger.backend.fx;
 
+import java.io.IOException;
+
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,15 +13,22 @@ public class OptionsPane extends CustomAnchorPane {
 	}
 	
 	@FXML protected void annuler(ActionEvent event) {
-		Context.getInstance().getMainWindow().showButtonPane();
+		Context.getInstance().getMainWindow().showDisabledBoxLeftPane();
 	}
 	
 	@FXML protected void deconnection(ActionEvent event) {
-		Context.getInstance().getMainWindow().showLoginPane();
-		Context.getInstance().getMainWindow().showButtonPane();
+		Context.getInstance().logout();
 	}
 	
 	@FXML protected void mise_hors_tension(ActionEvent event) {
+		/*
+		try {
+			Runtime.getRuntime().exec("shutdown -h now");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		*/
+		
 		Platform.exit();
 	}
 }

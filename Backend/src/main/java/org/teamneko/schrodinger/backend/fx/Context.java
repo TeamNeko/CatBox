@@ -1,5 +1,7 @@
 package org.teamneko.schrodinger.backend.fx;
 
+import java.util.function.Consumer;
+
 import org.teamneko.meowlib.json.BoxSearchResult;
 import org.teamneko.meowlib.json.ProductSearchResult;
 import org.teamneko.meowlib.json.SearchResult;
@@ -19,23 +21,32 @@ import com.sun.jersey.api.client.UniformInterfaceException;
 public class Context {
 	private static Context instance = new Context();
 	
-	private ApplicationState state;
 	private KeyboardHandler keyboardHandler;
+	
 	private MainWindow mainWindow;
 	private SchrodingerClient restClient;
 	private User user;
 	
-	private String lastScannedBarcode;
+	private String lastSearchedBarcode;
 	private SearchResult lastSearchResult;
 	
 	private MFRC522 rfid = null;
 	private RGBLed led = null;
 	private Piezo piezo = null;
 	
+	public void createBox() {
+		System.out.println("Create Box " + lastSearchedBarcode);
+	}
+	
+	public void editBox() {
+		System.out.println("Edit Box " + lastSearchedBarcode);
+	}
+	
 	public boolean login(String userCode) {
 		try {
 	 		user = restClient.requestUser(userCode);
 	 		mainWindow.showDetailPane();
+	 		mainWindow.showDisabledBoxLeftPane();
 	 	} catch(UniformInterfaceException e) {
 	 		return false;
 	 	}
@@ -43,10 +54,17 @@ public class Context {
 		return true;
 	}
 	
+	public void logout() {
+		user = null;
+		
+		mainWindow.showLoginPane();
+		mainWindow.showShutdownPane();
+	}
+
 	public KeyboardHandler getKeyboardHandler() {
 		return keyboardHandler;
 	}
-
+	
 	public MainWindow getMainWindow() {
 		return mainWindow;
 	}
@@ -66,37 +84,45 @@ public class Context {
 	public SchrodingerClient getRestClient() {
 		return restClient;
 	}
-	
-	public ApplicationState getState() {
-		return state;
-	}
 
 	public User getUser() {
 		return user;
 	}
 
-	public void search(String barcode, DetailPane pane) {
-		lastSearchResult = restClient.search(barcode);
-		lastScannedBarcode = barcode;
-		
-		if(lastSearchResult.getClass() == ProductSearchResult.class)
-			pane.showProduct(((ProductSearchResult) lastSearchResult).getProduct());
-		else if(lastSearchResult.getClass() == BoxSearchResult.class)
-			pane.showBox(((BoxSearchResult) lastSearchResult).getBox());
-		else if(lastSearchResult.getClass() == UserSearchResult.class)
-			pane.showUser(((UserSearchResult) lastSearchResult).getUser());
-		else
-			pane.showNotFound();
+	public void removeBarcodeCallback() {
+		keyboardHandler.removeKeyboardListener();
 	}
 	
-	public void setKeyboardHandler(KeyboardHandler keyboardHandler) {
-		this.keyboardHandler = keyboardHandler;
+	public void search(String barcode, DetailPane pane) {
+		lastSearchResult = restClient.search(barcode);
+		lastSearchedBarcode = barcode;
+		
+		if(lastSearchResult.getClass() == ProductSearchResult.class)
+		{
+			mainWindow.showDisabledBoxLeftPane();
+			pane.showProduct(((ProductSearchResult) lastSearchResult).getProduct());
+		}
+		else if(lastSearchResult.getClass() == BoxSearchResult.class)
+		{
+			mainWindow.showEditBoxLeftPane();
+			pane.showBox(((BoxSearchResult) lastSearchResult).getBox());
+		}
+		else if(lastSearchResult.getClass() == UserSearchResult.class)
+		{
+			mainWindow.showDisabledBoxLeftPane();
+			pane.showUser(((UserSearchResult) lastSearchResult).getUser());
+		}
+		else
+		{
+			mainWindow.showCreateBoxLeftPane();
+			pane.showNotFound();
+		}
 	}
 
-	public void setState(ApplicationState state) {
-		this.state = state;
+	public void setBarcodeCallback(Consumer<String> consumer) {
+		keyboardHandler.setKeyboardListener(new BarcodeScannerListener(consumer));
 	}
-
+	
 	public void setRestClient(SchrodingerClient restClient) {
 		this.restClient = restClient;
 	}
@@ -105,6 +131,9 @@ public class Context {
 		this.user = user;
 	}
 	
+	public void showOptions() {
+		mainWindow.showOptionsPane();
+	}
 	public static Context getInstance() {
 		return instance;
 	}
@@ -125,6 +154,7 @@ public class Context {
 			System.err.println("Could not initialize Pi4j, probably not running on a Pi");
 		}
 		
+		keyboardHandler = new KeyboardHandler();
 		mainWindow = new MainWindow();
 		restClient = new SchrodingerClient("http://localhost:8080/Frontend/rest");
 	}	

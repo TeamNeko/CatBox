@@ -6,7 +6,7 @@
 <?import javafx.scene.image.*?>
 
 <fx:root minWidth="160" minHeight="320" type="javafx.scene.layout.AnchorPane" xmlns:fx="http://javafx.com/fxml">
-            <Button onAction="#deconnection" layoutX="1" layoutY="1" prefWidth="156" prefHeight="105" text="Déconnection" />
+            <Button onAction="#deconnection" layoutX="1" layoutY="1" prefWidth="156" prefHeight="105" text="Déconnexion" />
             <Button onAction="#mise_hors_tension" layoutX="1" layoutY="106" prefWidth="156" prefHeight="105" text="Mise Hors Tension" />
             <Button onAction="#annuler" layoutX="1" layoutY="212" prefWidth="156" prefHeight="105" text="Annuler" />
 </fx:root>

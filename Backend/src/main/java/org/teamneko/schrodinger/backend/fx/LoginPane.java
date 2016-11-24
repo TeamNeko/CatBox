@@ -16,6 +16,7 @@ public class LoginPane extends CustomAnchorPane implements RFIDCallback {
 	public LoginPane() {
 		super();
 		
+		Context.getInstance().getKeyboardHandler().removeKeyboardListener();
 		RFIDReader rfid = Context.getInstance().getRFIDReader();
 		
 		if(rfid != null) {
@@ -25,12 +26,7 @@ public class LoginPane extends CustomAnchorPane implements RFIDCallback {
 	}
 	
 	 @FXML protected void login(ActionEvent event) {
-		 new Thread(new Runnable() {
-			@Override
-			public void run() {
-				attemptLogin(rfidText.getText());
-			}
-		 }).start();
+		 new Thread((Runnable) () -> attemptLogin(rfidText.getText())).start();
 	 }
 
 	@Override

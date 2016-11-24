@@ -1,16 +1,10 @@
 package org.teamneko.schrodinger.backend.fx;
 
 import javafx.event.EventHandler;
-import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 
 public class KeyboardHandler implements EventHandler<KeyEvent> {
-	private EventHandler<KeyEvent> listener;
-	
-	public KeyboardHandler(Scene scene) {
-		listener = null;
-		scene.addEventFilter(KeyEvent.KEY_PRESSED, this);
-	}
+	private EventHandler<KeyEvent> listener = null;
 	
 	public void removeKeyboardListener() {
 		this.listener = null;

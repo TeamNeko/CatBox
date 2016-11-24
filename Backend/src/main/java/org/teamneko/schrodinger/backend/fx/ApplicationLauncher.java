@@ -2,6 +2,7 @@ package org.teamneko.schrodinger.backend.fx;
 	
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -13,10 +14,10 @@ public class ApplicationLauncher extends Application {
 		Context context = Context.getInstance();
 		
 		Scene scene = new Scene(context.getMainWindow(),480,320);
-		context.getMainWindow().showLoginPane();
-		context.getMainWindow().showButtonPane();
+		scene.addEventFilter(KeyEvent.KEY_PRESSED, context.getKeyboardHandler());
 		
-		Context.getInstance().setKeyboardHandler(new KeyboardHandler(scene));
+		context.getMainWindow().showLoginPane();
+		context.getMainWindow().showShutdownPane();
 		
 		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		
