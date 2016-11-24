@@ -8,6 +8,7 @@ import org.teamneko.schrodinger.backend.gpio.Piezo;
 import org.teamneko.schrodinger.backend.gpio.Tone;
 
 public class IntegrationPiezoTest {
+	
 	private final static Note auClairDeLaLune[] = {
 		new Note(Tone.C4, Duration.Quarter),
 		new Note(Tone.C4, Duration.Quarter),
@@ -38,13 +39,16 @@ public class IntegrationPiezoTest {
 		Piezo piezo;
 		try {
 			piezo = DeviceFactory.createPiezo();
-		} catch (Pi4JMissingException e) {
+		} 
+		catch (Pi4JMissingException e) {
 			System.out.println("Not running on a Raspberry Pi");
 			return;
 		}
 		
-		System.out.println("Objet initialisï¿½");
+		System.out.println("Objet initialisé");
+		
 		while (true){
+			
 			piezo.playSong(auClairDeLaLune);
 			piezo.playSong(ouverture5eBeethoven);
 			
