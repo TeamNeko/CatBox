@@ -1,6 +1,7 @@
 package org.teamneko.schrodinger.backend.fx;
 
 import org.teamneko.meowlib.json.Box;
+import org.teamneko.meowlib.json.NamedProduct;
 import org.teamneko.meowlib.json.Product;
 import org.teamneko.meowlib.json.User;
 
@@ -41,7 +42,12 @@ public class DetailPane extends CustomAnchorPane implements EventHandler<KeyEven
 	}
 	
 	public void showBox(Box box) {
-		printInListView("Box: " + box.getBarcode());
+		printInListView("Box: ");
+		NamedProduct[] content = Context.getInstance().getRestClient().getBoxDetails(box.getId());
+		for(int i=0; i<content.length; i++)
+		{
+			detailList.getItems().add(content[i].getName() + " x" + content[i].getQuantity());
+		}
 	}
 	
 	public void showNotFound() {
