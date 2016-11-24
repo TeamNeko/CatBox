@@ -270,6 +270,7 @@ public class MFRC522 implements RFIDReader {
 	 * @return
 	 */
 	
+	
 	public int collisionDetection(byte[] back_data) {
 		int status;
 		byte[] serial_number = new byte[2];
@@ -303,19 +304,42 @@ public class MFRC522 implements RFIDReader {
 	/**
 	 * Initialise the MFRC522 by setting his:
 	 * TMode Register
-	 * 
+	 * 	Bit 7 	(1) Timers starts at the end of the transmission in all communication modes at all speeds
+	 * 	Bit 6-5 (00) Non-gated mode
+	 * 	Bit 4 	(0) To avoid the use of IRQ
+	 * 	Bit 3-0 (1101) Upper 4 bits of the Prescaler Register
+	 * 	
 	 * Prescaler
+	 * 	ftimer = 13.56MHz / (2*TPreScaler+1)
+	 * 	The TPreScaler is on 12 bytes, the lower ones are 0x3E
+	 * 	To get a value of 0xD3E (3390)
+	 * 	Which means ftimer equals ~2
 	 * 
 	 * Load Registers (Low and High, because it doesn't fit on one)
+	 * 16 bits Defines the 16-bits timer reload value on a start event
+	 * 0x1E00 (7680)
 	 * 
 	 * ASK Register
+	 * Bit 7 reserved
+	 * Bit 6 (1) Forces a 100% ASK modulation independent of other register setting
+	 * Bit 5-0 reserved
 	 * 
 	 * Mode Register
+	 * Bit 7 (0) MSBFirst CRC is not used
+	 * Bit 6 reserved
+	 * Bit 5 (1) TxWaitRF Transmitter can only be started if an RF field is generated 
+	 * Bit 4 reserved
+	 * Bit 3 (1) PolMFin MFIN is active HIGH
+	 * Bit 2 reserved
+	 * Bit 1-0 (01) CRCPreset Preset value for the CRC 6363h 
 	 * 
 	 * RFCfg Register
 	 * 	To enable more power to the sensor 
 	 * 	to expand his reading range
 	 * 
+	 * Bit 7 reserved
+	 * Bit 6-4 (111) receiver's signal voltage gain factor of 48db
+	 * Bit 3-0 reserved
 	 * 
 	 */
 
@@ -323,11 +347,11 @@ public class MFRC522 implements RFIDReader {
 		reset();
 		writeRegister(TModeReg, (byte) 0x8D);
 		writeRegister(TPrescalerReg, (byte) 0x3E);
-		writeRegister(TReloadRegL, (byte) 30);
-		writeRegister(TReloadRegH, (byte) 0);
+		writeRegister(TReloadRegL, (byte) 0x1E);
+		writeRegister(TReloadRegH, (byte) 0x00);
 		writeRegister(TxASKReg, (byte) 0x40);
-		writeRegister(ModeReg, (byte) 0x3D);
-		writeRegister(RFCfgReg, (byte) 0x7F);
+		writeRegister(ModeReg, (byte) 0x2D);
+		writeRegister(RFCfgReg, (byte) 0x70);
 		turnAntennaOn();
 	}
 
@@ -404,7 +428,7 @@ public class MFRC522 implements RFIDReader {
 
 			// Verify if there's a card to read
 			if (this.request(PICC_REQIDL, back_len) == MI_OK) {
-				// System.out.println("Detected card:");
+				//System.out.println("Detected card" + back_len);
 			}
 
 			// Verify if there's a collision with the signal to read
@@ -449,13 +473,14 @@ public class MFRC522 implements RFIDReader {
 		}
 	}
 	
-	
-	
 	/**
+	 * Passes the card type as the req_mode, 
+	 * Retrieves the number of valid bytes in the back_bits
 	 * 
-	 * 
+	 * @param req_mode
+	 * @param back_bits
+	 * @return
 	 */
-	
 
 	public int request(byte req_mode, int[] back_bits) {
 		int status;
@@ -477,7 +502,12 @@ public class MFRC522 implements RFIDReader {
 	}
 
 	
-	
+	/**
+	 * Simple byte masking used for masking addresses
+	 * 
+	 * @param address
+	 * @param mask
+	 */
 	
 	
 	private void clearBitMask(byte address, byte mask) {
@@ -485,40 +515,69 @@ public class MFRC522 implements RFIDReader {
 		writeRegister(address, (byte) (value & (~mask)));
 	}
 
+	/**
+	 * Formating the address to send it to the sensor
+	 * And making sure you are able to read on the sensor
+	 * @param address
+	 * @return
+	 */
+	
 	private byte readRegister(byte address) {
 		byte data[] = new byte[2];
 		data[0] = (byte) (((address << 1) & 0x7E) | 0x80);
 		data[1] = 0;
-		// int result=Spi.wiringPiSPIDataRW(SPI_SELECT, data);
-		// if(result == -1)
-		// System.out.println("Device read error,address="+address);
+		int result=Spi.wiringPiSPIDataRW(spiPort, data);
+		if(result == -1)
+			System.out.println("Device read error,address="+address);
 		return data[1];
 	}
-
+	
+	/**
+	 * Reset the sensor before intialising everything needed
+	 * Bit 4 (0) Wakes up the sensor
+	 * Bit 3-0 (1111) SoftReset, it resets the MFRC522
+	 */
+	
 	private void reset() {
 		writeRegister(CommandReg, PCD_RESETPHASE);
 	}
 
+	/**
+	 * Mask the address passed in parameter
+	 * 
+	 * @param address
+	 * @param mask
+	 */
+	
 	private void setBitMask(byte address, byte mask) {
 		byte value = readRegister(address);
 		writeRegister(address, (byte) (value | mask));
 	}
 
-	@SuppressWarnings("unused")
-	private void turnAntennaOff() {
-		clearBitMask(TxControlReg, (byte) 0x03);
-	}
-
+	/**
+	 * Bit 1-0 (11) Enables the energy for the antenna
+	 * 
+	 */
 	private void turnAntennaOn() {
-		// byte value=Read_RC522(TxControlReg);
-		// if((value & 0x03) != 0x03)
 		setBitMask(TxControlReg, (byte) 0x03);
 	}
 
-	// back_data-Length=16;
-	// back_data-
-	// back_bits-
-	// backLen-
+	/**
+	 * It writes a command to the sensor by passing the command, the type of the card as data and it's lenght
+	 * Retrieve the back_data, with his lenght (backLen).
+	 * The back_bits reads the ControlReg to indicate the number of valid byte 
+	 * if bit 2-0 equals 000b, the whole back_data is valid  
+	 * 
+	 * 
+	 * @param command
+	 * @param data
+	 * @param dataLen
+	 * @param back_data
+	 * @param back_bits
+	 * @param backLen
+	 * @return
+	 */
+	
 	private int writeCard(byte command, byte[] data, int dataLen, byte[] back_data, int[] back_bits, int[] backLen) {
 		int status = MI_ERR;
 		byte irq = 0, irq_wait = 0, lastBits = 0;
@@ -584,6 +643,12 @@ public class MFRC522 implements RFIDReader {
 		return status;
 	}
 
+	/**
+	 * Writes a value to the adress
+	 * 
+	 * @param address
+	 * @param value
+	 */
 	private void writeRegister(byte address, byte value) {
 
 		byte data[] = new byte[2];
