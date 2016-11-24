@@ -6,39 +6,28 @@ import org.teamneko.meowlib.json.Product;
 import org.teamneko.meowlib.json.User;
 
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
-public class DetailPane extends CustomAnchorPane implements EventHandler<KeyEvent>{
-	private String barcode = "";
-	
+public class DetailPane extends CustomAnchorPane {
 	@FXML protected ListView<String> detailList;
 	@FXML protected TextField barcodeField;
-	
+
 	public DetailPane(){
 		super();
-		Context.getInstance().getKeyboardHandler().setKeyboardListener(this);
+		Context.getInstance().setBarcodeCallback(s -> handleBarcode(s));
 		HBox.setHgrow(barcodeField, Priority.ALWAYS);
 	}
 	
 	@FXML protected void populer(ActionEvent event) {
 	}
 	
-	@Override
-	public void handle(KeyEvent event) {
-		if(event.getCode() == KeyCode.ENTER) {
-			barcodeField.setText(barcode);
-			Context.getInstance().search(barcode, this);
-			barcode = "";
-		}
-		else
-			barcode += event.getText();
+	public void handleBarcode(String barcode) {
+		barcodeField.setText(barcode);
+		Context.getInstance().search(barcode, this);
 	}
 	
 	public void showBox(Box box) {

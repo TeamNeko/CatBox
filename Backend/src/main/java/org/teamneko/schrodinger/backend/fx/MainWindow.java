@@ -15,15 +15,6 @@ public class MainWindow extends SplitPane {
 		CustomAnchorPane.loadFXML("MainWindow.fxml", this);
 	}
 	
-	private void setPane(final Pane pane, final int side) {
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				mainPane.getItems().set(side, pane);
-			}
-		});
-	}
-	
 	public void showLoginPane() {
 		setPane(new LoginPane(), RIGHT);
 	}
@@ -36,8 +27,16 @@ public class MainWindow extends SplitPane {
 		setPane(new DetailPane(), RIGHT);
 	}
 	
-	public void showButtonPane() {
-		setPane(new ButtonPane(), LEFT);
+	public void showEditBoxLeftPane() {
+		setPane(new EditBoxLeftPane(), LEFT);
+	}
+	
+	public void showCreateBoxLeftPane() {
+		setPane(new CreateBoxLeftPane(), LEFT);
+	}
+	
+	public void showDisabledBoxLeftPane() {
+		setPane(new DisabledBoxLeftPane(), LEFT);
 	}
 	
 	public void showOptionsPane() {
@@ -46,5 +45,13 @@ public class MainWindow extends SplitPane {
 	
 	public void showModificationPane() {
 		setPane(new ModificationPane(), LEFT);
+	}
+	
+	public void showShutdownPane() {
+		setPane(new ShutdownPane(), LEFT);
+	}
+	
+	private void setPane(final Pane pane, final int side) {
+		Platform.runLater((Runnable) () -> mainPane.getItems().set(side, pane));
 	}
 }

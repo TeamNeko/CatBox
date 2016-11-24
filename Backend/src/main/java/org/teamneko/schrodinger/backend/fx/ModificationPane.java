@@ -26,10 +26,10 @@ public class ModificationPane extends CustomAnchorPane {
 	}
 	
 	@FXML protected void ok(ActionEvent event) {
-		Context.getInstance().getMainWindow().showButtonPane();
+	
 	}
 	
 	@FXML protected void cancel(ActionEvent event) {
-		Context.getInstance().getMainWindow().showButtonPane();
+	
 	}
 }
