@@ -4,7 +4,7 @@ import org.teamneko.schrodinger.backend.gpio.DeviceFactory;
 import org.teamneko.schrodinger.backend.gpio.Pi4JMissingException;
 import org.teamneko.schrodinger.backend.gpio.RGBLed;
 
-public class RGBLEDTest {
+public class IntegrationRGBLEDTest {
 
 	public static void main(String[] args) throws InterruptedException {
 		
@@ -17,7 +17,7 @@ public class RGBLEDTest {
 			return;
 		}
 		
-		System.out.println("Objet crï¿½ï¿½");
+		System.out.println("Objet créé");
 		
 		int j = 0;
 		
@@ -30,8 +30,13 @@ public class RGBLEDTest {
 			
 			j=j+5;
 		}
+		
+		led.flashWhite();
+		
 		led.write(100, 100, 100);
+		
 		led.close();
-		System.out.println("Terminï¿½");
+		
+		System.out.println("Terminé");
 	}
 }
