@@ -74,6 +74,23 @@
      url="jdbc:postgresql://elmer.db.elephantsql.com:5432/jmtntlek"
      user="jmtntlek"  password="vaYxsY1WBNr5gYMMd-74kLrc98gqNhqI"/>
 
+<core:set var="addName" value="<%=addName%>"/>
+<core:set var="addBarcode" value="<%=addBarcode%>"/>
+<core:set var="addDescription" value="<%=addDescription%>"/>
+<core:set var="addWeight" value="<%=addWeight%>"/>
+<core:set var="addThreshold" value="<%=addThreshold%>"/>
+
+<core:if test="<%=insertTrue%>">
+	<sql:update dataSource="${snapshot}">
+		INSERT INTO products (name,barcode,description,weight,threshold) VALUES (?, ?, ?, ?, ?);
+		<sql:param value="${addName}" />
+		<sql:param value="${addBarcode}" />
+		<sql:param value="${addDescription}" />
+		<sql:param value="${addWeight}" />
+		<sql:param value="${addThreshold}" />
+	</sql:update>
+</core:if>
+
 <sql:query dataSource="${snapshot}" var="products">
 	SELECT * FROM products 
 	<core:if test="${not empty keyWord}">
@@ -91,22 +108,6 @@
 <sql:query dataSource="${snapshot}" var="user">
 	SELECT * FROM users;
 </sql:query>
-
-<core:set var="addName" value="<%=addName%>"/>
-<core:set var="addBarcode" value="<%=addBarcode%>"/>
-<core:set var="addDescription" value="<%=addDescription%>"/>
-<core:set var="addWeight" value="<%=addWeight%>"/>
-
-<core:if test="<%=insertTrue%>">
-	<sql:update dataSource="${snapshot}">
-		INSERT INTO products (name,barcode,description,weight,threshold) VALUES (?, ?, ?, ?, ?);
-		<sql:param value="${addName}" />
-		<sql:param value="${addBarcode}" />
-		<sql:param value="${addDescription}" />
-		<sql:param value="${addWeight}" />
-		<sql:param value="${addThreshold}" />
-	</sql:update>
-</core:if>
 
 <% 
 	int perPage = 5;
@@ -169,6 +170,13 @@
 				</core:forEach>
 			</div>
 		</div>
+	</core:if>
+	<core:if test="<%=insertTrue%>">
+		<p class="list-group-item list-group-item-warning">
+			<b>Produit ajouté</b><br/>
+			<core:out value="${addName}:" />
+			<core:out value="${addBarcode}" />
+		</p>
 	</core:if>
 	<div>
 	 	<form>
