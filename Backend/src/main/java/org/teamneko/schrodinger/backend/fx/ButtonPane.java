@@ -1,6 +1,5 @@
 package org.teamneko.schrodinger.backend.fx;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
@@ -11,9 +10,11 @@ public class ButtonPane extends CustomAnchorPane {
 	}
 	
 	@FXML protected void modifier(ActionEvent event) {
+		Context.getInstance().getMainWindow().showModificationPane();
 	}
 	
-	@FXML protected void quitter(ActionEvent event) {
-		Platform.exit();
+	@FXML protected void parametres(ActionEvent event) {
+		Context.getInstance().getMainWindow().showOptionsPane();
 	}
+
 }

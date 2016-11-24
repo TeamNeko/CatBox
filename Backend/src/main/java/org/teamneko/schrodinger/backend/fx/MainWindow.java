@@ -39,4 +39,12 @@ public class MainWindow extends SplitPane {
 	public void showButtonPane() {
 		setPane(new ButtonPane(), LEFT);
 	}
+	
+	public void showOptionsPane() {
+		setPane(new OptionsPane(), LEFT);
+	}
+	
+	public void showModificationPane() {
+		setPane(new ModificationPane(), LEFT);
+	}
 }

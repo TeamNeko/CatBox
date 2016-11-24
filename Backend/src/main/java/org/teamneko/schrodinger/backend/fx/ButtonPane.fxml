@@ -7,5 +7,5 @@
 
 <fx:root minWidth="160" minHeight="320" type="javafx.scene.layout.AnchorPane" xmlns:fx="http://javafx.com/fxml">
             <Button onAction="#modifier" layoutX="1" layoutY="1" prefWidth="156" prefHeight="158" text="Modifier" />
-            <Button onAction="#quitter" layoutX="1" layoutY="160" prefWidth="156" prefHeight="158" text="Quittter" />
+            <Button onAction="#parametres" layoutX="1" layoutY="160" prefWidth="156" prefHeight="158" text="Paramètres" />
 </fx:root>

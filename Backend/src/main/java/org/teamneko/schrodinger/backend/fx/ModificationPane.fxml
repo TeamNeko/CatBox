@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<fx:root minWidth="160" minHeight="320" type="javafx.scene.layout.AnchorPane" xmlns:fx="http://javafx.com/fxml">
+            <Button onAction="#plus" layoutX="1" layoutY="1" prefWidth="78" prefHeight="80" text="+" />
+            <Button onAction="#minus" layoutX="1" layoutY="80" prefWidth="78" prefHeight="80" text="-" />
+            <Button onAction="#up" layoutX="79" layoutY="1" prefWidth="78" prefHeight="80" text="↑" />
+            <Button onAction="#down" layoutX="79" layoutY="80" prefWidth="78" prefHeight="80" text="↓" />
+            <Button onAction="#ok" layoutX="1" layoutY="160" prefWidth="156" prefHeight="80" text="Confirmer" />
+            <Button onAction="#cancel" layoutX="1" layoutY="240" prefWidth="156" prefHeight="80" text="Annuler" />
+</fx:root>
