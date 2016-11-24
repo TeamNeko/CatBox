@@ -32,7 +32,7 @@ public class DetailPane extends CustomAnchorPane {
 	
 	public void showBox(Box box) {
 		printInListView("Box: ");
-		NamedProduct[] content = Context.getInstance().getRestClient().getBoxDetails(box.getId());
+		NamedProduct[] content = Context.getInstance().getPopulateNamedProducts();
 		for(int i=0; i<content.length; i++)
 		{
 			detailList.getItems().add(content[i].getName() + " x" + content[i].getQuantity());

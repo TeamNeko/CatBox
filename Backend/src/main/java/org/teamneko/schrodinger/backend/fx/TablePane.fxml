@@ -4,14 +4,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root type="javafx.scene.layout.AnchorPane" minHeight="240" minWidth="210" xmlns:fx="http://javafx.com/fxml">
-	<children>
- 		<TableView layoutX="0" layoutY="0" prefWidth="210" prefHeight="240">
-     		<columns>
-          		<TableColumn prefWidth="130" text="Nom" />
-          		<TableColumn prefWidth="40" text="Qty" />
-          		<TableColumn prefWidth="40" text="+/-" />
-     		</columns>
-		</TableView>
-	</children>
+
+<fx:root type="javafx.scene.layout.AnchorPane" xmlns:fx="http://javafx.com/fxml" >	
+	<HBox fillHeight="true" prefWidth="320" prefHeight="20" >
+		<Label text=" Barcode:" />
+		<TextField fx:id="barcodeField" disable="true" />
+	</HBox>
+	<TableView fx:id="detailTable" layoutX="0" layoutY="25" prefWidth="320" prefHeight="260"/>
 </fx:root>

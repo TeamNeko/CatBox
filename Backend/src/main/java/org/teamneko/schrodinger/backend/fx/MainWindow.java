@@ -20,7 +20,7 @@ public class MainWindow extends SplitPane {
 	}
 	
 	public void showTablePane() {
-		setPane(new TablePane(), RIGHT);
+		setPane(new TablePane(), RIGHT); 
 	}
 	
 	public void showDetailPane() {

@@ -1,8 +1,12 @@
 package org.teamneko.schrodinger.backend.fx;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
+import org.teamneko.meowlib.json.Box;
 import org.teamneko.meowlib.json.BoxSearchResult;
+import org.teamneko.meowlib.json.NamedProduct;
 import org.teamneko.meowlib.json.ProductSearchResult;
 import org.teamneko.meowlib.json.SearchResult;
 import org.teamneko.meowlib.json.User;
@@ -17,6 +21,9 @@ import org.teamneko.schrodinger.backend.gpio.RGBLed;
 import org.teamneko.schrodinger.client.SchrodingerClient;
 
 import com.sun.jersey.api.client.UniformInterfaceException;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class Context {
 	private static Context instance = new Context();
@@ -34,11 +41,16 @@ public class Context {
 	private RGBLed led = null;
 	private Piezo piezo = null;
 	
+	private ObservableList<ModifiedProduct> temporaryModifiedProducts = null;
+	private NamedProduct[] populateNamedProducts = null;
+	
 	public void createBox() {
 		System.out.println("Create Box " + lastSearchedBarcode);
 	}
 	
 	public void editBox() {
+		mainWindow.showModificationPane();
+		mainWindow.showTablePane();
 		System.out.println("Edit Box " + lastSearchedBarcode);
 	}
 	
@@ -50,7 +62,6 @@ public class Context {
 	 	} catch(UniformInterfaceException e) {
 	 		return false;
 	 	}
-		
 		return true;
 	}
 	
@@ -88,7 +99,14 @@ public class Context {
 	public User getUser() {
 		return user;
 	}
+	
+	public ObservableList<ModifiedProduct> getTemporaryModifiedProd() {
+		return temporaryModifiedProducts;
+	}
 
+	public NamedProduct[] getPopulateNamedProducts() {
+		return populateNamedProducts;
+	}
 	public void removeBarcodeCallback() {
 		keyboardHandler.removeKeyboardListener();
 	}
@@ -101,11 +119,13 @@ public class Context {
 		{
 			mainWindow.showDisabledBoxLeftPane();
 			pane.showProduct(((ProductSearchResult) lastSearchResult).getProduct());
-		}
+		}	
 		else if(lastSearchResult.getClass() == BoxSearchResult.class)
 		{
 			mainWindow.showEditBoxLeftPane();
-			pane.showBox(((BoxSearchResult) lastSearchResult).getBox());
+			Box boxResult = ((BoxSearchResult) lastSearchResult).getBox();
+		    setupBoxDetail(boxResult);
+			pane.showBox(boxResult);
 		}
 		else if(lastSearchResult.getClass() == UserSearchResult.class)
 		{
@@ -117,6 +137,18 @@ public class Context {
 			mainWindow.showCreateBoxLeftPane();
 			pane.showNotFound();
 		}
+	}
+
+	private void setupBoxDetail(Box boxResult) {
+		populateNamedProducts = Context.getInstance().getRestClient().getBoxDetails(boxResult.getId());
+		List<ModifiedProduct> modProdList = new ArrayList();
+		for(int i=0; i<populateNamedProducts.length; i++)
+		{
+			modProdList.add(new ModifiedProduct(populateNamedProducts[i].getId(), 
+								    			populateNamedProducts[i].getQuantity(), 
+								    			populateNamedProducts[i].getName()));
+		}
+		temporaryModifiedProducts = FXCollections.observableArrayList(modProdList);
 	}
 
 	public void setBarcodeCallback(Consumer<String> consumer) {

@@ -11,9 +11,9 @@
 
 <fx:root type="javafx.scene.layout.AnchorPane" xmlns:fx="http://javafx.com/fxml" >	
 	<HBox alignment="CENTER" prefWidth="320"  prefHeight="240">
-	    <children>
-	    	<ImageView fx:id="etatLecture"></ImageView>
-	       <Label>Veuillez scanner votre carte RFID</Label>
+		<children>
+			<ImageView fx:id="etatLecture"></ImageView>
+	     	<Label text="Veuillez scanner votre carte RFID"></Label>
 	    </children>
 	</HBox>
 	<TextField fx:id="rfidText" onAction="#login" prefWidth="320" prefHeight="20" layoutY="295"/>
