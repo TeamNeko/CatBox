@@ -11,7 +11,7 @@ public class DeviceFactory {
 	private static boolean pi4jSetUp = false;
 	private static boolean pi4jMissing = false;
 
-	private static final int DEFAULT_SPI_PORT = 500000;
+	private static final int DEFAULT_SPI_PORT = 0;
 	private static final int DEFAULT_CLOCK_SPEED = 500000;
 	private static final int DEFAULT_RESET_PIN = 22;
 	

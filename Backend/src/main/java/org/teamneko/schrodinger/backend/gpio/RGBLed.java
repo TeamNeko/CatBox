@@ -52,7 +52,9 @@ public class RGBLed {
 			blueValue = 255;
 		}
 		
-		write((redValue*100)/255, (greenValue*100)/255, (blueValue*100)/255);		
+		write((redValue  *100)/255, 
+			  (greenValue*100)/255, 
+			  (blueValue *100)/255);		
 	}
 	
 	public void flashRed() throws InterruptedException{	

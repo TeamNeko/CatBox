@@ -180,22 +180,67 @@ public class MFRC522 implements RFIDReader {
 
 	public String currentID = "0000000000";
 
-	//private int clockSpeed;
+	private int clockSpeed;
 	//private int resetPin;
 	private int spiPort; // "GPIO10" MOSI, "GPIO09" MISO
 
-	MFRC522(int spiPort, int resetPin, int clockSpeed) throws DeviceInitializationException {
+	/**
+	 * Enables the parameters of the MFRC522 object.
+	 * In order to use the object you must initialise the SPI 
+	 * communication on the RPi.
+	 * 
+	 * The SPI ports are predefined on the RPi, 
+	 * please refer to https://www.raspberrypi.org/ to find the 
+	 * proper port for your RPi version and needs
+	 * 
+	 * @param spiPort
+	 * @param resetPin
+	 * @param clockSpeed
+	 */
+	
+	
+	public MFRC522(int spiPort, int resetPin, int clockSpeed) {
+		
 		this.spiPort = spiPort;
 		//this.resetPin = resetPin;
-		//this.clockSpeed = clockSpeed;
+		this.clockSpeed = clockSpeed;
 		
-		if (Spi.wiringPiSPISetup(spiPort, clockSpeed) <= -1)
-			throw new DeviceInitializationException("Error opening SPI Device");
-
 		Gpio.pinMode(resetPin, Gpio.OUTPUT);
 		Gpio.digitalWrite(resetPin, Gpio.HIGH);
 	}
+	
+	
+	/**
+	 * This function is proper to the PI4J library and should 
+	 * be initialised only ONCE. Even if you use multiple gpio pins. 
+	 * This CANNOT be called twice
+	 * 
+	 * It enables the SPI communication on the predefined 
+	 * pins for the SPI ports and communication speed
+	 * 
+	 * @throws DeviceInitializationException
+	 */
+	
+	public void InitialisationSPI() throws DeviceInitializationException{
+		
+		if (Spi.wiringPiSPISetup(spiPort, clockSpeed) <= -1)
+			throw new DeviceInitializationException("Error opening SPI Device");
+		
+	}
 
+	
+	/**
+	 * Simple conversion of a table of bytes into their 
+	 * correspondant array of hexadecimal values
+	 * 
+	 * Since in a byte you can have valeus from 0 to F (15)
+	 * It writes the value of a byte on two character 
+	 * ex: byte 6 => "06"
+	 * 
+	 * @param bytes
+	 * @return
+	 */
+	
 	public static String bytesToHex(byte[] bytes) {
 		final char[] hexArray = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 		char[] hexChars = new char[bytes.length * 2];
@@ -207,10 +252,24 @@ public class MFRC522 implements RFIDReader {
 		}
 		return new String(hexChars);
 	}
-
-	// Anti-collision detection.
-	// Returns tuple of (error state, tag ID).
-	// back_data
+	
+	/**
+	 * This provides a protection against collision
+	 * In his parameter he passes the ID of the card 
+	 * to read to the precedent and subsequent function
+	 * 
+	 * If the function was able to correctly read an ID 
+	 * without a collision, it returns true and the 
+	 * ID is passed by back_data
+	 * 
+	 * Otherwise, if it reads the same card for a second 
+	 * time or sensor wasn't able to read the card, 
+	 * it returns a back_data full of '0' 
+	 * 
+	 * @param back_data
+	 * @return
+	 */
+	
 	public int collisionDetection(byte[] back_data) {
 		int status;
 		byte[] serial_number = new byte[2];
@@ -231,13 +290,34 @@ public class MFRC522 implements RFIDReader {
 					status = MI_ERR;
 					System.out.println("check error");
 				}
-			} else {
+			} 
+			else {
 				status = MI_OK;
 				System.out.println("backLen[0]=" + backLen[0]);
 			}
 		}
 		return status;
 	}
+	
+	
+	/**
+	 * Initialise the MFRC522 by setting his:
+	 * TMode Register
+	 * 
+	 * Prescaler
+	 * 
+	 * Load Registers (Low and High, because it doesn't fit on one)
+	 * 
+	 * ASK Register
+	 * 
+	 * Mode Register
+	 * 
+	 * RFCfg Register
+	 * 	To enable more power to the sensor 
+	 * 	to expand his reading range
+	 * 
+	 * 
+	 */
 
 	public void init() {
 		reset();
@@ -251,18 +331,55 @@ public class MFRC522 implements RFIDReader {
 		turnAntennaOn();
 	}
 
+	
+	
+	/**
+	 * Enables reading with fonctional parameters 
+	 * 
+	 * 500ms between readings
+	 * 3 successful hits needed to write the card ID 
+	 * 	in the currentID member parameter of the function
+	 * 
+	 */
 	public boolean read() {
 		try {
 			return readID(500, 3);
-		} catch(InterruptedException e) {
+		} 
+		catch(InterruptedException e) {
 			return false;
 		}
 	}
 
+	
+	/**
+	 * Getter of the currentID read by the sensor
+	 */
+	
 	public String getID() {
 		return currentID;
 	}
 	
+	
+	
+	/**
+	 * Returns a boolean to indicate if the reading 
+	 * was successful or not
+	 * 
+	 * 
+	 * @param sleepTime
+	 * 	Used to make a pause between the reads
+	 * 
+	 * @param nbHit
+	 * 	Number of hits needed to write the ID read in 
+	 * 	the member variable currentID to ensure that 
+	 * 	there is no misread, you can increase this number, 
+	 * 	but it diminish performance
+	 * 
+	 * @return 
+	 * 
+	 * 
+	 * @throws InterruptedException
+	 */
 	public boolean readID(int sleepTime, int nbHit) throws InterruptedException {
 
 		// Security if user enters an unallowed number of Hit
@@ -331,6 +448,14 @@ public class MFRC522 implements RFIDReader {
 
 		}
 	}
+	
+	
+	
+	/**
+	 * 
+	 * 
+	 */
+	
 
 	public int request(byte req_mode, int[] back_bits) {
 		int status;
@@ -351,6 +476,10 @@ public class MFRC522 implements RFIDReader {
 		return status;
 	}
 
+	
+	
+	
+	
 	private void clearBitMask(byte address, byte mask) {
 		byte value = readRegister(address);
 		writeRegister(address, (byte) (value & (~mask)));

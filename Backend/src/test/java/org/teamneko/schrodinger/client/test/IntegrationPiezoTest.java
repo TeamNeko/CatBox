@@ -7,7 +7,7 @@ import org.teamneko.schrodinger.backend.gpio.Pi4JMissingException;
 import org.teamneko.schrodinger.backend.gpio.Piezo;
 import org.teamneko.schrodinger.backend.gpio.Tone;
 
-public class PiezoTest {
+public class IntegrationPiezoTest {
 	private final static Note auClairDeLaLune[] = {
 		new Note(Tone.C4, Duration.Quarter),
 		new Note(Tone.C4, Duration.Quarter),
