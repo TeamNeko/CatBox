@@ -37,6 +37,7 @@ public class DeviceFactory {
 		setupPi4j();
 		
 		MFRC522 instance = new MFRC522(spiPort, resetPin, clockSpeed);
+		instance.InitialisationSPI();
 		instance.init();
 		return instance;
 	}
