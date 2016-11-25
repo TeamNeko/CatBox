@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import org.teamneko.meowlib.json.Box;
 import org.teamneko.meowlib.json.BoxSearchResult;
 import org.teamneko.meowlib.json.NamedProduct;
+import org.teamneko.meowlib.json.Product;
 import org.teamneko.meowlib.json.ProductSearchResult;
 import org.teamneko.meowlib.json.SearchResult;
 import org.teamneko.meowlib.json.TransactionRequest;
@@ -188,7 +189,32 @@ public class Context {
 			pane.showNotFound();
 		}
 	}
-
+	
+	public void search(String barcode, TablePane pane) {
+		lastSearchResult = restClient.search(barcode);
+		
+		if(lastSearchResult.getClass() == ProductSearchResult.class)
+		{
+			Product product = ((ProductSearchResult) lastSearchResult).getProduct();
+			ModifiedProduct addProduct = getTableProduct(product, (List<ModifiedProduct>)pane.detailTable.getItems());
+			if(addProduct == null) {
+				addProduct = new ModifiedProduct(product.getId(), 0, product.getName(), 1);
+				pane.addRowItem(addProduct);
+				modifiedProducts.add(new TransactionRequest.Product(addProduct.getId(),1));
+				productListLength++;
+			}
+		}
+	}
+	
+	public ModifiedProduct getTableProduct(Product product, List<ModifiedProduct> modifiedList) {
+		for (ModifiedProduct item : modifiedList) {
+			if(item.getId() == product.getId()) {
+				return item;
+			}
+		}
+		return null;
+	}
+	
 	private void setupBoxDetail(Box boxResult) {
 		populateNamedProducts = Context.getInstance().getRestClient().getBoxDetails(boxResult.getId());
 		List<ModifiedProduct> modProdList = new ArrayList();

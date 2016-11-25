@@ -17,6 +17,13 @@ public class ModifiedProduct {
 		nameProperty().set(name);
 		modifiedqtyProperty().set("0");
 	}	
+	
+	public ModifiedProduct(int id, int quantity, String name, int modifiedQty) {
+		idProperty().set(id);
+		quantityProperty().set(quantity);
+		nameProperty().set(name);
+		modifiedqtyProperty().set(Integer.toString(modifiedQty));
+	}
 
 	public IntegerProperty idProperty() {
 		if (id == null) id = new SimpleIntegerProperty(this, "0");

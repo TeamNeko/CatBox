@@ -20,6 +20,11 @@ public class TablePane extends CustomAnchorPane {
 		selectRow(0);
 	}
 
+	public void handleBarcode(String barcode) {
+		barcodeField.setText(barcode);
+		Context.getInstance().search(barcode, this);
+	}
+	
 	private void setupDetailTable() {
 		detailTable.setItems(Context.getInstance().getTemporaryModifiedProd());
 		TableColumn<ModifiedProduct,String> nameCol = new TableColumn<ModifiedProduct,String>("Nom");
@@ -36,10 +41,6 @@ public class TablePane extends CustomAnchorPane {
 		
 		detailTable.getColumns().setAll(nameCol,qteCol,modqteCol);
 	}
-
-	public void handleBarcode(String barcode) {
-		System.out.println("Barcode: " + barcode);
-	}
 	
 	public void selectRow(int row) {
 		detailTable.requestFocus();
@@ -49,6 +50,10 @@ public class TablePane extends CustomAnchorPane {
 	
 	public void setRowItem(int row, ModifiedProduct modifiedProduct) {
 		detailTable.getItems().set(row, modifiedProduct);
+	}
+	
+	public void addRowItem(ModifiedProduct product) {
+		detailTable.getItems().add(product);
 	}
 	
 	public ModifiedProduct getRowItem(int row) {
