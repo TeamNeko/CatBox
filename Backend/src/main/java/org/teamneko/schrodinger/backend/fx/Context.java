@@ -29,12 +29,13 @@ public class Context {
 	private static Context instance = new Context();
 	
 	private KeyboardHandler keyboardHandler;
+	private TablePane tablePane;
 	
 	private MainWindow mainWindow;
 	private SchrodingerClient restClient;
 	private User user;
 	
-	private String lastSearchedBarcode;
+	private String lastSearchedBarcode = "";
 	private SearchResult lastSearchResult;
 	
 	private MFRC522 rfid = null;
@@ -43,6 +44,7 @@ public class Context {
 	
 	private ObservableList<ModifiedProduct> temporaryModifiedProducts = null;
 	private NamedProduct[] populateNamedProducts = null;
+	private int productListLength = 0;
 	
 	public void createBox() {
 		System.out.println("Create Box " + lastSearchedBarcode);
@@ -100,15 +102,32 @@ public class Context {
 		return user;
 	}
 	
+	public String getLastSearchedBarcode() {
+		return lastSearchedBarcode;
+	}
+	
 	public ObservableList<ModifiedProduct> getTemporaryModifiedProd() {
 		return temporaryModifiedProducts;
+	}
+	
+	public int getProductListLength() {
+		return productListLength;
 	}
 
 	public NamedProduct[] getPopulateNamedProducts() {
 		return populateNamedProducts;
 	}
+	
 	public void removeBarcodeCallback() {
 		keyboardHandler.removeKeyboardListener();
+	}
+	
+	public void setTablePane(TablePane table) {
+		tablePane = table;
+	}
+	
+	public void selectTableRow(int row) {
+		tablePane.selectRow(row);
 	}
 	
 	public void search(String barcode, DetailPane pane) {
@@ -142,7 +161,8 @@ public class Context {
 	private void setupBoxDetail(Box boxResult) {
 		populateNamedProducts = Context.getInstance().getRestClient().getBoxDetails(boxResult.getId());
 		List<ModifiedProduct> modProdList = new ArrayList();
-		for(int i=0; i<populateNamedProducts.length; i++)
+		productListLength = populateNamedProducts.length;
+		for(int i=0; i < productListLength; i++)
 		{
 			modProdList.add(new ModifiedProduct(populateNamedProducts[i].getId(), 
 								    			populateNamedProducts[i].getQuantity(), 

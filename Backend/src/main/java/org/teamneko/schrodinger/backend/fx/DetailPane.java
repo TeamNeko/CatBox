@@ -19,6 +19,9 @@ public class DetailPane extends CustomAnchorPane {
 	public DetailPane(){
 		super();
 		Context.getInstance().setBarcodeCallback(s -> handleBarcode(s));
+		String lastCodeBar = Context.getInstance().getLastSearchedBarcode();
+		if(!lastCodeBar.isEmpty())
+			handleBarcode(lastCodeBar);
 		HBox.setHgrow(barcodeField, Priority.ALWAYS);
 	}
 	

@@ -7,8 +7,8 @@
 
 <fx:root type="javafx.scene.layout.AnchorPane" xmlns:fx="http://javafx.com/fxml" >	
 	<HBox fillHeight="true" prefWidth="320" prefHeight="20" >
-		<Label text=" Barcode:" />
+		<Label fx:id="barcode" text=" Barcode:" />
 		<TextField fx:id="barcodeField" disable="true" />
 	</HBox>
-	<TableView fx:id="detailTable" layoutX="0" layoutY="25" prefWidth="320" prefHeight="260"/>
+	<TableView fx:id="detailTable" layoutX="0" layoutY="25" prefWidth="320" prefHeight="295"/>
 </fx:root>
