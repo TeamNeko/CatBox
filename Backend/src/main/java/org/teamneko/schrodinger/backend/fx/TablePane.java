@@ -18,10 +18,10 @@ public class TablePane extends CustomAnchorPane {
 		barcodeField.setText(Context.getInstance().getLastSearchedBarcode());
 		setupDetailTable();
 		selectRow(0);
+		System.out.println(detailTable.getItems().toString());
 	}
 
 	public void handleBarcode(String barcode) {
-		barcodeField.setText(barcode);
 		Context.getInstance().search(barcode, this);
 	}
 	

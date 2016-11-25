@@ -15,14 +15,14 @@ public class ModifiedProduct {
 		idProperty().set(id);
 		quantityProperty().set(quantity);
 		nameProperty().set(name);
-		modifiedqtyProperty().set("0");
+		setModifiedqty(0);
 	}	
 	
 	public ModifiedProduct(int id, int quantity, String name, int modifiedQty) {
 		idProperty().set(id);
 		quantityProperty().set(quantity);
 		nameProperty().set(name);
-		modifiedqtyProperty().set(Integer.toString(modifiedQty));
+		setModifiedqty(modifiedQty);
 	}
 
 	public IntegerProperty idProperty() {

@@ -50,6 +50,9 @@ public class Context {
 	List<TransactionRequest.Product> modifiedProducts;
 	
 	public void createBox() {
+		setupEmptyDetail();
+		mainWindow.showModificationPane();
+		mainWindow.showTablePane();
 		System.out.println("Create Box " + lastSearchedBarcode);
 	}
 	
@@ -227,6 +230,11 @@ public class Context {
 		}
 		temporaryModifiedProducts = FXCollections.observableArrayList(modProdList);
 	}
+	
+	private void setupEmptyDetail() {
+		List<ModifiedProduct> modProdList = new ArrayList();
+		temporaryModifiedProducts = FXCollections.observableArrayList(modProdList);
+	} 
 
 	public void setBarcodeCallback(Consumer<String> consumer) {
 		keyboardHandler.setKeyboardListener(new BarcodeScannerListener(consumer));
