@@ -233,6 +233,7 @@ public class Context {
 	
 	private void setupEmptyDetail() {
 		List<ModifiedProduct> modProdList = new ArrayList();
+		productListLength = 0;
 		temporaryModifiedProducts = FXCollections.observableArrayList(modProdList);
 	} 
 
