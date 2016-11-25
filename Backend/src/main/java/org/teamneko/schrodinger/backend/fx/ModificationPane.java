@@ -11,11 +11,11 @@ public class ModificationPane extends CustomAnchorPane {
 	}
 	
 	@FXML protected void plus(ActionEvent event) {
-		
+		Context.getInstance().modifyTableRow(selectIndex, true);
 	}
 	
 	@FXML protected void minus(ActionEvent event) {
-		
+		Context.getInstance().modifyTableRow(selectIndex, false);
 	}
 	
 	@FXML protected void up(ActionEvent event) {
@@ -36,7 +36,9 @@ public class ModificationPane extends CustomAnchorPane {
 	}
 	
 	@FXML protected void ok(ActionEvent event) {
-	
+		Context.getInstance().commitTransaction();
+		Context.getInstance().getMainWindow().showEditBoxLeftPane();
+		Context.getInstance().getMainWindow().showDetailPane();
 	}
 	
 	@FXML protected void cancel(ActionEvent event) {

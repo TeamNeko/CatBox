@@ -9,6 +9,7 @@ import org.teamneko.meowlib.json.BoxSearchResult;
 import org.teamneko.meowlib.json.NamedProduct;
 import org.teamneko.meowlib.json.ProductSearchResult;
 import org.teamneko.meowlib.json.SearchResult;
+import org.teamneko.meowlib.json.TransactionRequest;
 import org.teamneko.meowlib.json.User;
 import org.teamneko.meowlib.json.UserSearchResult;
 import org.teamneko.schrodinger.backend.gpio.DeviceFactory;
@@ -45,6 +46,7 @@ public class Context {
 	private ObservableList<ModifiedProduct> temporaryModifiedProducts = null;
 	private NamedProduct[] populateNamedProducts = null;
 	private int productListLength = 0;
+	List<TransactionRequest.Product> modifiedProducts;
 	
 	public void createBox() {
 		System.out.println("Create Box " + lastSearchedBarcode);
@@ -130,6 +132,35 @@ public class Context {
 		tablePane.selectRow(row);
 	}
 	
+	public void modifyTableRow(int row, boolean add) {
+		ModifiedProduct modifiedProduct = tablePane.getRowItem(row);
+		if (add) 
+			modifiedProduct.setModifiedqty(modifiedProduct.getModifiedqty()+1);
+		else if (!add && (modifiedProduct.getModifiedqty()+modifiedProduct.getQuantity())!=0)
+			modifiedProduct.setModifiedqty(modifiedProduct.getModifiedqty()-1);
+		int quantity = modifiedProduct.getModifiedqty();
+		TransactionRequest.Product product = getModifiedProduct(modifiedProduct.getId());
+		if (product!=null) 
+			product.setQuantity(quantity);
+		else
+			modifiedProducts.add(new TransactionRequest.Product(modifiedProduct.getId(),quantity));
+		tablePane.setRowItem(row, modifiedProduct);
+	}
+	
+	public TransactionRequest.Product getModifiedProduct(int id){
+		for(TransactionRequest.Product product : modifiedProducts) {
+			if(product.getId() == id)
+				return product;
+		}
+		return null;
+	}
+	
+	public void commitTransaction() {
+		restClient.postTransaction(new TransactionRequest((int)user.getId(),
+														  lastSearchedBarcode,
+														  modifiedProducts));
+	}
+	
 	public void search(String barcode, DetailPane pane) {
 		lastSearchResult = restClient.search(barcode);
 		lastSearchedBarcode = barcode;
@@ -209,5 +240,6 @@ public class Context {
 		keyboardHandler = new KeyboardHandler();
 		mainWindow = new MainWindow();
 		restClient = new SchrodingerClient("http://localhost:8080/Frontend/rest");
+		modifiedProducts = new ArrayList();
 	}	
 }

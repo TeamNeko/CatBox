@@ -9,13 +9,13 @@ public class ModifiedProduct {
 	private IntegerProperty  id;
 	private IntegerProperty  quantity;
 	private StringProperty  name;
-	private IntegerProperty  modifiedQty;
+	private StringProperty  modifiedQty;
 	
 	public ModifiedProduct(int id, int quantity, String name) {
 		idProperty().set(id);
 		quantityProperty().set(quantity);
 		nameProperty().set(name);
-		modifiedqtyProperty().set(0);
+		modifiedqtyProperty().set("0");
 	}	
 
 	public IntegerProperty idProperty() {
@@ -57,16 +57,21 @@ public class ModifiedProduct {
 		nameProperty().set(name);
 	}
 	
-	public IntegerProperty modifiedqtyProperty() {
-		if (modifiedQty == null) modifiedQty = new SimpleIntegerProperty(this, "0");
+	public StringProperty modifiedqtyProperty() {
+		if (modifiedQty == null) modifiedQty = new SimpleStringProperty(this, "0");
         return modifiedQty; 
 	}
 	
 	public int getModifiedqty() {
-		return modifiedqtyProperty().get();
+		return Integer.parseInt(modifiedqtyProperty().get().replace("+", ""));
 	}
 	
 	public void setModifiedqty(int quantity) {
-		modifiedqtyProperty().set(quantity);
+		String newQty = "";
+		if(quantity>0)
+			newQty = "+" + quantity;
+		else
+			newQty = Integer.toString(quantity);
+		modifiedqtyProperty().set(newQty);
 	}
 }

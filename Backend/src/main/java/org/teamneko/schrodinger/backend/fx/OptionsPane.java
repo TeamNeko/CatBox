@@ -13,7 +13,10 @@ public class OptionsPane extends CustomAnchorPane {
 	}
 	
 	@FXML protected void annuler(ActionEvent event) {
-		Context.getInstance().getMainWindow().showDisabledBoxLeftPane();
+		if(Context.getInstance().getLastSearchedBarcode().isEmpty())
+			Context.getInstance().getMainWindow().showDisabledBoxLeftPane();
+		else
+			Context.getInstance().getMainWindow().showEditBoxLeftPane();
 	}
 	
 	@FXML protected void deconnection(ActionEvent event) {

@@ -12,6 +12,7 @@ public class TablePane extends CustomAnchorPane {
 	
 	public TablePane() {
 		super();
+		this.setMouseTransparent(true);
 		Context.getInstance().setTablePane(this);
 		Context.getInstance().setBarcodeCallback(s -> handleBarcode(s));
 		barcodeField.setText(Context.getInstance().getLastSearchedBarcode());
@@ -44,5 +45,13 @@ public class TablePane extends CustomAnchorPane {
 		detailTable.requestFocus();
 		detailTable.getSelectionModel().select(row);
 		detailTable.getFocusModel().focus(row);	
+	}
+	
+	public void setRowItem(int row, ModifiedProduct modifiedProduct) {
+		detailTable.getItems().set(row, modifiedProduct);
+	}
+	
+	public ModifiedProduct getRowItem(int row) {
+		return (ModifiedProduct) detailTable.getItems().get(row);
 	}
 }
