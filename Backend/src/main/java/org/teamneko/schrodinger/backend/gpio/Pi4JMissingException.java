@@ -1,4 +1,4 @@
-package org.teamneko.schrodinger.backend.RC522;
+package org.teamneko.schrodinger.backend.gpio;
 
 public class Pi4JMissingException extends Exception {
 	private static final long serialVersionUID = 2342413638469372491L;

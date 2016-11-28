@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.teamneko.meowlib.json.TransactionRequest;
 import org.teamneko.meowlib.json.TransactionRequest.Product;
 
-public class TransactionRequestTest {
+public class DtoTransactionRequestTest {
 	
 	private TransactionRequest testTransactionRequest;
 	private TransactionRequest.Product testTransactProduct;
@@ -25,7 +25,7 @@ public class TransactionRequestTest {
 	
 	@Test
 	public void getSetTransactionRequestTest() 
-	{
+	{ 
 		assertEquals("",testTransactionRequest.getBox());
 		assertEquals(-1,testTransactionRequest.getUser());
 		assertTrue(testTransactionRequest.getProductsModified().isEmpty());

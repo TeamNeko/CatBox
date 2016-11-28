@@ -1,8 +1,0 @@
-/**
- * 
- */
-/**
- * @author William
- *
- */
-package RGBLib;

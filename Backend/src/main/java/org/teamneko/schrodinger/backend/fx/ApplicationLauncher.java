@@ -11,17 +11,20 @@ public class ApplicationLauncher extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		Context context = Context.getInstance();
-		try {
-			Scene scene = new Scene(context.getMainWindow(),480,320);
-			Context.getInstance().setKeyboardHandler(new KeyboardHandler(scene));
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			primaryStage.initStyle(StageStyle.UNDECORATED);
-			primaryStage.setScene(scene);
-			//primaryStage.setFullScreen(true);
-			primaryStage.show();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		
+		Scene scene = new Scene(context.getMainWindow(),480,320);
+		context.getMainWindow().showLoginPane();
+		context.getMainWindow().showButtonPane();
+		
+		Context.getInstance().setKeyboardHandler(new KeyboardHandler(scene));
+		
+		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+		
+		primaryStage.initStyle(StageStyle.UNDECORATED);
+		primaryStage.setScene(scene);
+		//primaryStage.setFullScreen(true);
+		
+		primaryStage.show();
 	}
 	
 	public static void main(String[] args) {
