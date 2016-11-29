@@ -4,6 +4,8 @@ import java.util.logging.Filter;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
+import org.teamneko.softspi.SoftSPI;
+
 import com.pi4j.util.NativeLibraryLoader;
 import com.pi4j.wiringpi.Gpio;
 
@@ -11,9 +13,12 @@ public class DeviceFactory {
 	private static boolean pi4jSetUp = false;
 	private static boolean pi4jMissing = false;
 
-	private static final int DEFAULT_SPI_PORT = 0;
-	private static final int DEFAULT_CLOCK_SPEED = 500000;
-	private static final int DEFAULT_RESET_PIN = 22;
+	private static final int DEFAULT_CS_PIN = 27;
+	private static final int DEFAULT_CLK_PIN = 29;
+	private static final int DEFAULT_MOSI_PIN = 28;
+	private static final int DEFAULT_MISO_PIN = 24;
+	private static final int DEFAULT_RESET_PIN = 25;
+	private static final int DEFAULT_SPI_SPEED = 250000;
 	
 	private static final int DEFAULT_RED_PIN = 21;
 	private static final int DEFAULT_GREEN_PIN = 22;
@@ -22,22 +27,13 @@ public class DeviceFactory {
 	private static final int DEFAULT_PIEZO_PIN = 23;
 	
 	public static MFRC522 createMFRC522() throws Pi4JMissingException, DeviceInitializationException {
-		return createMFRC522(DEFAULT_SPI_PORT, DEFAULT_RESET_PIN, DEFAULT_CLOCK_SPEED);
+		return createMFRC522(DEFAULT_RESET_PIN);
 	}
 	
-	public static MFRC522 createMFRC522(int spiPort) throws Pi4JMissingException, DeviceInitializationException {
-		return createMFRC522(spiPort, DEFAULT_RESET_PIN, DEFAULT_CLOCK_SPEED);
-	}
-	
-	public static MFRC522 createMFRC522(int spiPort, int resetPin) throws Pi4JMissingException, DeviceInitializationException {
-		return createMFRC522(spiPort, resetPin, DEFAULT_CLOCK_SPEED);
-	}
-	
-	public static MFRC522 createMFRC522(int spiPort, int resetPin, int clockSpeed) throws Pi4JMissingException, DeviceInitializationException {
+	public static MFRC522 createMFRC522(int resetPin) throws Pi4JMissingException, DeviceInitializationException {
 		setupPi4j();
 		
-		MFRC522 instance = new MFRC522(spiPort, resetPin, clockSpeed);
-		instance.InitialisationSPI();
+		MFRC522 instance = new MFRC522(new SoftSPI(DEFAULT_CS_PIN, DEFAULT_MISO_PIN, DEFAULT_MOSI_PIN, DEFAULT_CLK_PIN, DEFAULT_SPI_SPEED), resetPin);
 		instance.init();
 		return instance;
 	}

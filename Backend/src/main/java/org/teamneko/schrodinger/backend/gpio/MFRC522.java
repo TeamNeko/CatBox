@@ -3,7 +3,8 @@ package org.teamneko.schrodinger.backend.gpio;
 import java.util.Arrays;
 
 import com.pi4j.wiringpi.Gpio;
-import com.pi4j.wiringpi.Spi;
+
+import org.teamneko.softspi.SoftSPI;
 
 public class MFRC522 implements RFIDReader {
 
@@ -125,9 +126,8 @@ public class MFRC522 implements RFIDReader {
 	
 	   public  String currentID = "0000000000";
 	
-	   private int clockSpeed = 500000;
+	   private SoftSPI spi;
 	   private int resetPin = 22;
-	   private int spiPort = 0; 
 
 	/**
 	 * Enables the parameters of the MFRC522 object.
@@ -144,32 +144,9 @@ public class MFRC522 implements RFIDReader {
 	 */
 	
 	
-	public MFRC522(int spiPort, int resetPin, int clockSpeed) {
-		
-		this.spiPort = spiPort;
+	public MFRC522(SoftSPI spi, int resetPin) {
+		this.spi = spi;
 		this.resetPin = resetPin;
-		this.clockSpeed = clockSpeed;
-		
-		
-	}
-	
-	
-	/**
-	 * This function is proper to the PI4J library and should 
-	 * be initialized only ONCE. Even if you use multiple gpio pins. 
-	 * This CANNOT be called twice
-	 * 
-	 * It enables the SPI communication on the predefined 
-	 * pins for the SPI ports and communication speed
-	 * 
-	 * @throws DeviceInitializationException
-	 */
-	
-	public void InitialisationSPI() throws DeviceInitializationException{
-		
-		if (Spi.wiringPiSPISetup(spiPort, clockSpeed) <= -1)
-			throw new DeviceInitializationException("Error opening SPI Device");
-		
 	}
 
 	
@@ -463,24 +440,6 @@ public class MFRC522 implements RFIDReader {
 		byte value = readRegister(address);
 		writeRegister(address, (byte) (value & (~mask)));
 	}
-
-	/**
-	 * Formating the address to send it to the sensor
-	 * And making sure you are able to read on the sensor
-	 * @param address
-	 * @return
-	 */
-	
-	private byte readRegister(byte address) {
-		byte data[] = new byte[2];
-		data[0] = (byte) (((address << 1) & 0x7E) | 0x80);
-		data[1] = 0;
-		
-		int SPIWrite = Spi.wiringPiSPIDataRW(spiPort, data);
-		//if(SPIWrite == -1)
-		//	System.out.println("Device read error,address="+address);
-		return data[1];
-	}
 	
 	/**
 	 * Reset the sensor before intialising everything needed
@@ -596,21 +555,30 @@ public class MFRC522 implements RFIDReader {
 		
 		return status;
 	}
-
+	
 	/**
-	 * Writes a value to the adress
-	 * 
-	 * @param address
-	 * @param value
+	 * Read a register from the MFRC522
+	 * @param address Register address to read
+	 * @return Value in the register
 	 */
-	private void writeRegister(byte address, byte value) {
-
-		byte data[] = new byte[2];
-		data[0] = (byte) ((address << 1) & 0x7E);
-		data[1] = value;
-
-		int SPIWrite = Spi.wiringPiSPIDataRW(spiPort, data);
-		//if (SPIWrite == -1)
-			//System.out.println("Device write  error,address=" + address + ",value=" + value);
+	public byte readRegister(byte address) {
+		byte[] data = new byte[2];
+		data[0] = (byte)((address << 1) | 0x80);
+		
+		data = SoftSPI.readWrite(spi, data);
+		return data[1];
 	}
+	
+	/**
+	 * Write to a register on the SPI device
+	 * @param address Register address to write
+	 * @param value Value to write to the register
+	 */
+	public void writeRegister(byte address, byte value) {
+		byte[] data = new byte[2];
+		data[0] = (byte)((address << 1) & 0x7F);
+		data[1] = value;
+		SoftSPI.readWrite(spi, data);
+	}
+	
 }

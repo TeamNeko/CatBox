@@ -3,3 +3,9 @@
 */
 include ':MeowLib'
 project(':MeowLib').projectDir = new File(settingsDir, '../MeowLib')
+
+/*
+ * Adds SoftSPI as a dependency
+*/
+include ':SoftSPI'
+project(':SoftSPI').projectDir = new File(settingsDir, '../../SoftSPI')
