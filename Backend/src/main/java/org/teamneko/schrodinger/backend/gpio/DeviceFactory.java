@@ -23,18 +23,21 @@ public class DeviceFactory {
 	
 	private static final int DEFAULT_RED_PIN = 21;
 	private static final int DEFAULT_GREEN_PIN = 22;
-	private static final int DEFAULT_BLUE_PIN = 25;
+	private static final int DEFAULT_BLUE_PIN = 23;
 	
-	private static final int DEFAULT_PIEZO_PIN = 23;
+	private static final int DEFAULT_PIEZO_PIN = 26;
 	
 	public static MFRC522 createMFRC522() throws Pi4JMissingException, DeviceInitializationException {
 		return createMFRC522(DEFAULT_RESET_PIN);
 	}
 	
 	public static MFRC522 createMFRC522(int resetPin) throws Pi4JMissingException, DeviceInitializationException {
+		if (!pi4jSetUp)			// While the native library is not changed do not call WiringPiSetup a second time
+			pi4jSetUp = true;
 		setupPi4j();
 		
 		MFRC522 instance = new MFRC522(new SoftSPI(DEFAULT_CS_PIN, DEFAULT_MISO_PIN, DEFAULT_MOSI_PIN, DEFAULT_CLK_PIN, DEFAULT_SPI_SPEED, SpiMode.MODE_0), resetPin);
+		
 		instance.init();
 		return instance;
 	}

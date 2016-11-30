@@ -23,14 +23,15 @@ public class IntegrationRGBLEDTest {
 		int j;
 		while (true){
 			
-			j = 0;	
-			while (j < 5){
-			
+			j = 1;	
+			while (j <= 5){
+				
+				System.out.println("Iteration " + j + " de 5");
 				led.flashRed();
 				led.flashGreen();
 				led.flashBlue();
 				
-				j=j++;
+				j++;
 			}
 			
 			led.flashWhite();
