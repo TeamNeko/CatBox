@@ -10,5 +10,5 @@
 		<Label fx:id="barcode" text=" Barcode:" />
 		<TextField fx:id="barcodeField" disable="true" />
 	</HBox>
-	<TableView fx:id="detailTable" layoutX="0" layoutY="25" prefWidth="320" prefHeight="295"/>
+	<TableView fx:id="detailTable" layoutX="0" layoutY="25" prefWidth="320" prefHeight="275"/>
 </fx:root>

@@ -10,11 +10,11 @@
 <?import javafx.scene.image.ImageView?>
 
 <fx:root type="javafx.scene.layout.AnchorPane" xmlns:fx="http://javafx.com/fxml" >	
-	<HBox alignment="CENTER" prefWidth="320"  prefHeight="240">
+	<HBox alignment="CENTER" layoutY="1" prefWidth="320" prefHeight="200">
 		<children>
 			<ImageView fx:id="etatLecture"></ImageView>
 	     	<Label text="Veuillez scanner votre carte RFID"></Label>
 	    </children>
 	</HBox>
-	<TextField fx:id="rfidText" onAction="#login" prefWidth="320" prefHeight="20" layoutY="295"/>
+	<TextField fx:id="rfidText" onAction="#login" layoutY="275" prefWidth="320" prefHeight="20"/>
 </fx:root>

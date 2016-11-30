@@ -39,6 +39,7 @@ public class Context {
 	
 	private String lastSearchedBarcode = "";
 	private SearchResult lastSearchResult;
+	private boolean isNewBarcode;
 	
 	private MFRC522 rfid = null;
 	private RGBLed led = null;
@@ -67,6 +68,7 @@ public class Context {
 	 		user = restClient.requestUser(userCode);
 	 		mainWindow.showDetailPane();
 	 		mainWindow.showDisabledBoxLeftPane();
+	 		mainWindow.setLoginName(user);
 	 	} catch(UniformInterfaceException e) {
 	 		return false;
 	 	}
@@ -75,7 +77,7 @@ public class Context {
 	
 	public void logout() {
 		user = null;
-		
+		mainWindow.resetLoginName();
 		mainWindow.showLoginPane();
 		mainWindow.showShutdownPane();
 	}
@@ -110,6 +112,10 @@ public class Context {
 	
 	public String getLastSearchedBarcode() {
 		return lastSearchedBarcode;
+	}
+	
+	public boolean getIsNewBarcode() {
+		return isNewBarcode;
 	}
 	
 	public ObservableList<ModifiedProduct> getTemporaryModifiedProd() {
@@ -168,7 +174,7 @@ public class Context {
 	public void search(String barcode, DetailPane pane) {
 		lastSearchResult = restClient.search(barcode);
 		lastSearchedBarcode = barcode;
-		
+		isNewBarcode = false;
 		if(lastSearchResult.getClass() == ProductSearchResult.class)
 		{
 			mainWindow.showDisabledBoxLeftPane();
@@ -190,6 +196,7 @@ public class Context {
 		{
 			mainWindow.showCreateBoxLeftPane();
 			pane.showNotFound();
+			isNewBarcode = true;
 		}
 	}
 	
