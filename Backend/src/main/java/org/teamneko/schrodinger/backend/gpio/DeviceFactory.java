@@ -4,6 +4,9 @@ import java.util.logging.Filter;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
+import com.pi4j.io.gpio.Pin;
+import com.pi4j.io.gpio.RaspiPin;
+import com.pi4j.io.spi.SpiMode;
 import com.pi4j.util.NativeLibraryLoader;
 import com.pi4j.wiringpi.Gpio;
 
@@ -11,33 +14,30 @@ public class DeviceFactory {
 	private static boolean pi4jSetUp = false;
 	private static boolean pi4jMissing = false;
 
-	private static final int DEFAULT_SPI_PORT = 0;
-	private static final int DEFAULT_CLOCK_SPEED = 500000;
-	private static final int DEFAULT_RESET_PIN = 22;
+	private static final Pin DEFAULT_CS_PIN = RaspiPin.GPIO_27;
+	private static final Pin DEFAULT_CLK_PIN = RaspiPin.GPIO_29;
+	private static final Pin DEFAULT_MOSI_PIN = RaspiPin.GPIO_28;
+	private static final Pin DEFAULT_MISO_PIN = RaspiPin.GPIO_24;
+	private static final int DEFAULT_RESET_PIN = 25;
+	private static final long DEFAULT_SPI_SPEED = 250000;
 	
 	private static final int DEFAULT_RED_PIN = 21;
 	private static final int DEFAULT_GREEN_PIN = 22;
-	private static final int DEFAULT_BLUE_PIN = 25;
+	private static final int DEFAULT_BLUE_PIN = 23;
 	
-	private static final int DEFAULT_PIEZO_PIN = 23;
+	private static final int DEFAULT_PIEZO_PIN = 26;
 	
 	public static MFRC522 createMFRC522() throws Pi4JMissingException, DeviceInitializationException {
-		return createMFRC522(DEFAULT_SPI_PORT, DEFAULT_RESET_PIN, DEFAULT_CLOCK_SPEED);
+		return createMFRC522(DEFAULT_RESET_PIN);
 	}
 	
-	public static MFRC522 createMFRC522(int spiPort) throws Pi4JMissingException, DeviceInitializationException {
-		return createMFRC522(spiPort, DEFAULT_RESET_PIN, DEFAULT_CLOCK_SPEED);
-	}
-	
-	public static MFRC522 createMFRC522(int spiPort, int resetPin) throws Pi4JMissingException, DeviceInitializationException {
-		return createMFRC522(spiPort, resetPin, DEFAULT_CLOCK_SPEED);
-	}
-	
-	public static MFRC522 createMFRC522(int spiPort, int resetPin, int clockSpeed) throws Pi4JMissingException, DeviceInitializationException {
+	public static MFRC522 createMFRC522(int resetPin) throws Pi4JMissingException, DeviceInitializationException {
+		if (!pi4jSetUp)			// While the native library is not changed do not call WiringPiSetup a second time
+			pi4jSetUp = true;
 		setupPi4j();
 		
-		MFRC522 instance = new MFRC522(spiPort, resetPin, clockSpeed);
-		instance.InitialisationSPI();
+		MFRC522 instance = new MFRC522(new SoftSPI(DEFAULT_CS_PIN, DEFAULT_MISO_PIN, DEFAULT_MOSI_PIN, DEFAULT_CLK_PIN, DEFAULT_SPI_SPEED, SpiMode.MODE_0), resetPin);
+		
 		instance.init();
 		return instance;
 	}

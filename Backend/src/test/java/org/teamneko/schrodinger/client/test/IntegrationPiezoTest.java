@@ -47,12 +47,22 @@ public class IntegrationPiezoTest {
 		
 		System.out.println("Objet initialisé");
 		
+		
+		
 		while (true){
 			
+			System.out.println("Au Clair de la Lune");
+			
 			piezo.playSong(auClairDeLaLune);
+			
+			Thread.sleep(1000);
+			
+			System.out.println("Ouverture de la 5e symphonie de Beethoven");
+			
 			piezo.playSong(ouverture5eBeethoven);
 			
 			Thread.sleep(1000);
+			
 		}
 	}
 }

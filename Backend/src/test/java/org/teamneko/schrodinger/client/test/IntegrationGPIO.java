@@ -1,6 +1,7 @@
 package org.teamneko.schrodinger.client.test;
 
 import org.teamneko.schrodinger.backend.gpio.DeviceFactory;
+import org.teamneko.schrodinger.backend.gpio.DeviceInitializationException;
 import org.teamneko.schrodinger.backend.gpio.Duration;
 import org.teamneko.schrodinger.backend.gpio.MFRC522;
 import org.teamneko.schrodinger.backend.gpio.Note;
@@ -9,7 +10,6 @@ import org.teamneko.schrodinger.backend.gpio.Piezo;
 import org.teamneko.schrodinger.backend.gpio.RGBLed;
 import org.teamneko.schrodinger.backend.gpio.Tone;
 
-@SuppressWarnings("unused")
 public class IntegrationGPIO {
 
 	private final static Note auClairDeLaLune[] = {
@@ -40,6 +40,18 @@ public class IntegrationGPIO {
 	
 	public static void main(String[] args) throws InterruptedException {
 		
+		MFRC522 rfid;
+		try {
+			rfid = DeviceFactory.createMFRC522();
+		} 
+		catch (Pi4JMissingException e) {
+			System.out.println("RFID Error : Not running on a Raspberry Pi");
+			return;
+		} catch (DeviceInitializationException e) {
+			System.out.println("RFID Error : Initialization Error");
+			return;
+		}
+		
 		Piezo piezo;
 		try {
 			piezo = DeviceFactory.createPiezo();
@@ -58,45 +70,22 @@ public class IntegrationGPIO {
 			return;
 		}
 		
-		/*
-		MFRC522 rfid;
-		try {
-			rfid = DeviceFactory.DeviceFactory.createMFRC522();
-		} 
-		catch (Pi4JMissingException e) {
-			System.out.println("RFID Error : Not running on a Raspberry Pi");
-			return;
-		}
-		 */
-		int i = 0;
 		while (true){
 			
-			if (i > 2){ //use rfid.read() here
-				System.out.println("Detecte card: "   /* + rfid.getID()*/ );
+			if (rfid.read()){ // If the sensor has read a correct UID, GreenFlash + auClairDeLaLune
+				System.out.println("Detecte card: " + rfid.getID() + " Led flash : Vert, Au Clair de la lune" );
 				led.flashGreen();
 				piezo.playSong(auClairDeLaLune);
 				Thread.sleep(1000);
-				i=0;
 			}
 			
-			else{
-				System.out.println("Missed 4 times ");
+			else{ // If the sensor has not read a correct UID, RedFlash + ouverture5eBeethoven
+				System.out.println("Missed 4 times " + "Led flash : Rouge, Ouverture 5e Beethoven");
 				led.flashRed();
 				piezo.playSong(ouverture5eBeethoven);
-				i++;
 			}
 			
-			Thread.sleep(1000);
-			
-			
-			
-			
+			Thread.sleep(1000);	
 		}
-		
-		
-		
-		
-		
 	}
-
 }
