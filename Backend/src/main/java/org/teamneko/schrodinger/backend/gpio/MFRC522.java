@@ -4,8 +4,6 @@ import java.util.Arrays;
 
 import com.pi4j.wiringpi.Gpio;
 
-import org.teamneko.softspi.SoftSPI;
-
 public class MFRC522 implements RFIDReader {
 
 	/* 	 
@@ -565,7 +563,7 @@ public class MFRC522 implements RFIDReader {
 		byte[] data = new byte[2];
 		data[0] = (byte)((address << 1) | 0x80);
 		
-		data = SoftSPI.readWrite(spi, data);
+		data = spi.readWrite(data);
 		return data[1];
 	}
 	
@@ -578,7 +576,7 @@ public class MFRC522 implements RFIDReader {
 		byte[] data = new byte[2];
 		data[0] = (byte)((address << 1) & 0x7F);
 		data[1] = value;
-		SoftSPI.readWrite(spi, data);
+		spi.readWrite(data);
 	}
 	
 }
