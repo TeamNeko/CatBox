@@ -14,6 +14,9 @@ public class RFIDThread extends Thread {
 	@Override
 	public void run() {
 		while(!this.isInterrupted()){
+			
+			new Thread(new LEDFlash(1.0, 1.0, 0.0, 0)).start();
+			
 			if(rfid.read()) 
 				callback.onRead(rfid.getID());
 		}

@@ -66,10 +66,13 @@ public class Context {
 	public boolean login(String userCode) {
 		try {
 	 		user = restClient.requestUser(userCode);
+	 		
+	 		//success
 	 		mainWindow.showDetailPane();
 	 		mainWindow.showDisabledBoxLeftPane();
 	 		mainWindow.setLoginName(user);
 	 	} catch(UniformInterfaceException e) {
+	 		//failure
 	 		return false;
 	 	}
 		return true;
