@@ -22,20 +22,19 @@ public class LEDFlash implements Runnable {
 	@Override
 	public void run() {
 		RGBLed rgb = Context.getInstance().getRGBLed();
-		for (int k=0; k<3;k++){
-			for(int i = 0; i<=100; i=i+5){
-				rgb.write((int)red*i,(int)green*i,(int)blue*i);
-				try { 
+		try {
+			for (int k=0; k<3;k++){
+				for(int i = 0; i<=100; i=i+5){
+					rgb.write((int)red*i,(int)green*i,(int)blue*i);
 					Thread.sleep(FLASH_SLEEP_TIME);
-				} catch (InterruptedException e) {}	
-			}
-			for(int j = 100; j>=0; j=j-5){
-				rgb.write((int)red*j,(int)green*j,(int)blue*j);
-				try { 
+				}
+				for(int j = 100; j>=0; j=j-5){
+					rgb.write((int)red*j,(int)green*j,(int)blue*j);
 					Thread.sleep(FLASH_SLEEP_TIME);
-				} catch (InterruptedException e) {}
+				}
 			}
 		}
+		catch(InterruptedException e) {}
 	}
 
 }

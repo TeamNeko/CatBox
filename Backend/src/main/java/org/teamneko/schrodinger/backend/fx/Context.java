@@ -20,6 +20,7 @@ import org.teamneko.schrodinger.backend.gpio.Pi4JMissingException;
 import org.teamneko.schrodinger.backend.gpio.Piezo;
 import org.teamneko.schrodinger.backend.gpio.RFIDReader;
 import org.teamneko.schrodinger.backend.gpio.RGBLed;
+import org.teamneko.schrodinger.backend.runnable.PiezoNotification;
 import org.teamneko.schrodinger.client.SchrodingerClient;
 
 import com.sun.jersey.api.client.UniformInterfaceException;
@@ -44,6 +45,7 @@ public class Context {
 	private MFRC522 rfid = null;
 	private RGBLed led = null;
 	private Piezo piezo = null;
+	private Thread piezoThread;
 	
 	private ObservableList<ModifiedProduct> temporaryModifiedProducts = null;
 	private NamedProduct[] populateNamedProducts = null;
@@ -178,6 +180,7 @@ public class Context {
 		lastSearchResult = restClient.search(barcode);
 		lastSearchedBarcode = barcode;
 		isNewBarcode = false;
+		piezoThread = new Thread((new PiezoNotification(PiezoNotification.PiezoMode.ItemFound)));
 		if(lastSearchResult.getClass() == ProductSearchResult.class)
 		{
 			mainWindow.showDisabledBoxLeftPane();
@@ -200,7 +203,9 @@ public class Context {
 			mainWindow.showCreateBoxLeftPane();
 			pane.showNotFound();
 			isNewBarcode = true;
+			piezoThread = new Thread((new PiezoNotification(PiezoNotification.PiezoMode.NewItem)));
 		}
+		piezoThread.start();
 	}
 	
 	public void search(String barcode, TablePane pane) {
