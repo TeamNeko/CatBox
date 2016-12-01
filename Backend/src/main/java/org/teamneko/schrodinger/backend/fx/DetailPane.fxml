@@ -5,9 +5,9 @@
 <?import javafx.scene.layout.*?>
 
 <fx:root type="javafx.scene.layout.AnchorPane" xmlns:fx="http://javafx.com/fxml" >	
-	<HBox fillHeight="true" prefWidth="320" prefHeight="20" >
-		<Label text="Barcode:" />
-		<TextField fx:id="barcodeField" disable="true" />
+	<HBox fillHeight="true" layoutY="20" prefWidth="320" prefHeight="20" >
+		<Label text=" Barcode:"/>
+		<TextField fx:id="barcodeField" disable="true"/>
 	</HBox>
-	<ListView fx:id="detailList" layoutX="0" layoutY="25" prefWidth="320" prefHeight="295" />
+	<ListView fx:id="detailList" layoutX="0" layoutY="45" prefWidth="320" prefHeight="295"/>
 </fx:root>

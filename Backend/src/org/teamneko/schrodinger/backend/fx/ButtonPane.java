@@ -10,11 +10,9 @@ public class ButtonPane extends CustomAnchorPane {
 	}
 	
 	@FXML protected void modifier(ActionEvent event) {
-		Context.getInstance().getMainWindow().showModificationPane();
 	}
 	
-	@FXML protected void parametres(ActionEvent event) {
-		Context.getInstance().getMainWindow().showOptionsPane();
+	@FXML protected void quitter(ActionEvent event) {
+		System.exit(0);
 	}
-
 }
