@@ -3,8 +3,6 @@ package org.teamneko.schrodinger.backend.gpio;
 import com.pi4j.wiringpi.SoftPwm;
 
 public class RGBLed {
-	private final static int FLASH_SLEEP_TIME = 7;
-	
 	private int redPin;
 	private int greenPin;
 	private int bluePin;
@@ -55,58 +53,6 @@ public class RGBLed {
 		write((redValue  *100)/255, 
 			  (greenValue*100)/255, 
 			  (blueValue *100)/255);		
-	}
-	
-	public void flashRed() throws InterruptedException{	
-		for (int k=0; k<3;k++){
-			for(int i = 0; i<=100; i=i+5){
-				write(i,0,0);
-				Thread.sleep(FLASH_SLEEP_TIME);
-			}
-			for(int j = 100; j>=0; j=j-5){
-				write(j,0,0);
-				Thread.sleep(FLASH_SLEEP_TIME);
-			}
-		}	
-	}
-	
-	public void flashGreen() throws InterruptedException{	
-		for (int k=0; k<3;k++){
-			for(int i = 0; i<=100; i=i+5){
-				write(0,i,0);
-				Thread.sleep(FLASH_SLEEP_TIME);
-			}
-			for(int j = 100; j>=0; j=j-5){
-				write(0,j,0);
-				Thread.sleep(FLASH_SLEEP_TIME);
-			}
-		}	
-	}
-	
-	public void flashBlue() throws InterruptedException{	
-		for (int k=0; k<3;k++){
-			for(int i = 0; i<=100; i=i+5){
-				write(0,0,i);
-				Thread.sleep(FLASH_SLEEP_TIME);
-			}
-			for(int j = 100; j>=0; j=j-5){
-				write(0,0,j);
-				Thread.sleep(FLASH_SLEEP_TIME);
-			}
-		}	
-	}
-	
-	public void flashWhite() throws InterruptedException{	
-		for (int k=0; k<3;k++){
-			for(int i = 0; i<=100; i=i+5){
-				write(i,i,i);
-				Thread.sleep(FLASH_SLEEP_TIME);
-			}
-			for(int j = 100; j>=0; j=j-5){
-				write(j,j,j);
-				Thread.sleep(FLASH_SLEEP_TIME);
-			}
-		}	
 	}
 	
 	public void close() {

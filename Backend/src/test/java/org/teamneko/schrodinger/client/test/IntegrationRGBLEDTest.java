@@ -27,14 +27,14 @@ public class IntegrationRGBLEDTest {
 			while (j <= 5){
 				
 				System.out.println("Iteration " + j + " de 5");
-				led.flashRed();
-				led.flashGreen();
-				led.flashBlue();
+				//led.flashRed();
+				//led.flashGreen();
+				//led.flashBlue();
 				
 				j++;
 			}
 			
-			led.flashWhite();
+			//led.flashWhite();
 		}
 	}
 }

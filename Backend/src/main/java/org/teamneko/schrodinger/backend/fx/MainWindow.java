@@ -67,6 +67,6 @@ public class MainWindow extends SplitPane {
 	}
 	
 	public void resetLoginName() {
-		Platform.runLater((Runnable) () -> loginName.setText(""));
+		Platform.runLater((Runnable) () -> loginName.setText(" Utilisateur non-connecte"));
 	}
 }
