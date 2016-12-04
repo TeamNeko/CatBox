@@ -1,5 +1,7 @@
 package org.teamneko.schrodinger.backend.fx;
 
+import java.io.IOException;
+
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 
@@ -9,6 +11,6 @@ public class ShutdownPane extends CustomAnchorPane {
 	}
 	
 	@FXML protected void shutdown() {
-		Platform.exit();
+		Context.getInstance().shutdown();
 	}
 }

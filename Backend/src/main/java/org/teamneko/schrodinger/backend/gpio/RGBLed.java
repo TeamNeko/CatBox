@@ -32,7 +32,6 @@ public class RGBLed {
 		SoftPwm.softPwmWrite(redPin, redValue);
 		SoftPwm.softPwmWrite(greenPin, greenValue);
 		SoftPwm.softPwmWrite(bluePin, blueValue);
-		
 	}
 	
 	public void writeHex(int redValue, int greenValue, int blueValue){

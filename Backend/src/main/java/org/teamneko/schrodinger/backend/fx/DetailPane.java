@@ -15,9 +15,10 @@ import javafx.scene.layout.Priority;
 public class DetailPane extends CustomAnchorPane {
 	@FXML protected ListView<String> detailList;
 	@FXML protected TextField barcodeField;
-
+ 
 	public DetailPane(){
 		super();
+		Context.getInstance().setDetailPane(this);
 		Context.getInstance().setBarcodeCallback(s -> handleBarcode(s));
 		String lastCodeBar = Context.getInstance().getLastSearchedBarcode();
 		if(!lastCodeBar.isEmpty())
@@ -34,7 +35,7 @@ public class DetailPane extends CustomAnchorPane {
 	}
 	
 	public void showBox(Box box) {
-		printInListView("Box: ");
+		printInListView("Boite: ");
 		NamedProduct[] content = Context.getInstance().getPopulateNamedProducts();
 		for(int i=0; i<content.length; i++)
 		{
@@ -43,7 +44,7 @@ public class DetailPane extends CustomAnchorPane {
 	}
 	
 	public void showNotFound() {
-		printInListView("Not found");
+		printInListView("Non trouvé");
 	}
 	
 	public void showProduct(Product product) {
@@ -52,6 +53,10 @@ public class DetailPane extends CustomAnchorPane {
 	
 	public void showUser(User user) {
 		printInListView(user.getType() + ": " + user.getFirstName() + " " + user.getLastName());
+	}
+	
+	public ListView<String> getDetailList() {
+		return detailList;
 	}
 	
 	private void printInListView(String... elements) {

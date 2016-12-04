@@ -21,9 +21,9 @@ public class ApplicationLauncher extends Application {
 		
 		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		
-		primaryStage.initStyle(StageStyle.UNDECORATED);
+		//primaryStage.initStyle(StageStyle.UNDECORATED);
 		primaryStage.setScene(scene);
-		//primaryStage.setFullScreen(true);
+		primaryStage.setFullScreen(true);
 		
 		primaryStage.show();
 	}

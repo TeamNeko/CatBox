@@ -16,5 +16,5 @@
 	     	<Label text="Veuillez scanner votre carte RFID"></Label>
 	    </children>
 	</HBox>
-	<TextField fx:id="rfidText" onAction="#login" layoutY="275" prefWidth="320" prefHeight="20"/>
+	<TextField fx:id="rfidText" id="rfidText" onAction="#login" layoutY="275" prefWidth="320" prefHeight="20"/>
 </fx:root>

@@ -24,7 +24,7 @@ public class TablePane extends CustomAnchorPane {
 	public void handleBarcode(String barcode) {
 		Context.getInstance().search(barcode, this);
 	}
-	
+	 
 	private void setupDetailTable() {
 		detailTable.setItems(Context.getInstance().getTemporaryModifiedProd());
 		TableColumn<ModifiedProduct,String> nameCol = new TableColumn<ModifiedProduct,String>("Nom");

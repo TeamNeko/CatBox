@@ -1,6 +1,5 @@
 package org.teamneko.schrodinger.backend.runnable;
 
-import org.teamneko.schrodinger.backend.gpio.Pi4JMissingException;
 import org.teamneko.schrodinger.backend.gpio.RFIDReader;
 
 public class RFIDThread extends Thread {
@@ -16,21 +15,21 @@ public class RFIDThread extends Thread {
 
 	@Override
 	public void run() {
-		while(!this.isInterrupted()){
-			ledT = new Thread(new LEDFlash(1.0, 1.0, 0.0, 0));
-			ledT.start();
+		boolean stop = false;
+		System.out.println(getClass().getSimpleName() + " start!");
+		
+		ledT = new Thread(new LEDFlash(1, 1, 0, 100));
+		ledT.start();
+		
+		while(!stop && !isInterrupted()){
 			if(rfid.read()) {
-				ledT.interrupt();
-				callback.onRead(rfid.getID());
-				ledT = new Thread(new LEDFlash(0.0, 1.0, 0.0, 0));
-				soundT = new Thread(new PiezoNotification(PiezoNotification.PiezoMode.LoginSuccess));
-				soundT.start();
-			}
-			else {
-				ledT = new Thread(new LEDFlash(1.0, 0.0, 0.0, 0));
-				soundT = new Thread(new PiezoNotification(PiezoNotification.PiezoMode.LoginFail));
-				soundT.start();
+				stop = true;
+				new Thread((Runnable)() -> callback.onRead(rfid.getID()));
 			}
 		}
+		
+		ledT.interrupt();
+		System.out.println(getClass().getSimpleName() + " done!");
 	}
 }
+ 

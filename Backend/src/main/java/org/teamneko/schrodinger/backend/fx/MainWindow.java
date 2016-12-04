@@ -63,7 +63,7 @@ public class MainWindow extends SplitPane {
 		Platform.runLater((Runnable) () -> loginName.setText(" Utilisateur: " 
 															 + user.getFirstName() + " " 
 															 + user.getLastName() + " (" 
-															 + user.getId() + ")"));
+															 + user.getNumber() + ")")); 
 	}
 	
 	public void resetLoginName() {

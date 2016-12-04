@@ -1,5 +1,6 @@
 package org.teamneko.schrodinger.backend.fx;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -25,6 +26,7 @@ import org.teamneko.schrodinger.client.SchrodingerClient;
 
 import com.sun.jersey.api.client.UniformInterfaceException;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -33,6 +35,7 @@ public class Context {
 	
 	private KeyboardHandler keyboardHandler;
 	private TablePane tablePane;
+	private DetailPane detailPane;
 	
 	private MainWindow mainWindow;
 	private SchrodingerClient restClient;
@@ -64,17 +67,19 @@ public class Context {
 		mainWindow.showTablePane();
 		System.out.println("Edit Box " + lastSearchedBarcode);
 	}
-	
+	 
 	public boolean login(String userCode) {
 		try {
 	 		user = restClient.requestUser(userCode);
 	 		
 	 		//success
+	 		new Thread(new PiezoNotification(PiezoNotification.PiezoMode.LoginSuccess)).start();
 	 		mainWindow.showDetailPane();
 	 		mainWindow.showDisabledBoxLeftPane();
 	 		mainWindow.setLoginName(user);
 	 	} catch(UniformInterfaceException e) {
 	 		//failure
+	 		new Thread(new PiezoNotification(PiezoNotification.PiezoMode.LoginFail)).start();
 	 		return false;
 	 	}
 		return true;
@@ -143,8 +148,31 @@ public class Context {
 		tablePane = table;
 	}
 	
+	public TablePane getTablePane() {
+		return tablePane;
+	}
+	
+	public void setDetailPane(DetailPane list) {
+		detailPane = list;
+	}
+	
+	public DetailPane getDetailPane() {
+		return detailPane;
+	}
+	
 	public void selectTableRow(int row) {
 		tablePane.selectRow(row);
+	}
+	
+	public void shutdown()  {
+		while(true) {
+			//try {
+				//Runtime.getRuntime().exec("shutdown -h now");
+				Platform.exit();
+				System.exit(0);
+			//} catch (IOException e) {
+			//}
+		}
 	}
 	
 	public void modifyTableRow(int row, boolean add) {
