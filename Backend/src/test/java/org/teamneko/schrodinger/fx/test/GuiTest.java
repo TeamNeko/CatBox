@@ -29,6 +29,7 @@ public class GuiTest {
     	toolkit.setLockingKeyState(KeyEvent.VK_CAPS_LOCK, true);
     	fxer.pause(100);
     	fxer.clickOn( fxer.getAt( Label.class ) )
+    		//Click User barcode textfield
 			.moveBy(750, 750, Speed.VERY_FAST) 
 			.click()
 	    	.type("c5a69609fc\n")
@@ -60,6 +61,7 @@ public class GuiTest {
 		String testBoite = Context.getInstance().getDetailPane().getDetailList().getItems().get(0);
 		assertEquals("Boite: ", testBoite);
 		
+		//Click Modifier
 		fxer.moveBy(-700, -500, Speed.VERY_FAST)
 			.click()
 			.pause(3000);
@@ -69,26 +71,32 @@ public class GuiTest {
 		int product0Qte = Context.getInstance().getTablePane().getRowItem(0).getQuantity();
 		int product1Qte = Context.getInstance().getTablePane().getRowItem(1).getQuantity();
 	
+		//Click +
 		fxer.moveBy(0, -200, Speed.VERY_FAST)
 			.click()
 			.pause(3000);
 		testTableProduit = Context.getInstance().getTablePane().getRowItem(0);
 		assertEquals(1,testTableProduit.getModifiedqty());
 		
+		//Click Down arrow
 		fxer.moveBy(200, 200, Speed.VERY_FAST)
 			.click()
+			//Click + 2x
 			.moveBy(-200, -200, Speed.VERY_FAST)
 			.click()
 			.click()
+			//Click -
 			.moveBy(0, 200, Speed.VERY_FAST)
 			.click()
 			.pause(3000);
 		testTableProduit = Context.getInstance().getTablePane().getRowItem(1);
 		assertEquals(1,testTableProduit.getModifiedqty());
 		
+		//Click Confirmer
 		fxer.moveBy(0, 150, Speed.VERY_FAST)
 			.click()
 			.pause(7000);
+		//Click Modifier
 		fxer.moveBy(0, -150, Speed.VERY_FAST) 
 			.click()
 			.pause(3000);
@@ -97,24 +105,46 @@ public class GuiTest {
 		testTableProduit = Context.getInstance().getTablePane().getRowItem(1);
 		assertEquals(product1Qte+1,testTableProduit.getQuantity());
 		
+		//Click Annuler
 		fxer.moveBy(0, 450, Speed.VERY_FAST)
 			.click()
 			.pause(3000)
+			//Click ListField
 			.moveBy(400, 0, Speed.VERY_FAST)
 			.click()
 			.type("12165798412\n")
 			.pause(3000)
+			//Click Créer une nouvelle boite
 			.moveBy(-400, -500, Speed.VERY_FAST)
 			.click()
 			.pause(3000)
+			//Click TableField
 			.moveBy(500, 0, Speed.VERY_FAST)
 			.click()
 			.type("66224891271\n")
 			.pause(3000);
 		testTableProduit = Context.getInstance().getTablePane().getRowItem(0);
 		assertEquals("Final Fantasy X/X2 HD Remaster",testTableProduit.getName());
-			
 		
+		//Click Annuler / Parametre
+		fxer.moveBy(-500, 550, Speed.VERY_FAST)
+			.click()
+			.pause(3000)
+			.click()
+			//Click Deconnexion
+			.moveBy(0, -600, Speed.VERY_FAST)
+			.click()
+			.pause(3000);
+		loginName = ( Label ) fxer.getAt( Label.class );
+    	assertEquals(" Utilisateur non-connecte", loginName.getText());
+    	
+    	fxer.moveBy(600, 600, Speed.VERY_FAST)
+    		.click()
+    		.type("c5236209fg\n")
+    		.pause(3000);
+    	loginName = ( Label ) fxer.getAt( Label.class );
+    	assertEquals(" Utilisateur: Mew Savaria (C5236209FG)", loginName.getText());
+    	
 		/*fxer.moveBy(0, 450, Speed.FAST)
 			.click()
 			.pause(2000)
