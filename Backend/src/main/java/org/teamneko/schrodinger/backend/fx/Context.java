@@ -121,8 +121,11 @@ public class Context {
 	 */
 	public boolean login(String userCode) {
 		try {
+			if(ledT != null) {
+				ledT.interrupt();
+			}
 	 		user = restClient.requestUser(userCode);
-	 		
+	 
 	 		//success
 	 		new Thread(new PiezoNotification(PiezoNotification.PiezoMode.LoginSuccess)).start();
 	 		ledT = new Thread(new LEDFlash(0, 1, 0, 100));
@@ -319,12 +322,12 @@ public class Context {
 	 */
 	public void shutdown()  {
 		while(true) {
-			//try {
-				//Runtime.getRuntime().exec("shutdown -h now");
+			try {
+				Runtime.getRuntime().exec("sudo shutdown -h now");
 				Platform.exit();
 				System.exit(0);
-			//} catch (IOException e) {
-			//}
+			} catch (IOException e) {
+			}
 		}
 	}
 	

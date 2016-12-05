@@ -144,12 +144,6 @@ public class GuiTest {
     		.pause(3000);
     	loginName = ( Label ) fxer.getAt( Label.class );
     	assertEquals(" Utilisateur: Tubbs Blanchette (C5A69609FC)", loginName.getText());
-    	
-		fxer.moveBy(-600, 0, Speed.VERY_FAST)
-			.click()
-			.pause(2000)
-			.moveBy(0, -300, Speed.VERY_FAST)
-			.click();
     }
  
 	private void setupTest() throws InterruptedException {
