@@ -10,13 +10,26 @@ import org.teamneko.meowlib.json.Box;
 import org.teamneko.schrodinger.dao.BoxesDAO;
 import org.teamneko.schrodinger.sql.FilteredQueryRunner;
 
+/**
+ * The Class PostgresBoxesDAO.
+ */
 public class PostgresBoxesDAO implements BoxesDAO {
+	
+	/** The runner. */
 	private FilteredQueryRunner runner;
 
+	/**
+	 * Instantiates a new postgres boxes DAO.
+	 *
+	 * @param database the database
+	 */
 	public PostgresBoxesDAO(PostgresDatabase database) {
 		runner = new FilteredQueryRunner(database.getDataSource());
 	}
 
+	/*
+	 * @see org.teamneko.schrodinger.dao.BoxesDAO#exists(java.lang.String)
+	 */
 	@Override
 	public boolean exists(String barcode) {
 		return runner.queryFiltered("SELECT exists(SELECT 1 FROM boxes WHERE barcode = ?)",
@@ -31,11 +44,17 @@ public class PostgresBoxesDAO implements BoxesDAO {
 		}, barcode);
 	}
 
+	/* 
+	 * @see org.teamneko.schrodinger.dao.BoxesDAO#create(java.lang.String)
+	 */
 	@Override
 	public void create(String barcode) {
 		runner.updateFiltered("INSERT INTO boxes(barcode) VALUES (?)", barcode);
 	}
 
+	/*
+	 * @see org.teamneko.schrodinger.dao.BoxesDAO#getId(java.lang.String)
+	 */
 	@Override
 	public int getId(String barcode) {
 		return runner.queryFiltered("SELECT id FROM boxes WHERE barcode = ?", new ResultSetHandler<Integer>() {
@@ -51,6 +70,9 @@ public class PostgresBoxesDAO implements BoxesDAO {
 		}, barcode);
 	}
 
+	/* 
+	 * @see org.teamneko.schrodinger.dao.BoxesDAO#search(java.lang.String)
+	 */
 	@Override
 	public Optional<Box> search(String barcode) {
 		return Optional.ofNullable(runner.queryFiltered("SELECT * FROM boxes WHERE barcode = ?", new ResultSetHandler<Box>() {

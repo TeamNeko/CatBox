@@ -21,17 +21,33 @@ import org.teamneko.schrodinger.sql.Database;
 
 import com.sun.jersey.api.NotFoundException;
 
+
+/**
+ * The Class ProductResource.
+ */
 @Path("/product")
 public class ProductResource {
+	
+	/** The products. */
 	private ProductsDAO products = Database.getDAOFactory().getProductsDAO();
+	
+	/** The history. */
 	private HistoryDAO history = Database.getDAOFactory().getHistoryDAO();
 	
+	/** The uri info. */
 	@Context
 	UriInfo uriInfo;
 	 
+	/** The request. */
 	@Context
 	Request request;
 	
+	/**
+	 * Gets the box details.
+	 *
+	 * @param id the id
+	 * @return the box details
+	 */
 	@GET
 	@Path("/history/{id}")
 	@Produces(MediaType.APPLICATION_JSON)

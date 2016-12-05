@@ -6,6 +6,7 @@ import org.teamneko.softspi.SoftSPI;
 
 import com.pi4j.wiringpi.Gpio;
 
+
 public class MFRC522 implements RFIDReader {
 
 	/* 	 

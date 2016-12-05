@@ -9,13 +9,26 @@ import org.teamneko.meowlib.json.User;
 import org.teamneko.schrodinger.dao.UsersDAO;
 import org.teamneko.schrodinger.sql.FilteredQueryRunner;
 
+/**
+ * The Class PostgresUsersDAO.
+ */
 public class PostgresUsersDAO implements UsersDAO {
+	
+	/** The runner. */
 	private FilteredQueryRunner runner;
 
+	/**
+	 * Instantiates a new postgres users DAO.
+	 *
+	 * @param database the database
+	 */
 	public PostgresUsersDAO(PostgresDatabase database) {
 		runner = new FilteredQueryRunner(database.getDataSource());
 	}
 
+	/*
+	 * @see org.teamneko.schrodinger.dao.UsersDAO#search(java.lang.String)
+	 */
 	@Override
 	public Optional<User> search(String number) {
 		return Optional.ofNullable(runner.queryFiltered("SELECT * FROM users WHERE number=?", new ResultSetHandler<User>() {

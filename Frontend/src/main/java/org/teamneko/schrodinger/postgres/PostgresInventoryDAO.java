@@ -13,19 +13,37 @@ import org.teamneko.meowlib.sql.InventoryRow;
 import org.teamneko.schrodinger.dao.InventoryDAO;
 import org.teamneko.schrodinger.sql.FilteredQueryRunner;
 
+/**
+ * The Class PostgresInventoryDAO.
+ */
 public class PostgresInventoryDAO implements InventoryDAO {
+	
+	/** The runner. */
 	private FilteredQueryRunner runner;
+	
+	/** The item handler. */
 	private ResultSetHandler<InventoryRow> itemHandler = new BeanHandler<InventoryRow>(InventoryRow.class);
 
 
+	/**
+	 * Instantiates a new postgres inventory DAO.
+	 *
+	 * @param database the database
+	 */
 	public PostgresInventoryDAO(PostgresDatabase database) {
 		runner = new FilteredQueryRunner(database.getDataSource());
 	}
 	
+	/* 
+	 * @see org.teamneko.schrodinger.dao.InventoryDAO#get(int, int)
+	 */
 	public Optional<InventoryRow> get(int idBox, int idProduct) {
 		return Optional.ofNullable(runner.queryFiltered("SELECT * FROM inventory WHERE id_product=? AND id_box = ? LIMIT 1", itemHandler, idProduct, idBox));
 	}
 
+	/* 
+	 * @see org.teamneko.schrodinger.dao.InventoryDAO#getBoxContents(int)
+	 */
 	@Override
 	public List<NamedProduct> getBoxContents(int idBox) {
 		return runner.queryFiltered(
@@ -50,6 +68,9 @@ public class PostgresInventoryDAO implements InventoryDAO {
 			}, idBox);
 	}
 
+	/* 
+	 * @see org.teamneko.schrodinger.dao.InventoryDAO#getStock(int)
+	 */
 	@Override
 	public int getStock(int idProduct) {
 		return runner.queryFiltered("SELECT SUM(quantity) AS total FROM inventory WHERE id_product=?",
@@ -63,16 +84,25 @@ public class PostgresInventoryDAO implements InventoryDAO {
 				}, idProduct);
 	}
 
+	/* 
+	 * @see org.teamneko.schrodinger.dao.InventoryDAO#update(org.teamneko.meowlib.sql.InventoryRow)
+	 */
 	@Override
 	public void update(InventoryRow item) {
 		runner.updateFiltered("UPDATE inventory SET quantity = ? WHERE id = ?", item.getQuantity(), item.getId());
 	}
 
+	/* 
+	 * @see org.teamneko.schrodinger.dao.InventoryDAO#insert(org.teamneko.meowlib.sql.InventoryRow)
+	 */
 	@Override
 	public void insert(InventoryRow item) {
 		runner.updateFiltered("INSERT INTO inventory(id_product, id_box, quantity) VALUES (?, ?, ?)", item.getId_product(), item.getId_box(), item.getQuantity());
 	}
 
+	/* 
+	 * @see org.teamneko.schrodinger.dao.InventoryDAO#delete(org.teamneko.meowlib.sql.InventoryRow)
+	 */
 	@Override
 	public void delete(InventoryRow item) {
 		runner.updateFiltered("DELETE FROM inventory WHERE id=?", item.getId());

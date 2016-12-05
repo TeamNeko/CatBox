@@ -1,5 +1,6 @@
 package org.teamneko.schrodinger.backend.gpio;
 
+
 public enum Tone {
 	// This is a mapping of the frequencies of notes
 	// These values are taken from http://www.phy.mtu.edu/~suits/notefreqs.html	
@@ -113,8 +114,14 @@ public enum Tone {
 	Bb8(7462),
 	B8(7902);
 	
+	/** The frequency. */
 	public final int frequency;
 	
+	/**
+	 * Instantiates a new tone.
+	 *
+	 * @param frequency the frequency
+	 */
 	private Tone(int frequency) {
 		this.frequency = frequency;
 	}

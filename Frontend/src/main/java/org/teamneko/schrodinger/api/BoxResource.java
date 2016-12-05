@@ -32,24 +32,51 @@ import org.teamneko.schrodinger.dao.ProductsDAO;
 import org.teamneko.schrodinger.dao.TransactionsDAO;
 import org.teamneko.schrodinger.sql.Database;
 
+
+/**
+ * The Class BoxResource.
+ */
 @Path("/box")
 public class BoxResource {
+	
+	/** The Constant OUT_OF_INVENTORY_LEVEL. */
 	private static final int OUT_OF_INVENTORY_LEVEL = 1;
+	
+	/** The Constant LOW_INVENTORY_LEVEL. */
 	private static final int LOW_INVENTORY_LEVEL = 2;
 	
+	/** The alerts. */
 	private AlertsDAO alerts = Database.getDAOFactory().getAlertsDAO();
+	
+	/** The boxes. */
 	private BoxesDAO boxes = Database.getDAOFactory().getBoxesDAO();
+	
+	/** The history. */
 	private HistoryDAO history = Database.getDAOFactory().getHistoryDAO();
+	
+	/** The inventory. */
 	private InventoryDAO inventory = Database.getDAOFactory().getInventoryDAO();
+	
+	/** The products. */
 	private ProductsDAO products = Database.getDAOFactory().getProductsDAO();
+	
+	/** The transactions. */
 	private TransactionsDAO transactions = Database.getDAOFactory().getTransactionsDAO();
 	
+	/** The uri info. */
 	@Context
 	UriInfo uriInfo;
 	 
+	/** The request. */
 	@Context
 	Request request;
 	
+	/**
+	 * Box exists.
+	 *
+	 * @param barcode the barcode
+	 * @return the string
+	 */
 	@GET
 	@Path("/exists/{barcode}")
 	@Produces(MediaType.TEXT_PLAIN)
@@ -57,6 +84,12 @@ public class BoxResource {
 		return Boolean.toString(boxes.exists(barcode));
 	}
 	
+	/**
+	 * Gets the box details.
+	 *
+	 * @param id the id
+	 * @return the box details
+	 */
 	@GET
 	@Path("/details/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -64,6 +97,11 @@ public class BoxResource {
 		return inventory.getBoxContents(id);
 	}
 	
+	/**
+	 * Update.
+	 *
+	 * @param content the content
+	 */
 	@POST
 	@Path("/update")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -88,6 +126,13 @@ public class BoxResource {
 		}
 	}
 	
+	/**
+	 * Adds the transaction.
+	 *
+	 * @param idUser the id user
+	 * @param idBox the id box
+	 * @param product the product
+	 */
 	private void addTransaction(int idUser, int idBox, TransactionRequest.Product product) {
 		//Create new transaction object
 		Transaction transaction = new Transaction();
@@ -117,11 +162,21 @@ public class BoxResource {
 		transactions.addTransaction(transaction);
 	}
 	
+	/**
+	 * Add to history.
+	 *
+	 * @param product the product
+	 */
 	private void addToHistory(ProductRow product) {
 		int stock = inventory.getStock(product.getId());
 		history.add(new HistoryRow(-1, product.getId(), stock, Timestamp.from(Instant.now())));
 	}
 	
+	/**
+	 * Sets the alerts.
+	 *
+	 * @param product the new alerts
+	 */
 	private void setAlerts(ProductRow product) {
 		int quantity = inventory.getStock(product.getId());
 		
@@ -140,6 +195,12 @@ public class BoxResource {
 		
 	}
 
+	/**
+	 * Sets the alert level.
+	 *
+	 * @param idProduct the id product
+	 * @param level the level
+	 */
 	private void setAlertToLevel(int idProduct, int level) {
 		Optional<AlertRow> currentAlert = alerts.getAlert(idProduct);
 		
@@ -151,6 +212,14 @@ public class BoxResource {
 		}
 	}
 	
+	/**
+	 * Update inventory.
+	 *
+	 * @param idBox the id box
+	 * @param idProduct the id product
+	 * @param quantity the quantity
+	 * @return true, if successful
+	 */
 	private boolean updateInventory(int idBox, int idProduct, int quantity) {
 		InventoryRow item = inventory.get(idBox, idProduct).orElse(new InventoryRow(-1, idBox, idProduct, 0));;
 		
