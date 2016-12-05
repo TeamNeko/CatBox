@@ -7,8 +7,15 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 
+// 
+/**
+ * The Class ApplicationLauncher. Used for initiating the GUI
+ */
 public class ApplicationLauncher extends Application {
 	
+	/* Initiate the graphic interface of the raspberry pi
+	 * @see javafx.application.Application#start(javafx.stage.Stage)
+	 */
 	@Override
 	public void start(Stage primaryStage) {
 		Context context = Context.getInstance();
@@ -28,6 +35,11 @@ public class ApplicationLauncher extends Application {
 		primaryStage.show();
 	}
 	
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
 	public static void main(String[] args) {
 		launch(args);
 	}

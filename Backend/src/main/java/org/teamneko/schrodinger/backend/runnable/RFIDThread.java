@@ -21,7 +21,7 @@ public class RFIDThread extends Thread {
 		ledT = new Thread(new LEDFlash(1, 1, 0, 100));
 		ledT.start();
 		
-		while(!stop && !isInterrupted()){
+		while(!stop && !isInterrupted()){ 
 			if(rfid.read()) {
 				stop = true;
 				new Thread((Runnable)() -> callback.onRead(rfid.getID()));

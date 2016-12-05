@@ -32,10 +32,10 @@ public class GuiTest {
     		//Click User barcode textfield
 			.moveBy(750, 750, Speed.VERY_FAST) 
 			.click()
-	    	.type("c5a69609fc\n")
+	    	.type("c5236209fg\n")
 			.pause(3000);
 		Label loginName = ( Label ) fxer.getAt( Label.class );
-    	assertEquals(" Utilisateur: Tubbs Blanchette (C5A69609FC)", loginName.getText());
+    	assertEquals(" Utilisateur: Mew Savaria (C5236209FG)", loginName.getText());
     	
     	fxer.click()
 			.type("66224891271\n")
@@ -66,7 +66,7 @@ public class GuiTest {
 			.click()
 			.pause(3000);
     	ModifiedProduct testTableProduit = Context.getInstance().getTablePane().getRowItem(0);
-		assertEquals("Final Fantasy X/X2 HD Remaster", testTableProduit.getName());
+		assertEquals("Final Fantasy XIII", testTableProduit.getName());
 		
 		int product0Qte = Context.getInstance().getTablePane().getRowItem(0).getQuantity();
 		int product1Qte = Context.getInstance().getTablePane().getRowItem(1).getQuantity();
@@ -140,17 +140,16 @@ public class GuiTest {
     	
     	fxer.moveBy(600, 600, Speed.VERY_FAST)
     		.click()
-    		.type("c5236209fg\n")
+    		.type("c5a69609fc\n")
     		.pause(3000);
     	loginName = ( Label ) fxer.getAt( Label.class );
-    	assertEquals(" Utilisateur: Mew Savaria (C5236209FG)", loginName.getText());
+    	assertEquals(" Utilisateur: Tubbs Blanchette (C5A69609FC)", loginName.getText());
     	
-		/*fxer.moveBy(0, 450, Speed.FAST)
+		fxer.moveBy(-600, 0, Speed.VERY_FAST)
 			.click()
 			.pause(2000)
-			.click()
-			.moveBy(0, -300, Speed.FAST)
-			.click();*/
+			.moveBy(0, -300, Speed.VERY_FAST)
+			.click();
     }
  
 	private void setupTest() throws InterruptedException {
