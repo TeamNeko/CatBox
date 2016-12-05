@@ -2,11 +2,28 @@ package org.teamneko.schrodinger.backend.gpio;
 
 import com.pi4j.wiringpi.SoftPwm;
 
+
+/**
+ * The Class RGBLed.
+ */
 public class RGBLed {
+	
+	/** The red pin. */
 	private int redPin;
+	
+	/** The green pin. */
 	private int greenPin;
+	
+	/** The blue pin. */
 	private int bluePin;
 
+	/**
+	 * Instantiates a new RGB led.
+	 *
+	 * @param redPin the red pin
+	 * @param greenPin the green pin
+	 * @param bluePin the blue pin
+	 */
 	RGBLed(int redPin, int greenPin, int bluePin){
 		this.redPin = redPin;
 		this.greenPin = greenPin;
@@ -18,6 +35,13 @@ public class RGBLed {
 
 	}
 	
+	/**
+	 * Set led color.
+	 *
+	 * @param redValue the red value
+	 * @param greenValue the green value
+	 * @param blueValue the blue value
+	 */
 	public void write(int redValue, int greenValue, int blueValue){
 		if(redValue > 100){
 			redValue = 100;
@@ -32,9 +56,15 @@ public class RGBLed {
 		SoftPwm.softPwmWrite(redPin, redValue);
 		SoftPwm.softPwmWrite(greenPin, greenValue);
 		SoftPwm.softPwmWrite(bluePin, blueValue);
-		
 	}
 	
+	/**
+	 * Set led color with hex values.
+	 *
+	 * @param redValue the red value
+	 * @param greenValue the green value
+	 * @param blueValue the blue value
+	 */
 	public void writeHex(int redValue, int greenValue, int blueValue){
 		
 		// To ensure compatibility between normal 0xFF values per RGB color
@@ -55,6 +85,9 @@ public class RGBLed {
 			  (blueValue *100)/255);		
 	}
 	
+	/**
+	 * Close.
+	 */
 	public void close() {
 		SoftPwm.softPwmStop(redPin);
 		SoftPwm.softPwmStop(greenPin);

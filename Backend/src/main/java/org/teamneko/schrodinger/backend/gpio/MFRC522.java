@@ -2,7 +2,10 @@ package org.teamneko.schrodinger.backend.gpio;
 
 import java.util.Arrays;
 
+import org.teamneko.softspi.SoftSPI;
+
 import com.pi4j.wiringpi.Gpio;
+
 
 public class MFRC522 implements RFIDReader {
 
@@ -563,7 +566,10 @@ public class MFRC522 implements RFIDReader {
 		byte[] data = new byte[2];
 		data[0] = (byte)((address << 1) | 0x80);
 		
-		data = spi.readWrite(data);
+		//System.out.print("Read reg "  + Integer.toString((int)(address) & 0xFF));
+		data = SoftSPI.readWrite(spi, data);
+		//System.out.print(", Value:"  + Integer.toString((int)(data[1]) & 0xFF));
+		
 		return data[1];
 	}
 	
@@ -576,7 +582,9 @@ public class MFRC522 implements RFIDReader {
 		byte[] data = new byte[2];
 		data[0] = (byte)((address << 1) & 0x7F);
 		data[1] = value;
-		spi.readWrite(data);
+		
+		//System.out.println("Write reg "  + Integer.toString((int)(address) & 0xFF) + ", Value:"  + Integer.toString((int)(data[1]) & 0xFF));
+		SoftSPI.readWrite(spi, data);
 	}
 	
 }

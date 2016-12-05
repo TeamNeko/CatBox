@@ -16,18 +16,28 @@ import org.teamneko.schrodinger.sql.Database;
 import com.sun.jersey.api.NotFoundException;
 
 /**
- * Servlet implementation class UserResource
+ * Servlet implementation class UserResource.
  */
 @Path("/user/{code}")
 public class UserResource {
+	
+	/** The dao. */
 	private static UsersDAO dao = Database.getDAOFactory().getUsersDAO();
 	
+	/** The uri info. */
 	@Context
 	UriInfo uriInfo;
 	 
+	/** The request. */
 	@Context
 	Request request;
     
+    /**
+     * Gets the user.
+     *
+     * @param code the code
+     * @return the user
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public User getUser(@PathParam("code") String code) {

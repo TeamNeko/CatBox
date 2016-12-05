@@ -74,14 +74,14 @@ public class IntegrationGPIO {
 			
 			if (rfid.read()){ // If the sensor has read a correct UID, GreenFlash + auClairDeLaLune
 				System.out.println("Detecte card: " + rfid.getID() + " Led flash : Vert, Au Clair de la lune" );
-				//led.flashGreen();
+				led.write(0, 100, 0);
 				piezo.playSong(auClairDeLaLune);
 				Thread.sleep(1000);
 			}
 			
 			else{ // If the sensor has not read a correct UID, RedFlash + ouverture5eBeethoven
 				System.out.println("Missed 4 times " + "Led flash : Rouge, Ouverture 5e Beethoven");
-				//led.flashRed();
+				led.write(100, 0, 0);
 				piezo.playSong(ouverture5eBeethoven);
 			}
 			

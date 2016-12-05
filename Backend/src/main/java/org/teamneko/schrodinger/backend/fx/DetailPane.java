@@ -12,12 +12,25 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
-public class DetailPane extends CustomAnchorPane {
-	@FXML protected ListView<String> detailList;
-	@FXML protected TextField barcodeField;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class DetailPane.
+ */
+public class DetailPane extends CustomAnchorPane {
+	
+	/** The detail list. */
+	@FXML protected ListView<String> detailList;
+	
+	/** The barcode field. */
+	@FXML protected TextField barcodeField;
+ 
+	/**
+	 * Instantiates a new detail pane.
+	 */
 	public DetailPane(){
 		super();
+		Context.getInstance().setDetailPane(this);
 		Context.getInstance().setBarcodeCallback(s -> handleBarcode(s));
 		String lastCodeBar = Context.getInstance().getLastSearchedBarcode();
 		if(!lastCodeBar.isEmpty())
@@ -25,16 +38,31 @@ public class DetailPane extends CustomAnchorPane {
 		HBox.setHgrow(barcodeField, Priority.ALWAYS);
 	}
 	
+	/**
+	 * Populer.
+	 *
+	 * @param event the event
+	 */
 	@FXML protected void populer(ActionEvent event) {
 	}
 	
+	/**
+	 * Handle barcode.
+	 *
+	 * @param barcode the barcode
+	 */
 	public void handleBarcode(String barcode) {
 		barcodeField.setText(barcode);
 		Context.getInstance().search(barcode, this);
 	}
 	
+	/**
+	 * Show box.
+	 *
+	 * @param box the box
+	 */
 	public void showBox(Box box) {
-		printInListView("Box: ");
+		printInListView("Boite: ");
 		NamedProduct[] content = Context.getInstance().getPopulateNamedProducts();
 		for(int i=0; i<content.length; i++)
 		{
@@ -42,18 +70,45 @@ public class DetailPane extends CustomAnchorPane {
 		}
 	}
 	
+	/**
+	 * Show not found.
+	 */
 	public void showNotFound() {
-		printInListView("Not found");
+		printInListView("Non trouvé");
 	}
 	
+	/**
+	 * Show product.
+	 *
+	 * @param product the product
+	 */
 	public void showProduct(Product product) {
 		printInListView("Product: " + product.getName());
 	}
 	
+	/**
+	 * Show user.
+	 *
+	 * @param user the user
+	 */
 	public void showUser(User user) {
 		printInListView(user.getType() + ": " + user.getFirstName() + " " + user.getLastName());
 	}
 	
+	/**
+	 * Gets the detail list.
+	 *
+	 * @return the detail list
+	 */
+	public ListView<String> getDetailList() {
+		return detailList;
+	}
+	
+	/**
+	 * Prints the in list view.
+	 *
+	 * @param elements the elements
+	 */
 	private void printInListView(String... elements) {
 		detailList.getItems().clear();
 		detailList.getItems().addAll(elements);

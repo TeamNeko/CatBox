@@ -24,18 +24,36 @@ import org.teamneko.schrodinger.dao.ProductsDAO;
 import org.teamneko.schrodinger.dao.UsersDAO;
 import org.teamneko.schrodinger.sql.Database;
 
+
+/**
+ * The Class SearchResource.
+ */
 @Path("/search/{barcode}")
 public class SearchResource {
+	
+	/** The boxes. */
 	private BoxesDAO boxes = Database.getDAOFactory().getBoxesDAO();
+	
+	/** The products. */
 	private ProductsDAO products = Database.getDAOFactory().getProductsDAO();
+	
+	/** The users. */
 	private UsersDAO users = Database.getDAOFactory().getUsersDAO();
 	
+	/** The uri info. */
 	@Context
 	UriInfo uriInfo;
 	 
+	/** The request. */
 	@Context
 	Request request;
 	
+	/**
+	 * Search.
+	 *
+	 * @param barcode the barcode
+	 * @return the search result
+	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public SearchResult search(@PathParam("barcode") String barcode) {

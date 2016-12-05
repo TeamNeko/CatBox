@@ -38,4 +38,6 @@ dependencies {
     // testCompile dependency to testCompile 'org.testng:testng:6.8.1' and add
     // 'test.useTestNG()' to your build script.
     testCompile 'junit:junit:4.12'
+    
+    testCompile "com.athaydes.automaton:Automaton:1.1.0"
 }

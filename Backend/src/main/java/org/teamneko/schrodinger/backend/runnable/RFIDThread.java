@@ -1,36 +1,53 @@
 package org.teamneko.schrodinger.backend.runnable;
 
-import org.teamneko.schrodinger.backend.gpio.Pi4JMissingException;
 import org.teamneko.schrodinger.backend.gpio.RFIDReader;
 
+
+/**
+ * The Class RFIDThread.
+ */
 public class RFIDThread extends Thread {
+	
+	/** The rfid. */
 	RFIDReader rfid;
+	
+	/** The callback. */
 	RFIDCallback callback;
+	
+	/** The led Thread. */
 	Thread ledT;
+	
+	/** The sound Thread. */
 	Thread soundT;
 	
-	public RFIDThread(RFIDReader rfid, RFIDCallback callback) {
+	/**
+	 * Instantiates a new RFID thread.
+	 *
+	 * @param rfid the rfid
+	 * @param callback the callback
+	 */
+	public RFIDThread(RFIDReader rfid, RFIDCallback callback) { 
 		this.callback = callback;
 		this.rfid = rfid;
 	}
 
+	/* Called when Thread.start. Start rfid reading thread and led waiting connection thread
+	 * @see java.lang.Thread#run()
+	 */
 	@Override
 	public void run() {
-		while(!this.isInterrupted()){
-			ledT = new Thread(new LEDFlash(1.0, 1.0, 0.0, 0));
-			ledT.start();
+		System.out.println(getClass().getSimpleName() + " start!");
+		
+		ledT = new Thread(new LEDFlash(1, 1, 0, 100));
+		ledT.start();  
+		
+		while(!isInterrupted()){ 
 			if(rfid.read()) {
+				new Thread((Runnable)() -> callback.onRead(rfid.getID())).start();
 				ledT.interrupt();
-				callback.onRead(rfid.getID());
-				ledT = new Thread(new LEDFlash(0.0, 1.0, 0.0, 0));
-				soundT = new Thread(new PiezoNotification(PiezoNotification.PiezoMode.LoginSuccess));
-				soundT.start();
-			}
-			else {
-				ledT = new Thread(new LEDFlash(1.0, 0.0, 0.0, 0));
-				soundT = new Thread(new PiezoNotification(PiezoNotification.PiezoMode.LoginFail));
-				soundT.start();
+				return;
 			}
 		}
 	}
 }
+ 
