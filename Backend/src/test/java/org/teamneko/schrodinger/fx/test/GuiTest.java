@@ -38,7 +38,7 @@ public class GuiTest {
     	assertEquals(" Utilisateur: Mew Savaria (C5236209FG)", loginName.getText());
     	
     	fxer.click()
-			.type("66224891271\n")
+			.type("662248912714\n")
 			.pause(3000);
     	String testProduct = Context.getInstance().getDetailPane().getDetailList().getItems().get(0);
 		assertEquals("Product: Final Fantasy X/X2 HD Remaster", testProduct);
@@ -121,7 +121,7 @@ public class GuiTest {
 			//Click TableField
 			.moveBy(500, 0, Speed.VERY_FAST)
 			.click()
-			.type("66224891271\n")
+			.type("662248912714\n")
 			.pause(3000);
 		testTableProduit = Context.getInstance().getTablePane().getRowItem(0);
 		assertEquals("Final Fantasy X/X2 HD Remaster",testTableProduit.getName());
@@ -153,6 +153,7 @@ public class GuiTest {
     }
  
 	private void setupTest() throws InterruptedException {
+        System.setProperty("catbox.rest.url", "http://localhost:8080/Frontend/rest");
 		FXApp.startApp(new ApplicationLauncher());
         Thread.sleep(500);
         fxer = FXer.getUserWith(FXApp.getScene().getRoot());
