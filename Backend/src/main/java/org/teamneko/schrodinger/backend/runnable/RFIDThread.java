@@ -26,7 +26,7 @@ public class RFIDThread extends Thread {
 	 * @param rfid the rfid
 	 * @param callback the callback
 	 */
-	public RFIDThread(RFIDReader rfid, RFIDCallback callback) {
+	public RFIDThread(RFIDReader rfid, RFIDCallback callback) { 
 		this.callback = callback;
 		this.rfid = rfid;
 	}
@@ -36,21 +36,18 @@ public class RFIDThread extends Thread {
 	 */
 	@Override
 	public void run() {
-		boolean stop = false;
 		System.out.println(getClass().getSimpleName() + " start!");
 		
 		ledT = new Thread(new LEDFlash(1, 1, 0, 100));
-		ledT.start();
+		ledT.start();  
 		
-		while(!stop && !isInterrupted()){ 
+		while(!isInterrupted()){ 
 			if(rfid.read()) {
-				stop = true;
-				new Thread((Runnable)() -> callback.onRead(rfid.getID()));
+				new Thread((Runnable)() -> callback.onRead(rfid.getID())).start();
+				ledT.interrupt();
+				return;
 			}
 		}
-		
-		ledT.interrupt();
-		System.out.println(getClass().getSimpleName() + " done!");
 	}
 }
  

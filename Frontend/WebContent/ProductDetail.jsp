@@ -93,7 +93,7 @@
 </sql:query>
   
 <core:if test="${products.rowCount ==  0}">
-	<% response.sendError(404, "Produit non trouvï¿½"); %>
+	<% response.sendError(404, "Produit non trouvé"); %>
 </core:if>
 
 <core:forEach var="row" items="${products.rows}">
@@ -201,7 +201,7 @@
 			 	<th>Quantité</th>
 			 	<th>Poids</th>
 			 	<th>Taille</th>
-			 	<th>Date de cré½ation</th>
+			 	<th>Date de création</th>
 			 	<th>Date de modification</th>
 				<th>Code barre</th>
 			</tr>

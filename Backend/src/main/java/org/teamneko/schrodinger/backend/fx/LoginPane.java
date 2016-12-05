@@ -12,11 +12,7 @@ import javafx.scene.control.TextField;
 /**
  * The Class LoginPane.
  */
-public class LoginPane extends CustomAnchorPane implements RFIDCallback {
-	
-	/** The thread. */
-	private RFIDThread thread = null;
-	
+public class LoginPane extends CustomAnchorPane implements RFIDCallback {	
 	/** The rfid text. */
 	@FXML protected TextField rfidText;
 	 
@@ -61,7 +57,7 @@ public class LoginPane extends CustomAnchorPane implements RFIDCallback {
 	 * Attempt login.
 	 *
 	 * @param id the id
-	 */
+	 */ 
 	private void attemptLogin(String id) {
 		if(!Context.getInstance().login(id))
 			startRFIDThread();

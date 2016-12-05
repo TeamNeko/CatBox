@@ -21,6 +21,7 @@ import org.teamneko.schrodinger.backend.gpio.Pi4JMissingException;
 import org.teamneko.schrodinger.backend.gpio.Piezo;
 import org.teamneko.schrodinger.backend.gpio.RFIDReader;
 import org.teamneko.schrodinger.backend.gpio.RGBLed;
+import org.teamneko.schrodinger.backend.runnable.LEDFlash;
 import org.teamneko.schrodinger.backend.runnable.PiezoNotification;
 import org.teamneko.schrodinger.client.SchrodingerClient;
 
@@ -83,12 +84,15 @@ public class Context {
 	
 	/** The populate named products. */
 	private NamedProduct[] populateNamedProducts = null;
-	
+	 
 	/** The product list length. */
 	private int productListLength = 0;
 	
 	/** The modified products. */
 	List<TransactionRequest.Product> modifiedProducts;
+	
+	/** The led Thread. */
+	Thread ledT;
 	
 	/**
 	 * Creates the box.
@@ -121,12 +125,18 @@ public class Context {
 	 		
 	 		//success
 	 		new Thread(new PiezoNotification(PiezoNotification.PiezoMode.LoginSuccess)).start();
+	 		ledT = new Thread(new LEDFlash(0, 1, 0, 100));
+			ledT.start();  
 	 		mainWindow.showDetailPane();
 	 		mainWindow.showDisabledBoxLeftPane();
 	 		mainWindow.setLoginName(user);
+	 		System.out.println("User: " + user.getNumber() + " is connected");
 	 	} catch(UniformInterfaceException e) {
 	 		//failure
 	 		new Thread(new PiezoNotification(PiezoNotification.PiezoMode.LoginFail)).start();
+	 		ledT = new Thread(new LEDFlash(1, 0, 0, 100));
+			ledT.start();  
+	 		System.out.println("User failed to connect");
 	 		return false;
 	 	}
 		return true;
@@ -136,7 +146,9 @@ public class Context {
 	 * Logout.
 	 */
 	public void logout() {
+		ledT.interrupt();
 		user = null;
+		lastSearchedBarcode = "";
 		mainWindow.resetLoginName();
 		mainWindow.showLoginPane();
 		mainWindow.showShutdownPane();
@@ -527,7 +539,7 @@ public class Context {
 		
 		keyboardHandler = new KeyboardHandler();
 		mainWindow = new MainWindow();
-		restClient = new SchrodingerClient("http://localhost:8080/Frontend/rest");
+		restClient = new SchrodingerClient(System.getProperty("catbox.rest.url"));
 		modifiedProducts = new ArrayList();
 	}	
 }

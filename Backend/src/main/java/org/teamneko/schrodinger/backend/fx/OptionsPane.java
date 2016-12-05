@@ -54,14 +54,6 @@ public class OptionsPane extends CustomAnchorPane {
 	 * @param event the event
 	 */
 	@FXML protected void mise_hors_tension(ActionEvent event) {
-		/*
-		try {
-			Runtime.getRuntime().exec("shutdown -h now");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		*/
-		
-		Platform.exit();
+		Context.getInstance().shutdown();
 	}
 }

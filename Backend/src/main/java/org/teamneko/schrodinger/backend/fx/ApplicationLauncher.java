@@ -1,6 +1,7 @@
 package org.teamneko.schrodinger.backend.fx;
 	
 import javafx.application.Application;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
@@ -27,13 +28,13 @@ public class ApplicationLauncher extends Application {
 		context.getMainWindow().showShutdownPane();
 		
 		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-		
+		scene.setCursor(Cursor.NONE);
 		//primaryStage.initStyle(StageStyle.UNDECORATED);
 		primaryStage.setScene(scene);
 		primaryStage.setFullScreen(true);
 		
 		primaryStage.show();
-	}
+	} 
 	
 	/**
 	 * The main method.

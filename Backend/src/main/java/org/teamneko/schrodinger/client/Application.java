@@ -180,7 +180,7 @@ public class Application {
 	}
 	
 	public Application() {
-		client = new SchrodingerClient("http://localhost:8080/Frontend/rest");
+		client = new SchrodingerClient("http://192.168.0.1:8080/Frontend/rest");
 		client.removeAllFilters();
 	}
 	

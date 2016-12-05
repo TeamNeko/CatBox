@@ -566,9 +566,9 @@ public class MFRC522 implements RFIDReader {
 		byte[] data = new byte[2];
 		data[0] = (byte)((address << 1) | 0x80);
 		
-		System.out.print("Read reg "  + Integer.toString((int)(address) & 0xFF));
+		//System.out.print("Read reg "  + Integer.toString((int)(address) & 0xFF));
 		data = SoftSPI.readWrite(spi, data);
-		System.out.print(", Value:"  + Integer.toString((int)(data[1]) & 0xFF));
+		//System.out.print(", Value:"  + Integer.toString((int)(data[1]) & 0xFF));
 		
 		return data[1];
 	}
@@ -583,7 +583,7 @@ public class MFRC522 implements RFIDReader {
 		data[0] = (byte)((address << 1) & 0x7F);
 		data[1] = value;
 		
-		System.out.println("Write reg "  + Integer.toString((int)(address) & 0xFF) + ", Value:"  + Integer.toString((int)(data[1]) & 0xFF));
+		//System.out.println("Write reg "  + Integer.toString((int)(address) & 0xFF) + ", Value:"  + Integer.toString((int)(data[1]) & 0xFF));
 		SoftSPI.readWrite(spi, data);
 	}
 	

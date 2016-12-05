@@ -138,9 +138,8 @@ public class DeviceFactory {
 			}
 		});
 		
-		if(!pi4jSetUp && !pi4jMissing) {
+		if(!pi4jSetUp && !pi4jMissing) { 
 			try {
-				System.out.println("WiringPiSetup");
 				Gpio.wiringPiSetup();           //Enabling wiringPi pin schema
 			} catch(UnsatisfiedLinkError e) {
 				pi4jMissing = true;
