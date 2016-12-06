@@ -175,9 +175,11 @@
 			</core:forEach>
 			</tbody>
 		</table>
-		<a href="?start=<%=(currentPage-1)+urlSaver%>">Précédent</a>
-		<%=currentPage*perPage+1 %> - <%=perPage*(currentPage+1) %>
-		<a href="?start=<%=(currentPage+1)+urlSaver%>">Suivant</a><br/>
+		<core:if test="${boxId != -1}">
+			<a href="?start=<%=(currentPage-1)+urlSaver%>">Précédent</a>
+			<%=currentPage*perPage+1 %> - <%=perPage*(currentPage+1) %>
+			<a href="?start=<%=(currentPage+1)+urlSaver%>">Suivant</a><br/>
+		</core:if>
 	</div>
 </div>
 </body>
