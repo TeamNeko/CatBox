@@ -5,17 +5,17 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
      
 <% 
+	String barcode = "";
 	String urlSaver = ""; 
-	int boxId;
-	try{
-		boxId = Integer.parseInt(request.getParameter("search"));
-		System.out.println(boxId);
-		urlSaver += "&search=" + boxId;
-	}
-	catch(NumberFormatException e)
+	String keyWord = request.getParameter("search");
+	if (keyWord != null)
 	{
-		boxId = -1;
+		if(!keyWord.isEmpty())
+		{
+			urlSaver += "&search=" + keyWord;
+		}
 	}
+	urlSaver += "&search=" + barcode;
 	String sortString = request.getParameter("sort");
 	String sortColumnOrder = "ASC";
 	String sortColumnName = "id";
@@ -40,7 +40,7 @@
 	urlSaver.trim();
 %>
 
-<core:set var="keyWord" value="<%=boxId %>"/>
+<core:set var="keyWord" value="<%=barcode%>"/>
 <core:set var="sortColumnOrder" value="<%=sortColumnOrder %>"/>
 <core:set var="sortColumnName" value="<%=sortColumnName %>"/>
 
@@ -48,14 +48,14 @@
      url="jdbc:postgresql://elmer.db.elephantsql.com:5432/jmtntlek"
      user="jmtntlek"  password="vaYxsY1WBNr5gYMMd-74kLrc98gqNhqI"/>
      
-<core:if test="${keyWord == -1}">
+<core:if test="${empty keyWord}">
 	<sql:query dataSource="${snapshot}" var="box"> 
-		SELECT * FROM "Boxes" ORDER BY "${sortColumnName}" ${sortColumnOrder} LIMIT 50;
+		SELECT * FROM boxes ORDER BY "${sortColumnName}" ${sortColumnOrder} LIMIT 50;
 	</sql:query>
 </core:if>
-<core:if test="${keyWord != -1}">
+<core:if test="${not empty keyWord}">
 	<sql:query dataSource="${snapshot}" var="box">
-		SELECT * FROM "Boxes" WHERE id = ? ORDER BY "${sortColumnName}" ${sortColumnOrder} LIMIT 50;
+		SELECT * FROM boxes WHERE barcode = ? ORDER BY "${sortColumnName}" ${sortColumnOrder} LIMIT 50;
 		<sql:param value="${keyWord}" />
 	</sql:query>
 </core:if>
@@ -68,12 +68,15 @@
 	try 
 	{
 		totalRecords =  (int)pageContext.getAttribute("total");
-		totalPage = totalRecords/perPage;
+		totalPage = totalRecords/perPage-1;
 		lastPageItem = totalRecords%perPage;
 		currentPage = Integer.parseInt(request.getParameter("start"));
 		if(currentPage > totalPage)
 		{
-			currentPage = totalPage;
+			if(lastPageItem == 0)
+				currentPage = totalPage;
+			else
+				currentPage = totalPage + 1;
 		}
 		else if (currentPage < 0)
 		{
@@ -82,28 +85,38 @@
 	}
 	catch (NumberFormatException e)
 	{
-		e.printStackTrace();
+		currentPage = 0;
 	}
 %>  
     
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Soprema - Liste de boite</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<title>Soprema - Liste de boite</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="js/util.js"></script>
 </head>
 <body>
-	<div id="header">
+<div class="container-fluid">
+	<div>
 		<jsp:include page="Header.jsp" />
 	</div>
 	<div class="search">
 	 	<form>
-			search: <input type="text" name="search">
-			<button type="submit" id="search"></button>
-			Ordre d'affichage:  
-				<select name="sort">
-					<option value="Asc-id" <%=sortString.equals("Asc-id") ? "selected" : ""%>>Ordre croissant d'ID</option>
-					<option value="Des-id" <%=sortString.equals("Des-id")? "selected" : ""%>>Ordre décroissant d'ID</option>
+			<div class="form-group">
+				<label for="search">Recherche: </label>
+				<input type="text" id="search" name="search">
+				<button type="submit" class="glyphicon glyphicon-search"></button>
+			</div>
+			<div class="form-group">
+				<label for="sort">Ordre d'affichage: </label> 
+				<select name="sort" class="form-control">
 					<option value="Asc-barcode" <%=sortString.equals("Asc-barcode") ? "selected" : ""%>>Ordre croissant de code barre</option>
 					<option value="Des-barcode" <%=sortString.equals("Des-barcode")? "selected" : ""%>>Ordre décroissant de code barre</option>
 					<option value="Asc-weight" <%=sortString.equals("Asc-weight") ? "selected" : ""%>>Ordre croissant de poids</option>
@@ -115,18 +128,21 @@
 					<option value="Asc-last_modified" <%=sortString.equals("Asc-last_modified") ? "selected" : ""%>>Ordre croissant de retrait</option>
 					<option value="Des-last_modified" <%=sortString.equals("Des-last_modified") ? "selected" : ""%>>Ordre décroissant de retrait</option>
 				</select>
+			</div>
 		</form>
 	</div>
-	<div class="list">
-		<table width="59%" border="1">
+	<div>	
+		<table class="table table-striped>">
+		<thead>
 			<tr>
-				<th>ID</th>
 				<th>Code barre</th>
 				<th>Poids</th>
 				<th>Taille</th>
 				<th>Date de création</th>
 				<th>Date de modification</th>
 			</tr>
+		</thead>
+		<tbody>
 			<core:set var="total" scope="session" value="${fn:length(box.rows)}"/>
 			<core:set var="perPage" scope="session"  value="10"/>
 			<core:set var="pageStart" value="${param.start}"/>
@@ -137,8 +153,7 @@
 			    <core:set var="pageStart" value="${total}"/>
 			</core:if>			
 			<core:forEach var="row" items="${box.rows}" begin="<%=currentPage*perPage%>" end="<%=perPage*(currentPage+1)-1 %>">
-				<tr>
-					<td><a href="BoxDetail.jsp?box=${row.id}"><core:out value="${row.id}"/></a></td>
+				<tr class="clickable-row"  data-href="BoxDetail.jsp?box=${row.id}">
 					<td><core:out value="${row.barcode}"/></td>
 					<td><core:out value="${row.weight}"/></td>
 					<td><core:out value="${row.size}"/></td>
@@ -146,10 +161,12 @@
 					<td><core:out value="${row.last_modified}"/></td>
 				</tr>
 			</core:forEach>
+		</tbody>
 		</table>
-		<a href="?start=<%=(currentPage-1)+urlSaver%>">Previous</a>
+		<a href="?start=<%=(currentPage-1)+urlSaver%>">Précédent</a>
 		<%=currentPage*perPage+1 %> - <%=perPage*(currentPage+1) %>
-		<a href="?start=<%=(currentPage+1)+urlSaver%>">Next</a><br/>
+		<a href="?start=<%=(currentPage+1)+urlSaver%>">Suivant</a><br/>
 	</div>
+</div>
 </body>
 </html>

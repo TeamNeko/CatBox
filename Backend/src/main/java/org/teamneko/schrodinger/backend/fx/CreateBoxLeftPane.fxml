@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<fx:root minWidth="160" minHeight="300" type="javafx.scene.layout.AnchorPane" xmlns:fx="http://javafx.com/fxml">
+            <Button onAction="#creer" layoutX="1" layoutY="1" prefWidth="156" prefHeight="148" text="Créer Nouvelle Boîte" />
+            <Button onAction="#parametres" layoutX="1" layoutY="150" prefWidth="156" prefHeight="148" text="Paramètres" />
+</fx:root>

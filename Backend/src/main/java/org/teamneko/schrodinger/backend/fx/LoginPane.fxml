@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.ImageView?>
+
+<fx:root type="javafx.scene.layout.AnchorPane" xmlns:fx="http://javafx.com/fxml" >	
+	<HBox alignment="CENTER" layoutY="1" prefWidth="320" prefHeight="200">
+		<children>
+			<ImageView fx:id="etatLecture"></ImageView>
+	     	<Label text="Veuillez scanner votre carte RFID"></Label>
+	    </children>
+	</HBox>
+	<TextField fx:id="rfidText" id="rfidText" onAction="#login" layoutY="275" prefWidth="320" prefHeight="20"/>
+</fx:root>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<fx:root type="javafx.scene.control.SplitPane" fx:id="mainPane" maxWidth="480" maxHeight="320" minWidth="480" minHeight="320" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+  <items>
+    <AnchorPane minWidth="160" minHeight="320" />
+    <AnchorPane minWidth="320" minHeight="320"/>
+  </items>
+</fx:root>

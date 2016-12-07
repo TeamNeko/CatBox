@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <table name="alerts">
+    <column>id</column>
+    <column>time</column>
+    <column>id_product</column>
+    <column>id_message</column>
+  </table>
+</dataset>

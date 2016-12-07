@@ -9,7 +9,6 @@
      user="jmtntlek"  password="vaYxsY1WBNr5gYMMd-74kLrc98gqNhqI"/>
      
 <%
-	int id = 1;
 	String firstName = "", lastName = "", userType = "Employé",  userNum = "";
 	try{
 		userNum = request.getParameter("number");
@@ -23,24 +22,13 @@
 	}
 %>     
 
-<sql:query dataSource="${snapshot}" var="user">
-	SELECT * FROM "Users";
-</sql:query>
-
-<core:catch var="SQLException">
-	<core:forEach var="row" items="${user.rows}">
-		<% id++; %>
-	</core:forEach>
-</core:catch>
-<core:set var="id" value="<%=id%>"/>
 <core:set var="userNum" value="<%=userNum%>"/>
 <core:set var="firstName" value="<%=firstName%>"/>
 <core:set var="lastName" value="<%=lastName%>"/>
 <core:set var="userType" value="<%=userType%>"/>
 
 <sql:update dataSource="${snapshot}">
-	INSERT INTO "Users" VALUES (?, ?, ?, ?, ?);
-	<sql:param value="${id}" />
+	INSERT INTO users (first_name,last_name,number,type) VALUES (?, ?, ?, ?);
 	<sql:param value="${firstName}" />
 	<sql:param value="${lastName}" />
 	<sql:param value="${userNum}" />
@@ -54,21 +42,23 @@
 <title>Création d'utilisateur</title>
 </head>
 <body>
-	<div id="header">
+<div class="container-fluid">
+	<div>
 		<jsp:include page="Header.jsp" />
 	</div>
-		<core:if test="${SQLException != null}">
-			Une erreur s'est produite. Cliquez <a href="CreateUser.jsp">ici</a> pour recommencer.
-		</core:if>
-		<core:if test="${SQLException == null}">
-		L'utilisateur :
-			<ul>
-				<li><core:out value="${firstName}"/></li>
-				<li><core:out value="${lastName}"/></li>
-				<li><core:out value="${userNum}"/></li>
-				<li><core:out value="${userType}"/></li>
-			</ul>
-		<p>a été ajouté .</p>
-		</core:if>
+	<core:if test="${SQLException != null}">
+		Une erreur s'est produite. Cliquez <a href="CreateUser.jsp">ici</a> pour recommencer.
+	</core:if>
+	<core:if test="${SQLException == null}">
+	L'utilisateur :
+		<ul>
+			<li><core:out value="${firstName}"/></li>
+			<li><core:out value="${lastName}"/></li>
+			<li><core:out value="${userNum}"/></li>
+			<li><core:out value="${userType}"/></li>
+		</ul>
+	<p>a été ajouté .</p>
+	</core:if>
+</div>
 </body>
 </html>

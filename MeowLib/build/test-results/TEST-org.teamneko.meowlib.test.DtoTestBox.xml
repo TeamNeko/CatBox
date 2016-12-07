@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.teamneko.meowlib.test.DtoTestBox" tests="3" skipped="0" failures="0" errors="0" timestamp="2016-11-19T22:57:02" hostname="suzuka" time="0.001">
+  <properties/>
+  <testcase name="initalisationBoxTest" classname="org.teamneko.meowlib.test.DtoTestBox" time="0.0"/>
+  <testcase name="toStringBoxTest" classname="org.teamneko.meowlib.test.DtoTestBox" time="0.0"/>
+  <testcase name="getsetBoxTest" classname="org.teamneko.meowlib.test.DtoTestBox" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
